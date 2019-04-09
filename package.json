@@ -1,0 +1,60 @@
+{
+  "name": "Splus",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest",
+    "build-android": "cd ./android && ./gradlew app:assembleDebug && ./gradlew installDebug",
+    "build-android-release": "cd ./android && ./gradlew clean && ./gradlew app:assembleRelease",
+    "clean-android": "cd ./android && ./gradlew clean",
+    "clean": "rm -rf ./node_modules/ && yarn"
+  },
+  "dependencies": {
+    "@mindinventory/react-native-tab-bar-interaction": "github:mindinventory/react-native-tab-bar-interaction",
+    "@monterosa/react-native-parallax-scroll": "^1.8.0",
+    "native-base": "^2.12.1",
+    "react": "16.8.3",
+    "react-native": "0.59.0",
+    "react-native-app-intro": "^1.1.5",
+    "react-native-app-intro-slider": "^1.0.1",
+    "react-native-collapsible": "^1.4.0",
+    "react-native-custom-radio-group": "^1.0.1",
+    "react-native-gesture-handler": "^1.1.0",
+    "react-native-gradient-buttons": "^1.3.0",
+    "react-native-linear-gradient": "^2.5.3",
+    "react-native-modal": "^9.0.0",
+    "react-native-modal-overlay": "^1.3.1",
+    "react-native-modalbox": "^1.7.1",
+    "react-native-orientation-locker": "^1.1.4",
+    "react-native-raw-bottom-sheet": "^1.1.3",
+    "react-native-reanimated": "^1.0.0",
+    "react-native-router-flux": "^4.0.6",
+    "react-native-slideshow": "^1.0.1",
+    "react-native-snap-carousel": "^3.7.5",
+    "react-native-svg": "^9.3.3",
+    "react-native-tab-view": "^2.0.3",
+    "react-native-vector-icons": "^6.4.1",
+    "react-navigation": "^3.4.1",
+    "react-redux": "^6.0.1",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
+    "rn-fetch-blob": "^0.10.15"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/runtime": "^7.3.4",
+    "babel-jest": "^24.5.0",
+    "jest": "^24.5.0",
+    "metro-react-native-babel-preset": "^0.53.0",
+    "react-test-renderer": "16.8.3"
+  },
+  "rnpm": {
+    "assets": [
+      "app/Fonts"
+    ]
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
