@@ -80,7 +80,6 @@ export default {
     color: '#999',
   },
   countIcon: {
-    color: '#FCC300',
     marginRight: 10,
     fontSize: 24,
     width:null
@@ -219,7 +218,6 @@ export default {
   },
   tabGrey: {
     backgroundColor: '#FFF',
-		fontFamily: Fonts.type.sfuiDisplaySemibold,
   },
   tabText: {
 		fontFamily: Fonts.type.sfuiDisplaySemibold,
@@ -437,5 +435,14 @@ export default {
     marginTop: 5,
     fontSize: 14,
   },
+  overviewHtml :{
+    width : '100%',
+    height: 400,
+    
+  },
+  overviewWebView :{
+    width: '100%',
+    height : 400,
+  }
 
 }

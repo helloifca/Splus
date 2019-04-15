@@ -1,6 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet,Dimensions } from 'react-native';
 import { Fonts, Metrics, Colors } from '../../Themes/';
-
+const dh = Dimensions.get("window").height;
+const dw = Dimensions.get("window").width;
 
 export const colors = {
     black: '#1a1917',
@@ -96,5 +97,10 @@ export default StyleSheet.create({
         textAlign: 'center',
         padding:8,
 		fontFamily: Fonts.type.sfuiDisplaySemibold,
-	},
+    },
+    corContainerStyle : {
+        height : dh * 0.54,
+        alignItems:'center',
+        justifyContent: 'center',
+    }
 });

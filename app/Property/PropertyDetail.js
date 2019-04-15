@@ -1,7 +1,6 @@
 import React from "react";
 import {
   StatusBar,
-  WebView,
   TouchableOpacity,
   TextInput,
   StyleSheet,
@@ -12,7 +11,8 @@ import {
   Platform,
   SafeAreaView,
   FlatList,
-  Modal
+  Modal,
+  ActivityIndicator
 } from "react-native";
 import {
   Container,
@@ -37,19 +37,18 @@ import {
   Tabs,
   Fab,
   Form,
-  Label
+  Label,
 } from "native-base";
 import { Actions } from "react-native-router-flux";
-
+import {urlApi} from '@Config/services';
 import GALLERY from "./Gallery";
 import AMENITIES from "./Amenities";
 import SIMILAR from "./Similar";
+import {_storeData,_getData} from '@Component/StoreAsync';
 
-import { Style, Colors } from "../Themes/";
+import { Style, Colors } from "../Themes/index";
 import Styles from "./Style";
-
-
-
+import { WebView } from 'react-native-webview';
 
 //const {width, height} = Dimensions.get('window')
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get(
@@ -58,18 +57,63 @@ const { width: viewportWidth, height: viewportHeight } = Dimensions.get(
 
 export default class extends React.Component {
     constructor(props) {
-        super(props)
-        this.state = {
-          active: 'true',
-          isVisible: false,
-        };
-      }
-      
-  componentDidMount() {
-    Actions.refresh({ backTitle: () => this.props.title });
-  }
+      super(props)
+      this.state = {
+        active: 'true',
+        isVisible: false,
 
-  clickCategoris() {
+        hd : new Headers,
+        amenities  : null,
+        feature : null,
+        overview : null,
+        project : null
+      };
+
+    }
+      
+async componentDidMount() {
+    Actions.refresh({ backTitle: () => this.props.title });
+
+    const data = {
+      hd : new Headers({
+        'Token' : await _getData('@Token')
+      })
+    }
+
+    this.setState(data)
+
+    this.getDataDetails(this.props.items)
+}
+
+getDataDetails = (item) => {
+    console.log('this.state.hd',this.state.hd);
+    fetch(urlApi+'c_reservation/getDataDetails/'+item.db_profile+'/'+item.entity_cd+'/'+item.project_no,{
+        method:'GET',
+        headers : this.state.hd,
+    }).then((response) => response.json())
+    .then((res)=>{
+        if(!res.Error){
+            const resData = res.Data
+            const data = {
+              amenities : resData.amenities,
+              feature : resData.feature,
+              overview : resData.overview,
+              project : resData.project
+            }
+            console.log('data',data);
+            this.setState(data)
+        } else {
+            this.setState({isLoaded: !this.state.isLoaded},()=>{
+                alert(res.Pesan)
+            });
+        }
+        console.log('getDAtaDetails',res);
+    }).catch((error) => {
+        console.log(error);
+    });
+}
+
+clickCategoris() {
     Actions.categoris();
     this.setState({ click : true})
 }
@@ -80,6 +124,14 @@ clickSearch() {
 
  
   render() {
+    let feature = ''
+    if(this.state.feature){
+      feature = this.state.feature[0].feature_info.replace(/<div class="col-md-6">|<\/div>|<\/b>|<b>|<ul class="list-unstyled">|<\/ul>/gi, '')
+      feature = feature.replace(/<\/li>/gi,'\n')
+      feature = feature.replace(/<li>/gi,'\t• ')
+      feature = feature.replace(/<br>/gi,' ')
+      console.log('feature',feature)
+    }
 
     return (
       <Container style={Style.bgMain}>
@@ -106,7 +158,7 @@ clickSearch() {
           </View>
           <View style={Style.actionBarMiddle}>
             <Text style={Style.actionBarText}>
-              {"YUKATA SUITES".toUpperCase()}
+              {this.props.items.project_descs.toUpperCase()}
             </Text>
           </View>
           <View style={Style.actionBarRight}>
@@ -137,8 +189,7 @@ clickSearch() {
         >
           <ImageBackground
             source={{
-              uri:
-                "http://139.255.61.85/WaskitaWeb/img/PlProject/Logo_Yukata.png"
+              uri: this.props.items.picture_url
             }}
             imageStyle={"cover"}
             style={Styles.coverImg}
@@ -226,19 +277,13 @@ clickSearch() {
 
           <View style={Styles.overview}>
             <Text style={Styles.overviewTitle}>Overview</Text>
-            <Text style={Styles.overviewDesc}>
-              Yukata Suites adalah bangunan apartemen bertingkat 32 yang berada
-              di area seluas 5000 meter persegi dengan nilai investasi tinggi
-              dan mengusung konsep ketepatan, kemewahan dalam keheningan, dan
-              arsitektur yang membawa ketenangan.
-              {"\n\n"}Yukata berasal dari bahasa Jepang yang berarti pakaian
-              tradisional Jepang. Orang Jepang memakai Yukata saat mereka pergi
-              ke Onsen untuk berisirahat dari rutinitas sehari-hari dan
-              menemukan ketenangan.
-              {"\n\n"}Kehidupan di kota besar yang hiruk-pikuk membuat Yukata
-              Suites menjadi tempat tinggal yang sempurna bagi mereka yang
-              mendambakan ketenangan dan privasi.
-            </Text>
+    
+              {this.state.overview ? 
+              <Text style={Styles.overviewDesc}> 
+                {this.state.overview[0].overview_info.replace(/<p xss="removed">|<\/p>/gi, '\n')}
+              </Text>
+              :<ActivityIndicator /> }
+
           </View>
           <Tabs tabBarUnderlineStyle={Styles.tabBorder}>
             <Tab
@@ -251,21 +296,11 @@ clickSearch() {
               <List style={Styles.infoTab}>
                 <View style={Styles.overview}>
                   <Text style={Styles.overviewTitle}>Feature</Text>
-                  <Text style={Styles.overviewDesc}>
-                    Yukata Suites, apartmen yang Disajikan fasilitas bernuansa
-                    Jepang dan di lengkapi dengan Private Lift, Yukata Suites
-                    didesign dengan konsep Japanese Resort yang menghubungkan 5
-                    elemen alam seperti Tanah, Air, Angin, Kayu, dan Logam.
-                    sehingga setiap penghuni dapat merasakan 'Therapy' dengan
-                    pengalaman 4 dimensi. anda dapat bermeditasi di Zen Garden,
-                    mengenakan pakaian 'Yukata' dan 'Bakiak' saat menuju ke ke
-                    pamdian air panas Jepang (Osen) di lantai fasilitas.
-                    {"\n\n"}Fasilitas : Olympic Size Swimming Pool Exclusive
-                    Function Room Lounge BBQ Pavilions Playground Kids Pool
-                    Library GYM Private Lift Karaoke Room Indoor Onsen Outdoor
-                    Onsen Reading Area Contemplation Garden Zen Garden "Mizu"
-                    Units Outdoor Area
-                  </Text>
+                    {this.state.feature ? 
+                    <Text style={Styles.overviewDesc}> 
+                      {feature}
+                    </Text>
+                    :<ActivityIndicator /> }
                 </View>
               </List>
             </Tab>
@@ -395,7 +430,7 @@ clickSearch() {
                 </Button>
               </Right>
             </View>
-            <FlatList
+            {/* <FlatList
               data={SIMILAR}
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -415,28 +450,11 @@ clickSearch() {
                     </View>
                     <Text style={Styles.itemPrice}>{item.title}</Text>
                     <Text style={Styles.itemLocation}>{item.subtitle}</Text>
-                    {/* <View style={Styles.itemRow}>
-                      <View style={Styles.itemOverview}>
-                        <Icon
-                          name="bed"
-                          type="FontAwesome"
-                          style={Styles.itemIcon}
-                        />
-                        <Text style={Styles.itemNo}>{item.bedroom}</Text>
-                      </View>
-                      <View style={Styles.itemOverview}>
-                        <Icon
-                          name="bathtub"
-                          type="FontAwesome"
-                          style={Styles.itemIcon}
-                        />
-                        <Text style={Styles.itemNo}>{item.bathroom}</Text>
-                      </View>
-                    </View> */}
+                    
                   </View>
                 </TouchableOpacity>
               )}
-            />
+            /> */}
           </View>
           <Modal
           animationType={'slide'}

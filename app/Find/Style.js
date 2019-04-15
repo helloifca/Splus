@@ -1,7 +1,9 @@
 const React = require("react-native");
 const { Platform } = React;
 import { Fonts, Metrics, Colors } from '../Themes/';
-
+import {Dimensions} from 'react-native';
+const dh = Dimensions.get("window").height;
+const dw = Dimensions.get("window").width;
 
 export default {
     layoutContent: {
@@ -259,7 +261,7 @@ export default {
 
     /* -- Top Cities -- */
     city: {
-        flex: 1,
+        flex : 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
         paddingHorizontal: 20,
@@ -269,21 +271,24 @@ export default {
         width: '48%',
         height: 100,
         marginBottom: 10,
+        borderRadius: 5,
     },
     btnCityImg: {
+        width: dw * 0.42,
+        height : null,
         flex: 1,
         borderRadius: 5,
     },
     btnCityLocation: {
         flex: 1,
         position: 'absolute',
-        width: '100%',
+        width: dw * 0.42,
         height: 100,
         justifyContent: 'center',
         alignItems: 'center',
     },
     btnCityText: {
-        color: '#FFF',
+        color: '#fff',
 		fontFamily: Fonts.type.sfuiDisplaySemibold,
         fontSize: 12,
     },
@@ -377,6 +382,14 @@ export default {
         color: '#FFF',
 		fontFamily: Fonts.type.sfuiDisplaySemibold,
         fontSize: 10,
+    },
+    loading: {
+        marginVertical: 10,
+    },
+    loadingText: {
+        textAlign: 'center',
+        fontSize: 16,
+        fontWeight: '500',
     },
 
 }

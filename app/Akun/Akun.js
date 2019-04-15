@@ -16,15 +16,12 @@ const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window'
 export default class Akun extends React.Component {
     render() {
         return <Container style={Style.bgMain}>
-            <Header style={Style.navigation}>
-                <StatusBar backgroundColor="#7E8BF5" animated barStyle="light-content" />
-
-                <View style={Style.actionBarMiddle}>
-                    <Text style={Style.actionBarText}>{''.toUpperCase()}</Text>
-                </View>
-                <View style={Style.actionBarRight}>
-                </View>
-            </Header>
+                <StatusBar
+                translucent={true}
+                backgroundColor={"rgba(0, 0, 0, 0.3)"}
+                barStyle={"light-content"}
+                />
+            
 
 
             <Content style={Style.layoutInner} contentContainerStyle={Style.layoutContent}>
@@ -93,8 +90,8 @@ export default class Akun extends React.Component {
                         <FlatList
                             data={MESSAGES}
                             style={Styles.item}
-                            renderItem={({ item, separators }) => (
-                                <TouchableHighlight underlayColor='transparent' onPress={() => { NavigationService.navigate('MemberMessages') }}>
+                            renderItem={({ item, separators,key }) => (
+                                <TouchableHighlight key={key} underlayColor='transparent' onPress={() => { NavigationService.navigate('MemberMessages') }}>
                                     <View style={Styles.record}>
                                         <Image source={{ uri: item.image }} style={Styles.itemImg} />
                                         <View style={Styles.itemInfo}>

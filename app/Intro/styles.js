@@ -114,7 +114,9 @@ const styles = StyleSheet.create({
 		borderRadius: 15,
     alignSelf: 'center',
 		elevation: 3,
-		shadowColor:"#000"
+		shadowColor:"#000",
+		alignItems : 'center',
+		justifyContent : 'center'
 	},
 	signInBtnText:{
 		color: "#fff",

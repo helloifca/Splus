@@ -1,48 +1,168 @@
 /*This is an example of React Native App Intro Slider */
 import React from 'react';
 //import react in project 
-import { Text, View, Image, StatusBar, Platform, ImageBackground ,TouchableOpacity, BackHandler,I18nManager} from 'react-native';
+import { Text, View, Image, StatusBar, Platform, ActivityIndicator, ImageBackground ,TouchableOpacity, BackHandler,I18nManager} from 'react-native';
 import { Container, Button, Icon, Right, Item, Input, Header, Left, Body, Title} from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 //import all the required component
 import AppIntroSlider from 'react-native-app-intro-slider';
 import styles from '../Intro/styles';
 import { Actions } from 'react-native-router-flux'
+import {_storeData,_getData} from '@Component/StoreAsync';
+import DeviceInfo from 'react-native-device-info';
+import {urlApi} from '@Config/services';
 
+let isMount = false;
 
 //import AppIntroSlider to use it
 export default class Intro extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showRealApp: false,
-      //To show the main page of the app
+      showRealApp: true,//To show the main page of the app
+      isLoaded : true,
+
+      email : '',
+      password : ''
     };
   }
   componentWillMount() {
-		var that = this
-		BackHandler.addEventListener('hardwareBackPress', function() {
-			that.props.navigation.navigate('Home')
-			return true;
-		});
+    isMount = true
   }
 
+  async componentDidMount(){
+    const isIntro = await _getData('@isIntro')
+    if(isMount){
+      BackHandler.addEventListener('hardwareBackPress', function() {
+        Actions.home()
+        return true;
+      })
+    }
+    this.setState({showRealApp : isIntro})
+
+  }
+
+  componentWillUnmount(){
+    isMount = false
+    BackHandler.removeEventListener('hardwareBackPress')
+  }
 
   clickHome() {
-    Actions.home();
+    Actions.tabbar()
     this.setState({click:true})
-}
+  }
 
   _onDone = () => {
     // After user finished the intro slides. Show real app through
     // navigation or simply by controlling state
-    this.setState({ showRealApp: true });
-  };
+    this.setState({ showRealApp: true },()=>{
+      _storeData('@isIntro',true);
+    });
+  }
+
   _onSkip = () => {
     // After user skip the intro slides. Show real app through
     // navigation or simply by controlling state
-    this.setState({ showRealApp: true });
-  };
+    this.setState({ showRealApp: true },()=>{
+      _storeData('@isIntro',true);
+    });
+  }
+
+  btnLoginClick = async () => {
+    const mac = await DeviceInfo.getMACAddress().then(mac => {return mac});
+    const formData = {
+      email : this.state.email,
+      password : this.state.password,
+      token : '',
+      token_firebase : "",
+      device : Platform.OS,
+      mac : mac
+    }
+    console.log('formData',formData)
+    var lengthPass = this.state.password.length;
+    if(lengthPass < 4 ){
+      // this.setState({isCorrect:false,titleButtonAlert:"Try Again"});
+      alert('Wrong password !!!')
+    }else{
+      this.doLogin(formData);
+    }
+  }
+
+  doLogin (value) {
+    this.setState({isLoaded: !this.state.isLoaded});
+    data = JSON.stringify(value);
+
+    fetch(urlApi+'c_auth/Login',{
+        method:'POST',
+        headers : {
+            'Accept':'application/json',
+            'Content-Type' : 'application/json',
+        },
+        body : data
+    }).then((response) => response.json())
+    .then((res)=>{
+        if(!res.Error){
+            this.signIn(res)
+        } else {
+            this.setState({isLoaded: !this.state.isLoaded},()=>{
+                alert(res.Pesan)
+            });
+        }
+        console.log('Login Result',res);
+    }).catch((error) => {
+        console.log(error);
+    });
+  }
+
+  signIn = async(res) =>{
+
+    this.getTower()
+
+    try {
+        _storeData('@UserId', res.Data.UserId);
+        _storeData('@Name', res.Data.name);
+        _storeData('@Token', res.Data.Token);
+        _storeData('@User', res.Data.user);
+        _storeData('@Group', res.Data.Group);
+        _storeData("@isLogin",true);
+        _storeData("@isReset",res.Data.isResetPass.toString());
+        _storeData("@AgentCd",res.Data.AgentCd?res.Data.AgentCd:'');
+        _storeData("@Debtor",res.Data.Debtor_acct?res.Data.Debtor_acct:'');
+        _storeData('@rowID', res.Data.rowID.toString());
+        _storeData('@RefreshProfile', false);
+
+        this.setState({isLoaded : true},()=>{
+            Actions.reset('tabbar')
+        })
+       
+    } catch(err){
+        console.log('error:', err)
+    }
+  }
+
+  getTower = () => {
+    const email = this.state.email;
+    fetch(urlApi+'c_product_info/getData/IFCAMOBILE/' +email ,{
+        method : "GET",
+    })
+    .then((response) => response.json())
+    .then((res)=>{
+        if(res.Error === false){
+            let resData = res.Data
+            let data = []
+            resData.map((item)=>{
+              let items = {...item,illustration : item.picture_url,title :item.project_descs,subtitle:item.db_profile+item.project_no}
+              data.push(items)
+            })
+            console.log('data',data);
+
+            _storeData('@UserProject', data);
+        }
+    }).catch((error) => {
+        console.log(error);
+    });
+  }
+
   render() {
     // let BG_Image = { uri : 'https://antiqueruby.aliansoftware.net/Images/signin/ic_main_bg_stwo.png'};
 		StatusBar.setBarStyle('dark-content', true);
@@ -75,7 +195,8 @@ export default class Intro extends React.Component {
 							<Input
 								ref='email'
 								style={styles.inputEmail}
-								editable={true}
+                editable={true}
+                onChangeText={(val)=>this.setState({email:val})}
 								keyboardType='email-address'
 								returnKeyType='next'
 								autoCapitalize='none'
@@ -91,6 +212,7 @@ export default class Intro extends React.Component {
 								ref='password'
 								style={styles.inputEmail}
 								editable={true}
+                onChangeText={(val)=>this.setState({password:val})}
 								keyboardType='default'
 								returnKeyType='next'
 								autoCapitalize='none'
@@ -103,8 +225,9 @@ export default class Intro extends React.Component {
 						</View>
 					</View>
 					<View style={styles.signbtnSec}>
-						<Button style={styles.signInBtn} onPress={() => alert("SignIn")}>
-							<Text style={styles.signInBtnText}>Sign In</Text>
+						<Button style={styles.signInBtn} onPress={() => this.btnLoginClick()}>
+              {!this.state.isLoaded ? <ActivityIndicator color="#fff" /> :
+            <Text style={styles.signInBtnText}>Sign In</Text>}
 						</Button>
 					</View>
 					<Text style={styles.forgotPassword} onPress={() => alert("Forgot Password")}>Forgot your password?</Text>

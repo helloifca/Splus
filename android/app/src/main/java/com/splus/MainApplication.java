@@ -1,8 +1,10 @@
 package com.splus;
 
 import android.app.Application;
-
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.facebook.react.ReactApplication;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.swmansion.reanimated.ReanimatedPackage;
 import org.wonday.orientation.OrientationPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -15,7 +17,8 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-
+import com.oblador.shimmer.RNShimmerPackage;
+import com.BV.LinearGradient.LinearGradientPackage;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,6 +34,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNDeviceInfo(),
+            new AsyncStoragePackage(),
             new ReanimatedPackage(),
             new OrientationPackage(),
             new RNFetchBlobPackage(),
@@ -38,7 +43,11 @@ public class MainApplication extends Application implements ReactApplication {
             new RNGestureHandlerPackage(),
             new VectorIconsPackage(),
             new LinearGradientPackage(),
-            new SvgPackage()
+            new SvgPackage(),
+            new RNShimmerPackage(),
+            new LinearGradientPackage(),
+            new RNCWebViewPackage()
+
       );
     }
 

@@ -1,36 +1,45 @@
 import React from 'react'
-import { StatusBar, TouchableOpacity, TextInput, StyleSheet, Image, ImageBackground, Dimensions, ScrollView, Platform, SafeAreaView, FlatList } from 'react-native'
+import { StatusBar, TouchableOpacity, TextInput, StyleSheet, Image, ImageBackground, Dimensions, ScrollView, Platform, SafeAreaView, FlatList,ActivityIndicator } from 'react-native'
 import { Container, Header, Content, Button, Icon, Text, Title, Left, Right, Body, Input, Item, Footer, View, FooterTab, Badge } from 'native-base'
 import RadioGroup from 'react-native-custom-radio-group'
-
-
 import {Actions} from 'react-native-router-flux'
-
 import { Style } from '../Themes/'
 import Styles from './Style'
-
+import {_storeData,_getData} from '@Component/StoreAsync';
+// import Shimmer from 'react-native-shimmer';
+import Shimmer from '@Component/Shimmer';
 //const {width, height} = Dimensions.get('window')
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
-export const btnType = [{
-    label: 'BUY',
-    value: 'btn_buy'
-}, {
-    label: 'RENT',
-    value: 'btn_rent'
-}, {
-    label: 'PROJECTS',
-    value: 'btn_project'
-}];
+
 
 
 export default class Search extends React.Component {
+
+    state = {
+        dataTower :[]
+    }
    
-    componentDidMount(){
+    async componentDidMount(){
+        const data = {
+            dataTower : await _getData('@UserProject')
+        }
+
+        this.setState(data)
+
         Actions.refresh({backTitle: ()=> this.props.title})
 
-        }
-    clickProject() {
-        Actions.propertydetail();
+    }
+
+    componentWillMount() {
+        setTimeout(() => {
+            this.setState({
+                isVisible: true
+            })
+        }, 2000)
+    }
+    clickProject(item) {
+        // console.log('property',item);
+        Actions.propertydetail({items : item});
         this.setState({ click : true})
     }
     render() {
@@ -54,52 +63,18 @@ export default class Search extends React.Component {
                         </Right> */}
                     </View>
                     <View style={Styles.city}>
-                        <TouchableOpacity style={Styles.btnCity} onPress={() => this.clickProject()}>
-                            <Image source={{ uri: 'https://cdn.londonandpartners.com/visit/london-organisations/houses-of-parliament/63950-640x360-london-icons2-640.jpg' }} resizeMode={'cover'} style={Styles.btnCityImg} />
-                            <View style={Styles.btnCityLocation}>
-                                <Text style={Styles.btnCityText}>THE REIZ CONDO</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={Styles.btnCity} onPress={() => {
-                            NavigationService.navigate('PublicProperties')
-                        }}>
-                            <Image source={{ uri: 'https://www.visitbritain.com/sites/default/files/consumer_destinations/teaser_images/manchester_town_hall.jpg' }} resizeMode={'cover'} style={Styles.btnCityImg} />
-                            <View style={Styles.btnCityLocation}>
-                                <Text style={Styles.btnCityText}>88 AVENUE</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={Styles.btnCity} onPress={() => {
-                            NavigationService.navigate('PublicProperties')
-                        }}>
-                            <Image source={{ uri: 'https://i2-prod.birminghampost.co.uk/business/commercial-property/article13376659.ece/ALTERNATES/s615/Hotel-la-Tour-1.jpg' }} resizeMode={'cover'} style={Styles.btnCityImg} />
-                            <View style={Styles.btnCityLocation}>
-                                <Text style={Styles.btnCityText}>SOLTERRA PLACE</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={Styles.btnCity} onPress={() => {
-                            NavigationService.navigate('PublicProperties')
-                        }}>
-                            <Image source={{ uri: 'https://calvium.com/calvium/wp-content/uploads/2014/07/shutterstock_129753212.jpg' }} resizeMode={'cover'} style={Styles.btnCityImg} />
-                            <View style={Styles.btnCityLocation}>
-                                <Text style={Styles.btnCityText}>YUKATA SUITES</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={Styles.btnCity} onPress={() => {
-                            NavigationService.navigate('PublicProperties')
-                        }}>
-                            <Image source={{ uri: 'https://media-cdn.tripadvisor.com/media/photo-s/12/1e/c7/71/mann-island-pier-head.jpg' }} resizeMode={'cover'} style={Styles.btnCityImg} />
-                            <View style={Styles.btnCityLocation}>
-                                <Text style={Styles.btnCityText}>NINES PLAZA & RESIDENCE</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={Styles.btnCity} onPress={() => {
-                            NavigationService.navigate('PublicProperties')
-                        }}>
-                            <Image source={{ uri: 'https://media-cdn.tripadvisor.com/media/photo-s/0f/4a/fe/6e/edinburgh-from-calton.jpg' }} resizeMode={'cover'} style={Styles.btnCityImg} />
-                            <View style={Styles.btnCityLocation}>
-                                <Text style={Styles.btnCityText}>VASAKA RESIDENCE</Text>
-                            </View>
-                        </TouchableOpacity>
+                        {this.state.dataTower.length == 0 ? null :
+                            this.state.dataTower.map((item,key)=>
+                                <Shimmer key={key} autoRun={true} style={Styles.btnCity} visible={this.state.isVisible} >
+                                    <TouchableOpacity style={Styles.btnCity} onPress={() => this.clickProject(item)}>
+                                    <Image source={{ uri: item.picture_url+ '?random_number=' + new Date().getTime() }} resizeMode={'cover'} style={Styles.btnCityImg} />
+                                    <View style={Styles.btnCityLocation}>
+                                        <Text style={Styles.btnCityText}>{item.project_descs}</Text>
+                                    </View>
+                                    </TouchableOpacity>
+                                </Shimmer>
+                            )
+                        }
                     </View>
                 </View>
 

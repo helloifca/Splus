@@ -94,6 +94,9 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
+    packagingOptions {
+        pickFirst '**/libc++_shared.so'
+    }
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     compileOptions {
@@ -138,6 +141,11 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-webview')
+    implementation project(':react-native-linear-gradient')
+    implementation project(':react-native-shimmer')
+    implementation project(':react-native-device-info')
+    implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-reanimated')
     implementation project(':react-native-orientation-locker')
     implementation project(':rn-fetch-blob')

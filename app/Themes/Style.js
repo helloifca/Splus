@@ -1,7 +1,7 @@
 const React = require("react-native");
 const { Platform } = React;
 import { Fonts, Metrics, Colors } from '../Themes/';
-
+import {StatusBar} from 'react-native';
 
 export default {
 

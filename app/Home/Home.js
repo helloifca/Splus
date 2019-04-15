@@ -8,7 +8,8 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Dimensions,
-  Image
+  Image,
+  ActivityIndicator
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Carousel, { Pagination } from "react-native-snap-carousel";
@@ -18,17 +19,25 @@ import styles, { colors } from "./styles/index";
 import { ENTRIES1, ENTRIES2 } from "./static/entries";
 import { scrollInterpolators, animatedStyles } from "./utils/animations";
 import CardSlide from "../components/CardSlide";
-
 const { height, width } = Dimensions.get('window')
+import {urlApi} from '@Config/services';
+import {_storeData,_getData} from '@Component/StoreAsync';
+import { Actions } from "react-native-router-flux";
 
 const IS_ANDROID = Platform.OS === "android";
-const SLIDER_1_FIRST_ITEM = 1;
+const SLIDER_1_FIRST_ITEM = 0;
 
 export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      slider1ActiveSlide: SLIDER_1_FIRST_ITEM
+      slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
+
+      email  : '',
+      dataTower : [{illustration:'',title:'', subtitle:''}],
+      dataTowerCor : [{illustration:'',title:'', subtitle:''}],
+
+      isCorLoaded : false,
     };
   }
 
@@ -37,11 +46,44 @@ export default class Home extends Component {
     if (Platform.OS == 'android') {
         this.startHeaderHeight = 100 + StatusBar.currentHeight
     }
-}
-
-  _renderItem({ item, index }) {
-    return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
   }
+
+  async componentDidMount(){
+    console.log('Data Project',await _getData('@UserProject'));
+    const data = {
+      email :  await _getData('@User'),
+      dataTower : await _getData('@UserProject'),
+      isCorLoaded : true
+    }
+
+    this.setState(data)
+  }
+
+  // getTower = () => {
+  //   let email = this.state.email;
+  //   fetch(urlApi+'c_product_info/getData/IFCAMOBILE/' +email ,{
+  //       method : "GET",
+  //   })
+  //   .then((response) => response.json())
+  //   .then((res)=>{
+  //       if(res.Error === false){
+  //           let resData = res.Data
+  //           console.log('resData',resData);
+  //           let data = []
+  //           resData.map((item)=>{
+  //             let items = {illustration : item.picture_url,title :item.project_descs,subtitle:item.db_profile+item.project_no}
+  //             data.push(items)
+  //           })
+  //           this.setState({dataTower:data,isCorLoaded:true})
+  //       }
+  //   }).catch((error) => {
+  //       console.log(error);
+  //   });
+  // }
+
+  // _renderItem({ item, index }) {
+  //   return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
+  // }
 
   _renderItemWithParallax({ item, index }, parallaxProps) {
     return (
@@ -69,6 +111,7 @@ export default class Home extends Component {
       <View style={styles.exampleContainer}>
         <Text style={styles.title}>{`Hey Guest`}</Text>
         <Text style={styles.subtitle}>{`Welcome to Ifca S+`}</Text>
+        
         <View
           style={{
             justifyContent: "flex-end",
@@ -78,31 +121,36 @@ export default class Home extends Component {
             marginTop: -32
           }}
         >
-          <TouchableOpacity style={styles.InBtn}>
+          <TouchableOpacity style={styles.InBtn} onPress={()=>Actions.search()}>
             <Text style={styles.InBtnText}>All Project</Text>
           </TouchableOpacity>
         </View>
-
-        <Carousel
-          ref={c => (this._slider1Ref = c)}
-          data={ENTRIES1}
-          renderItem={this._renderItemWithParallax}
-          sliderWidth={sliderWidth}
-          itemWidth={itemWidth}
-          hasParallaxImages={true}
-          firstItem={SLIDER_1_FIRST_ITEM}
-          inactiveSlideScale={0.94}
-          inactiveSlideOpacity={0.7}
-          inactiveSlideShift={20}
-          containerCustomStyle={styles.slider}
-          contentContainerCustomStyle={styles.sliderContentContainer}
-          loop={true}
-          loopClonesPerSide={2}
-          autoplay={true}
-          autoplayDelay={500}
-          autoplayInterval={3000}
-          onSnapToItem={index => this.setState({ slider1ActiveSlide: index })}
-        />
+        
+        <View style={styles.corContainerStyle}>
+          {!this.state.isCorLoaded ? <ActivityIndicator size="large" /> :
+            <Carousel
+            ref={c => (this._slider1Ref = c)}
+            data={this.state.dataTower}
+            renderItem={this._renderItemWithParallax}
+            sliderWidth={sliderWidth}
+            itemWidth={itemWidth}
+            hasParallaxImages={true}
+            firstItem={SLIDER_1_FIRST_ITEM}
+            inactiveSlideScale={0.94}
+            inactiveSlideOpacity={0.7}
+            inactiveSlideShift={20}
+            containerCustomStyle={styles.slider}
+            contentContainerCustomStyle={styles.sliderContentContainer}
+            loop={false}
+            loopClonesPerSide={2}
+            enableMomentum={false}
+            lockScrollWhileSnapping={true}
+            autoplay={false}
+            autoplayDelay={1000}
+            autoplayInterval={3000}
+          />
+          }
+        </View>
         
       </View>
     );
