@@ -20,7 +20,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-project.xcworkspace
+Splus.xcworkspace
 
 # Android/IntelliJ
 #
@@ -29,6 +29,8 @@ build/
 .gradle
 local.properties
 *.iml
+*.lock
+*.bin
 
 # node.js
 #
@@ -60,3 +62,4 @@ ios/Pods/
 
 yarn.lock
 package.json.lock
+

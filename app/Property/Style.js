@@ -142,8 +142,8 @@ export default {
     padding: 15,
   },
   amenityIcon: {
-    color: '#FCC300',
-    fontSize: 24,
+    // color: '#FCC300',
+    // fontSize: 24,
     marginBottom: 5,
   },
   amenityItem: {

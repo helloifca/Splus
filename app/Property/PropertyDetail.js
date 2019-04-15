@@ -319,6 +319,7 @@ clickSearch() {
                     horizontal
                     style={Styles.slider}
                     showsHorizontalScrollIndicator={false}
+                    keyExtractor={item =>item.id}
                     renderItem={({ item, separators }) => (
                       <TouchableOpacity
                         underlayColor="transparent"
@@ -342,6 +343,7 @@ clickSearch() {
                     <FlatList
                       data={AMENITIES}
                       horizontal
+                      keyExtractor={item => item.amenity}
                       renderItem={({ item, separators }) => (
                         <View style={Styles.amenity}>
                           <Image

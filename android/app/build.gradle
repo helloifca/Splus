@@ -143,7 +143,6 @@ android {
 dependencies {
     implementation project(':react-native-webview')
     implementation project(':react-native-linear-gradient')
-    implementation project(':react-native-shimmer')
     implementation project(':react-native-device-info')
     implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-reanimated')
