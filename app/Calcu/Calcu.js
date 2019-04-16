@@ -9,18 +9,7 @@ class Calcu extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <WebView
-                style={styles.webview}
-                scrollEnabled={false}
-                source={{html:'<h1>Hello</h1>'}}
-                startInLoadingState={true}
-                scalesPageToFit={false} />
-                <WebView
-                style={styles.webview}
-                scrollEnabled={false}
-                source={{html:'<h1>Hello</h1>'}}
-                startInLoadingState={true}
-                scalesPageToFit={false} />
+                <Text>Calcu</Text>
             </View>
             // <View style={styles.container}>
             //     <WebView 
@@ -36,8 +25,7 @@ class Calcu extends Component {
 // define your styles
 const styles = StyleSheet.create({
     container: {
-        width: deviceWidth *0.5,
-        height : 200,
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#2c3e50',

@@ -16,7 +16,8 @@ const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window'
 export default class Search extends React.Component {
 
     state = {
-        dataTower :[]
+        dataTower :[],
+        isVisible : false
     }
    
     async componentDidMount(){
@@ -24,18 +25,23 @@ export default class Search extends React.Component {
             dataTower : await _getData('@UserProject')
         }
 
-        this.setState(data)
+        this.setState(data,()=>{
+            setTimeout(() => {
+                this.setState({
+                    isVisible: true
+                })
+            }, 2000)
+        })
+        // setTimeout(() => {
+        //     this.setState(data)
+        // }, 2000)
 
         Actions.refresh({backTitle: ()=> this.props.title})
 
     }
 
     componentWillMount() {
-        setTimeout(() => {
-            this.setState({
-                isVisible: true
-            })
-        }, 2000)
+        
     }
     clickProject(item) {
         // console.log('property',item);
@@ -62,20 +68,32 @@ export default class Search extends React.Component {
                             </Button>
                         </Right> */}
                     </View>
-                    <View style={Styles.city}>
-                        {this.state.dataTower.length == 0 ? null :
-                            this.state.dataTower.map((item,key)=>
-                                <Shimmer key={key} autoRun={true} style={Styles.btnCity} visible={this.state.isVisible} >
-                                    <TouchableOpacity style={Styles.btnCity} onPress={() => this.clickProject(item)}>
-                                    <Image source={{ uri: item.picture_url+ '?random_number=' + new Date().getTime() }} resizeMode={'cover'} style={Styles.btnCityImg} />
-                                    <View style={Styles.btnCityLocation}>
-                                        <Text style={Styles.btnCityText}>{item.project_descs}</Text>
-                                    </View>
-                                    </TouchableOpacity>
-                                </Shimmer>
-                            )
-                        }
-                    </View>
+                    
+                    {this.state.dataTower.length == 0 ? 
+                        <View style={Styles.city}>
+                            <Shimmer autoRun={true} style={Styles.btnCity} />
+                            <Shimmer autoRun={true} style={Styles.btnCity} />
+                            <Shimmer autoRun={true} style={Styles.btnCity} />
+                            <Shimmer autoRun={true} style={Styles.btnCity} />
+                        </View>
+                    :
+                        <View style={Styles.city}>
+
+                        {this.state.dataTower.map((item,key)=>
+                            <Shimmer key={key} autoRun={true} style={Styles.btnCity} visible={this.state.isVisible}>
+                            <TouchableOpacity style={Styles.btnCity} onPress={() => this.clickProject(item)}>
+                            <Image source={{ uri: item.picture_url+ '?random_number=' + new Date().getTime() }} resizeMode={'cover'} style={Styles.btnCityImg} />
+                            <View style={Styles.btnCityLocation}>
+                                <Text style={Styles.btnCityText}>{item.project_descs}</Text>
+                            </View>
+                            </TouchableOpacity>
+                            </Shimmer>
+                        )}
+                        </View>
+
+                    }
+
+                    
                 </View>
 
 

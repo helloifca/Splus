@@ -19,7 +19,7 @@ export default class Akun extends React.Component {
                 <StatusBar
                 translucent={true}
                 backgroundColor={"rgba(0, 0, 0, 0.3)"}
-                barStyle={"light-content"}
+                barStyle={"dark-content"}
                 />
             
 

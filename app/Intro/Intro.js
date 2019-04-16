@@ -165,7 +165,7 @@ export default class Intro extends React.Component {
 
   render() {
     // let BG_Image = { uri : 'https://antiqueruby.aliansoftware.net/Images/signin/ic_main_bg_stwo.png'};
-		StatusBar.setBarStyle('dark-content', true);
+		StatusBar.setBarStyle('light-content', true);
 
     if(Platform.OS === 'android') {
      StatusBar.setBackgroundColor('transparent',true);

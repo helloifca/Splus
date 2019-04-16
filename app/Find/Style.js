@@ -272,6 +272,7 @@ export default {
         height: 100,
         marginBottom: 10,
         borderRadius: 5,
+        backgroundColor:'#fff'
     },
     btnCityImg: {
         width: dw * 0.42,

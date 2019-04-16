@@ -55,18 +55,24 @@ const { width: viewportWidth, height: viewportHeight } = Dimensions.get(
   "window"
 );
 
+let isMount = false
+
 export default class extends React.Component {
     constructor(props) {
       super(props)
       this.state = {
-        active: 'true',
+        title : '',
+        picture_url : '',
+
+        active: false,
         isVisible: false,
 
         hd : new Headers,
         amenities  : null,
         feature : null,
         overview : null,
-        project : null
+        project : null,
+        gallery : []
       };
 
     }
@@ -77,16 +83,27 @@ async componentDidMount() {
     const data = {
       hd : new Headers({
         'Token' : await _getData('@Token')
-      })
+      }),
+      title : this.props.items.project_descs,
+      picture_url : this.props.items.picture_url
     }
 
-    this.setState(data)
+    isMount=true
 
-    this.getDataDetails(this.props.items)
+    this.setState(data,()=>{
+      this.getDataDetails(this.props.items)
+      this.getDataGallery(this.props.items)
+    })
+
+}
+
+componentWillUnmount(){
+  // this.setState({isMount:false})
+  isMount =false
 }
 
 getDataDetails = (item) => {
-    console.log('this.state.hd',this.state.hd);
+    {isMount ?
     fetch(urlApi+'c_reservation/getDataDetails/'+item.db_profile+'/'+item.entity_cd+'/'+item.project_no,{
         method:'GET',
         headers : this.state.hd,
@@ -110,7 +127,30 @@ getDataDetails = (item) => {
         console.log('getDAtaDetails',res);
     }).catch((error) => {
         console.log(error);
-    });
+    })
+    :null}
+}
+
+getDataGallery = (item) => {
+  {isMount ?
+  fetch(urlApi+'c_reservation/getGallery/'+item.db_profile+'/'+item.entity_cd+'/'+item.project_no,{
+      method:'GET',
+      headers : this.state.hd,
+  }).then((response) => response.json())
+  .then((res)=>{
+      if(!res.Error){
+          const resData = res.Data
+          this.setState({gallery : resData.gallery})
+      } else {
+          this.setState({isLoaded: !this.state.isLoaded},()=>{
+              alert(res.Pesan)
+          });
+      }
+      console.log('getData Galerry',res);
+  }).catch((error) => {
+      console.log(error);
+  })
+  :null}
 }
 
 clickCategoris() {
@@ -128,7 +168,7 @@ clickSearch() {
     if(this.state.feature){
       feature = this.state.feature[0].feature_info.replace(/<div class="col-md-6">|<\/div>|<\/b>|<b>|<ul class="list-unstyled">|<\/ul>/gi, '')
       feature = feature.replace(/<\/li>/gi,'\n')
-      feature = feature.replace(/<li>/gi,'\t• ')
+      feature = feature.replace(/<li>/gi,'• ')
       feature = feature.replace(/<br>/gi,' ')
       console.log('feature',feature)
     }
@@ -158,7 +198,7 @@ clickSearch() {
           </View>
           <View style={Style.actionBarMiddle}>
             <Text style={Style.actionBarText}>
-              {this.props.items.project_descs.toUpperCase()}
+              {this.state.title.toUpperCase()}
             </Text>
           </View>
           <View style={Style.actionBarRight}>
@@ -187,13 +227,14 @@ clickSearch() {
           style={Style.layoutInner}
           contentContainerStyle={Style.layoutContent}
         >
-          <ImageBackground
+          {this.state.picture_url !='' ?
+            <ImageBackground
             source={{
-              uri: this.props.items.picture_url
+              uri: this.state.picture_url
             }}
             imageStyle={"cover"}
             style={Styles.coverImg}
-          >
+            >
           <Fab
             active={this.state.active}
             direction="down"
@@ -213,6 +254,8 @@ clickSearch() {
             </Button>
           </Fab>
           </ImageBackground>
+          :<ActivityIndicator/>}
+
 
           {/* <View style={Styles.section}>
                     <Text style={Styles.price}>$2,850,000</Text>
@@ -285,10 +328,10 @@ clickSearch() {
               :<ActivityIndicator /> }
 
           </View>
-          <Tabs tabBarUnderlineStyle={Styles.tabBorder}>
+          <Tabs locked={Platform.OS == 'android' ? true : false} tabBarUnderlineStyle={Styles.tabBorder}>
             <Tab
               tabStyle={Styles.tabGrey}
-              textStyle={Styles.tabTextActive}
+              textStyle={Styles.tabText}
               activeTabStyle={Styles.tabGrey}
               activeTextStyle={Styles.tabTextActive}
               heading="Informations"
@@ -308,34 +351,36 @@ clickSearch() {
               tabStyle={Styles.tabGrey}
               textStyle={Styles.tabText}
               activeTabStyle={Styles.tabGrey}
-              activeTextStyle={Styles.tabText}
+              activeTextStyle={Styles.tabTextActive}
               heading="Gallery"
             >
               <List style={Styles.infoTab}>
                 <View style={Styles.overview}>
                   <Text style={Styles.overviewTitle}>Photo Gallery</Text>
+                  {this.state.gallery.length != 0 ?
                   <FlatList
-                    data={GALLERY}
-                    horizontal
-                    style={Styles.slider}
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={item =>item.id}
-                    renderItem={({ item, separators }) => (
-                      <TouchableOpacity
-                        underlayColor="transparent"
-                        onPress={() => {
-                          NavigationService.navigate("StudentActivities");
-                        }}
-                      >
-                        <View>
-                          <Image
-                            source={{ uri: item.image }}
-                            style={Styles.sliderImg}
-                          />
-                        </View>
-                      </TouchableOpacity>
-                    )}
-                  />
+                  data={this.state.gallery}
+                  horizontal
+                  style={Styles.slider}
+                  showsHorizontalScrollIndicator={false}
+                  keyExtractor={item =>item.line_no}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      underlayColor="transparent"
+                      onPress={() => {
+                        alert('click')
+                      }}
+                    >
+                      <View>
+                        <Image
+                          source={{ uri: item.gallery_url }}
+                          style={Styles.sliderImg}
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  )}
+                />  
+                 :<ActivityIndicator/>}
                 </View>
                 <View style={Styles.amenities}>
                   <Text style={Styles.amenityTitle}>Facilities</Text>
@@ -344,7 +389,7 @@ clickSearch() {
                       data={AMENITIES}
                       horizontal
                       keyExtractor={item => item.amenity}
-                      renderItem={({ item, separators }) => (
+                      renderItem={({ item }) => (
                         <View style={Styles.amenity}>
                           <Image
                             source={item.icon}
@@ -362,7 +407,7 @@ clickSearch() {
               tabStyle={Styles.tabGrey}
               textStyle={Styles.tabText}
               activeTabStyle={Styles.tabGrey}
-              activeTextStyle={Styles.tabText}
+              activeTextStyle={Styles.tabTextActive}
               heading="Simulasi KPA/R"
             >
               <List style={Styles.infoTab}>
@@ -432,12 +477,13 @@ clickSearch() {
                 </Button>
               </Right>
             </View>
-            {/* <FlatList
+            <FlatList
               data={SIMILAR}
               horizontal
               showsHorizontalScrollIndicator={false}
               style={Styles.flatList}
-              renderItem={({ item, separators }) => (
+              keyExtractor={item => item.id}
+              renderItem={({ item }) => (
                 <TouchableOpacity
                   style={Styles.item}
                   underlayColor="transparent"
@@ -456,7 +502,7 @@ clickSearch() {
                   </View>
                 </TouchableOpacity>
               )}
-            /> */}
+            />
           </View>
           <Modal
           animationType={'slide'}

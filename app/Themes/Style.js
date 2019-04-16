@@ -13,6 +13,8 @@ export default {
     layoutInner: {
         width: '100%',
     },
+    layoutContent:{
+    },
     layoutCenter: {
         flexGrow: 1,
         alignItems: 'center',

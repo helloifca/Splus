@@ -8,13 +8,14 @@ class CardSlide extends Component {
         style={{
           height: 130,
           width: 130,
-          marginLeft: 20,
+          marginLeft: 10,
+          marginRight : 10
         //   borderWidth: 1,
         //   borderColor: "#DBDBDB",
         //   borderRadius: 15
         }}
       >
-        <View style={{ flex: 2 }}>
+        <View style={{ flex: 2,backgroundColor:'#fff',borderRadius:10 }}>
           <Image
             source={this.props.imageUri}
             style={{
@@ -27,7 +28,7 @@ class CardSlide extends Component {
           />
         </View>
         <View style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}>
-          <Text>{this.props.name}</Text>
+          <Text style={{textAlign:'center'}}>{this.props.name}</Text>
         </View>
       </View>
     );

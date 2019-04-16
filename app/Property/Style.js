@@ -1,7 +1,7 @@
-const React = require("react-native");
-const { Platform } = React;
+import { Platform, StyleSheet, Dimensions } from 'react-native';
 import { Fonts, Metrics, Colors } from '../Themes/';
-
+const dh = Dimensions.get("window").height;
+const dw = Dimensions.get("window").width;
 
 export default {
   layoutContent: {
@@ -57,6 +57,7 @@ export default {
     flexDirection: 'row',
     borderTopWidth: 1,
     borderColor: '#E6E4E4',
+    width : dw
   },
   countCol: {
     flexDirection: 'row'
@@ -67,6 +68,8 @@ export default {
     borderColor: '#E6E4E4',
     paddingVertical: 20,
     paddingHorizontal: 10,
+    width : dw * 0.333,
+    alignItems: 'center',
   },
   countFirst: {
     paddingLeft: 20,
@@ -340,7 +343,8 @@ export default {
     backgroundColor: '#f0f0f0',
   },
   flatList: {
-    paddingLeft: 15,
+    // paddingLeft: 15,
+    // paddingRight : 15
   },
   headerBg: {
     flexDirection: 'row',

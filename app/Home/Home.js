@@ -36,6 +36,7 @@ export default class Home extends Component {
       email  : '',
       dataTower : [{illustration:'',title:'', subtitle:''}],
       dataTowerCor : [{illustration:'',title:'', subtitle:''}],
+      dataPromo : [],
 
       isCorLoaded : false,
     };
@@ -56,30 +57,27 @@ export default class Home extends Component {
       isCorLoaded : true
     }
 
-    this.setState(data)
+    this.setState(data,()=>{
+      this.getPromo()
+    })
   }
 
-  // getTower = () => {
-  //   let email = this.state.email;
-  //   fetch(urlApi+'c_product_info/getData/IFCAMOBILE/' +email ,{
-  //       method : "GET",
-  //   })
-  //   .then((response) => response.json())
-  //   .then((res)=>{
-  //       if(res.Error === false){
-  //           let resData = res.Data
-  //           console.log('resData',resData);
-  //           let data = []
-  //           resData.map((item)=>{
-  //             let items = {illustration : item.picture_url,title :item.project_descs,subtitle:item.db_profile+item.project_no}
-  //             data.push(items)
-  //           })
-  //           this.setState({dataTower:data,isCorLoaded:true})
-  //       }
-  //   }).catch((error) => {
-  //       console.log(error);
-  //   });
-  // }
+  getPromo = () => {
+    fetch(urlApi+'c_newsandpromo/getDatapromo/IFCAMOBILE' ,{
+        method : "GET",
+    })
+    .then((response) => response.json())
+    .then((res)=>{
+        if(!res.Error){
+          const resData = res.Data
+
+          this.setState({dataPromo:resData})
+        }
+    }).catch((error) => {
+        console.log(error);
+    });
+  }
+  
 
   // _renderItem({ item, index }) {
   //   return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
@@ -182,7 +180,7 @@ export default class Home extends Component {
         <StatusBar
           translucent={true}
           backgroundColor={"rgba(0, 0, 0, 0.3)"}
-          barStyle={"light-content"}
+          barStyle={"dark-content"}
         />
         {this.gradient}
         <ScrollView
@@ -204,15 +202,11 @@ export default class Home extends Component {
                                     horizontal={true}
                                     showsHorizontalScrollIndicator={false}
                                 >
-                                    <CardSlide imageUri={require('../Images/home.jpg')}
-                                        name="Home"
-                                    />
-                                    <CardSlide imageUri={require('../Images/experiences.jpg')}
-                                        name="Experiences"
-                                    />
-                                    <CardSlide imageUri={require('../Images/restaurant.jpg')}
-                                        name="Resturant"
-                                    />
+                                    {this.state.dataPromo.length != 0 ?
+                                      this.state.dataPromo.map((item,key)=>
+                                         <CardSlide key={key} imageUri={{url:item.picture}} name={item.subject} />
+                                      )
+                                    :<ActivityIndicator/>}
                                 </ScrollView>
                             </View>
                             <View style={{ marginTop: 40, paddingHorizontal: 20, paddingBottom: 16 }}>
