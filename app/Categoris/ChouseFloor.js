@@ -40,12 +40,71 @@ import {
 import { Style, Colors } from "../Themes";
 import Styles from "./Style";
 
+import {_storeData,_getData} from '@Component/StoreAsync';
+import {urlApi} from '@Config/services';
 
+let isMount = false
 // create a component
 class ChouseFloor extends Component {
-    clickChouseUnit() {
-        Actions.chouseunit();
-        this.setState({ click : true})
+
+    constructor(props){
+      super(props)
+
+      this.state={
+        hd : null,
+
+        blok : []
+
+    }
+
+      console.log('props cf',props);
+    }
+
+    async componentDidMount(){
+      isMount = true
+      const data = {
+        hd : new Headers({
+          'Token' : await _getData('@Token')
+        })
+      }
+
+      this.setState(data,()=>{
+          this.getBlok()
+      })
+    }
+
+    getBlok = () =>{
+      const item = this.props.item
+      const items = this.props.prevItems
+      {isMount ?
+          fetch(urlApi+'c_product_info/getBlok/'+items.db_profile+'/'+items.entity_cd+'/'+items.project_no+'/'+items.tower+'/'+item.lot_type,{
+              method:'GET',
+              headers : this.state.hd,
+          }).then((response) => response.json())
+          .then((res)=>{
+              if(!res.Error){
+                  const resData = res.Data
+                  this.setState({blok : resData})
+              } else {
+                  this.setState({isLoaded: !this.state.isLoaded},()=>{
+                      alert(res.Pesan)
+                  });
+              }
+              console.log('getBlok',res);
+          }).catch((error) => {
+              console.log(error);
+          })
+      :null}
+    }
+
+    clickChouseUnit(item) {
+      
+        Actions.chouseunit({
+          unitItems : item,
+          items : this.props.item,
+          prevItems : this.props.prevItems
+        });
+        // this.setState({ click : true})
     }
     clickUnitEnquiry() {
         Actions.unitenquiry();
@@ -56,7 +115,7 @@ class ChouseFloor extends Component {
             <Container style={Style.bgMain}>
             <Header style={Style.navigation}>
                <StatusBar
-                 backgroundColor="#7E8BF5"
+                 backgroundColor={Colors.statusBarOrange}
                  animated
                  barStyle="light-content"
                />
@@ -131,74 +190,19 @@ class ChouseFloor extends Component {
 
                     }}>Unit type</Text>
                     <View style={Styles.city}>
-                            <TouchableOpacity style={Styles.btnCity} onPress={() => {
-        this.clickChouseUnit();
-      }} >
-                                <View style={Styles.btnCityLocation}>
-                                    <Icon
-                                        active
-                                        name="floor-plan"
-                                        style={Style.actionIconquiry}
-                                        type="MaterialCommunityIcons"
-                                    />
-                                    <Text style={Styles.btnCityText}>Lantai 01 </Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={Styles.btnCity} >
-                                <View style={Styles.btnCityLocation}>
-                                    <Icon
-                                        active
-                                        name="floor-plan"
-                                        style={Style.actionIconquiry}
-                                        type="MaterialCommunityIcons"
-                                    />
-                                    <Text style={Styles.btnCityText}>Lantai 02 </Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={Styles.btnCity} >
-                                <View style={Styles.btnCityLocation}>
-                                    <Icon
-                                        active
-                                        name="floor-plan"
-                                        style={Style.actionIconquiry}
-                                        type="MaterialCommunityIcons"
-                                    />
-                                    <Text style={Styles.btnCityText}>Lantai 03 </Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={Styles.btnCity} >
-                                <View style={Styles.btnCityLocation}>
-                                    <Icon
-                                        active
-                                        name="floor-plan"
-                                        style={Style.actionIconquiry}
-                                        type="MaterialCommunityIcons"
-                                    />
-                                    <Text style={Styles.btnCityText}>Lantai 01 </Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={Styles.btnCity} >
-                                <View style={Styles.btnCityLocation}>
-                                    <Icon
-                                        active
-                                        name="floor-plan"
-                                        style={Style.actionIconquiry}
-                                        type="MaterialCommunityIcons"
-                                    />
-                                    <Text style={Styles.btnCityText}>Lantai 02 </Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={Styles.btnCity} >
-                                <View style={Styles.btnCityLocation}>
-                                    <Icon
-                                        active
-                                        name="floor-plan"
-                                        style={Style.actionIconquiry}
-                                        type="MaterialCommunityIcons"
-                                    />
-                                    <Text style={Styles.btnCityText}>Lantai 03 </Text>
-                                </View>
-                            </TouchableOpacity>
+                      {this.state.blok.map((item,key)=>
+                        <TouchableOpacity key={key} style={Styles.btnCity} onPress={() => {this.clickChouseUnit(item)}} >
+                          <View style={Styles.btnCityLocation}>
+                              <Icon
+                                  active
+                                  name="floor-plan"
+                                  style={Style.actionIconquiry}
+                                  type="MaterialCommunityIcons"
+                              />
+                              <Text style={Styles.btnCityText}>{item.descs}</Text>
+                          </View>
+                        </TouchableOpacity>
+                      )}
                     </View>
                 </View>
              </Content>

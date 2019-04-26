@@ -62,7 +62,7 @@ class Interested extends Component {
           }}>
           <Header style={Style.navigation}>
           <StatusBar
-            backgroundColor="#7E8BF5"
+            backgroundColor={Colors.statusBarOrange}
             animated
             barStyle="light-content"
           />

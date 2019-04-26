@@ -24,6 +24,7 @@ import UnitDetail from "./Categoris/UnitDetail";
 
 import { Tab } from "native-base";
 import ChouseFloor from "./Categoris/ChouseFloor";
+import ChooseTower from "./Categoris/ChooseTower";
 import ChouseUnit from "./Categoris/ChouseUnit";
 import UnitInfo from "./Categoris/UnitInfo";
 import UnitEnquiry from "./Categoris/UnitEnquiry";
@@ -151,9 +152,16 @@ class Routes extends Component{
                   hideNavBar={true}
                   title=""
                 />
-                 <Scene
+                
+                <Scene
                   key="chousefloor"
                   component={ChouseFloor}
+                  hideNavBar={true}
+                  title=""
+                />
+                <Scene
+                  key="choosetower"
+                  component={ChooseTower}
                   hideNavBar={true}
                   title=""
                 />

@@ -50,8 +50,9 @@ export default {
         backgroundColor: 'transparent',
         width: '100%',
         borderBottomWidth: 0,
-        borderColor: '#7E8BF5',
-        backgroundColor: '#DAD299',
+        borderColor: Colors.headerOrange,
+        backgroundColor: Colors.headerOrange,
+        marginTop: StatusBar.currentHeight,
     },
     navigationTransparent: {
         backgroundColor: 'transparent',

@@ -39,6 +39,10 @@ const colors = {
   skyblue:'#71d4ff',
   txtsky:'#83c8e7',
 
+  statusBarOrange : '#db5f00',
+  headerOrange : '#ff6f00',
+
+
   //WooCommerce Color
   veryLightGray: "#dcdcdc",
   red: 'red',

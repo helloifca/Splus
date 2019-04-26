@@ -118,10 +118,9 @@ sLink: {
 },
 headerUnit: {
   flexDirection: 'row',
-  marginBottom: 15,
+  marginBottom: 8,
   paddingHorizontal: 20,
   paddingTop: 16,
-  paddingBottom: 16,
 },
 city: {
   flex: 1,
@@ -138,10 +137,10 @@ btnCity: {
   backgroundColor: '#DFE3EE',
   borderRadius: 10,
   shadowColor: '#eee',
-    shadowOffset: { width: 2, height: 3 },
-    shadowOpacity: 2,
-    shadowRadius: 2,
-    elevation: 1,
+  shadowOffset: { width: 2, height: 3 },
+  shadowOpacity: 2,
+  shadowRadius: 2,
+  elevation: 1,
 
 
   

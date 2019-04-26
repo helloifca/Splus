@@ -61,6 +61,10 @@ class Unitgoris extends React.Component {
   state = {
     modalVisible: true, 
   }
+
+  componentDidMount(){
+    console.log('props',this.props);
+  }
   
   onClose = () => this.setState({ modalVisible: false});
 
@@ -74,7 +78,7 @@ class Unitgoris extends React.Component {
       <Container style={Style.bgMain}>
         <Header style={Style.navigation}>
           <StatusBar
-            backgroundColor="#7E8BF5"
+            backgroundColor={Colors.statusBarOrange}
             animated
             barStyle="light-content"
           />

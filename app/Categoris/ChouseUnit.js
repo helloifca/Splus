@@ -39,23 +39,91 @@ import ParallaxScroll from "@monterosa/react-native-parallax-scroll";
 
 import { Style, Colors } from "../Themes";
 import Styles from "./Style";
-
+import {_storeData,_getData} from '@Component/StoreAsync';
+import {urlApi} from '@Config/services';
+let isMount = false
 // create a component
 class ChouseUnit extends Component {
-  clickUnitInfo() {
-    Actions.unitinfo();
-    this.setState({ click: true });
+  constructor(props){
+    super(props)
+
+    this.state={
+      hd : null,
+
+      unit : []
+    }
+
+    console.log('props CU',props);
+
+  }
+
+  async componentDidMount(){
+    isMount = true
+
+    const data = {
+      hd : new Headers({
+        'Token' : await _getData('@Token')
+      })
+    }
+
+    this.setState(data,()=>{
+      this.getUnit()
+    })
+    
+  }
+
+  getUnit = () =>{
+    const item = this.props.prevItems
+    const items = this.props.items
+    const unit = this.props.unitItems
+    {isMount ?
+        fetch(urlApi+'c_product_info/getUnit/'+item.db_profile+'/'+item.entity_cd+'/'+item.project_no+'/'+item.tower+'/'+unit.level_no+'/'+items.lot_type,{
+            method:'GET',
+            headers : this.state.hd,
+        }).then((response) => response.json())
+        .then((res)=>{
+            if(!res.Error){
+                const resData = res.Data
+                this.setState({unit : resData})
+            } else {
+                this.setState({isLoaded: !this.state.isLoaded},()=>{
+                    alert(res.Pesan)
+                });
+            }
+            console.log('getUnit',res);
+        }).catch((error) => {
+            console.log(error);
+        })
+    :null}
+  }
+  
+  clickUnitInfo(item) {
+    if(item.status == 'A'){
+      Actions.unitinfo({
+        items : item,
+        prevItems : this.props.prevItems,
+        unitItems : this.props.unitItems
+      });
+    } else {
+      alert('This Unit is Not Available')
+    }
+    // this.setState({ click: true });
   }
   clickUnitEnquiry() {
     Actions.unitenquiry();
     this.setState({ click: true });
   }
   render() {
+
+    const item = this.props.prevItems
+    const items = this.props.items
+    const unit = this.props.unitItems
+
     return (
       <Container style={Style.bgMain}>
         <Header style={Style.navigation}>
           <StatusBar
-            backgroundColor="#7E8BF5"
+            backgroundColor={Colors.statusBarOrange}
             animated
             barStyle="light-content"
           />
@@ -114,102 +182,38 @@ class ChouseUnit extends Component {
               <Text style={Styles.sHeader}>
                 {"Yukata Suites".toUpperCase()}
               </Text>
-              <Right>
-                <Button
-                  small
-                  rounded
-                  style={Styles.sBtn}
-                  onPress={() => {
-                    this.clickUnitEnquiry();
-                  }}
-                >
-                  <Text style={Styles.sLink}>Unit Enquiry</Text>
-                </Button>
-              </Right>
             </View>
-            <Text
-              style={{
-                fontWeight: "300",
-                fontSize: 16,
-                paddingLeft: 16,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              MIZU | Lantai 03 | 3 BR
-            </Text>
-            <View style={Styles.city}>
-              <TouchableOpacity
-                style={Styles.btnCity}
-                onPress={() => {
-                  this.clickUnitInfo();
+            <View style={{flexDirection:'row',marginHorizontal:20}}>
+              <Text
+                style={{
+                  fontWeight: "300",
+                  fontSize: 16,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexWrap : 'wrap',
+                  flex :1
                 }}
               >
+                {item.title} | {unit.descs} | {items.descs}
+              </Text>
+            </View>
+            <View style={Styles.city}>
+
+            {this.state.unit.map((item,key)=>
+              <TouchableOpacity key={key} style={[Styles.btnCity,{backgroundColor : item.status !== 'A' ? '#a30000' :'#1faa00'}]} onPress={() => { this.clickUnitInfo(item) }} >
                 <View style={Styles.btnCityLocation}>
                   <Icon
                     active
                     name="floor-plan"
-                    style={Style.actionIconquiry}
+                    style={[Style.actionIconquiry,{color : '#fff'}]}
                     type="MaterialCommunityIcons"
                   />
-                  <Text style={Styles.btnCityText}>03/B </Text>
+                  <Text style={[Styles.btnCityText,{color : '#fff'}]}>{item.lot_no} </Text>
+                  <Text style={[Styles.btnCityText,{color : '#fff'}]}>{item.descs} </Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity style={Styles.btnCity}>
-                <View style={Styles.btnCityLocation}>
-                  <Icon
-                    active
-                    name="floor-plan"
-                    style={Style.actionIconquiry}
-                    type="MaterialCommunityIcons"
-                  />
-                  <Text style={Styles.btnCityText}>03/C </Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity style={Styles.btnCity}>
-                <View style={Styles.btnCityLocation}>
-                  <Icon
-                    active
-                    name="floor-plan"
-                    style={Style.actionIconquiry}
-                    type="MaterialCommunityIcons"
-                  />
-                  <Text style={Styles.btnCityText}>03/D </Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity style={Styles.btnCity}>
-                <View style={Styles.btnCityLocation}>
-                  <Icon
-                    active
-                    name="floor-plan"
-                    style={Style.actionIconquiry}
-                    type="MaterialCommunityIcons"
-                  />
-                  <Text style={Styles.btnCityText}>03/E </Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity style={Styles.btnCity}>
-                <View style={Styles.btnCityLocation}>
-                  <Icon
-                    active
-                    name="floor-plan"
-                    style={Style.actionIconquiry}
-                    type="MaterialCommunityIcons"
-                  />
-                  <Text style={Styles.btnCityText}>03/F</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity style={Styles.btnCity}>
-                <View style={Styles.btnCityLocation}>
-                  <Icon
-                    active
-                    name="floor-plan"
-                    style={Style.actionIconquiry}
-                    type="MaterialCommunityIcons"
-                  />
-                  <Text style={Styles.btnCityText}>03/G </Text>
-                </View>
-              </TouchableOpacity>
+            )}
+
             </View>
           </View>
         </Content>

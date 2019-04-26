@@ -102,7 +102,7 @@ export default class Intro extends React.Component {
     }).then((response) => response.json())
     .then((res)=>{
         if(!res.Error){
-            this.signIn(res)
+            this.getTower(res)
         } else {
             this.setState({isLoaded: !this.state.isLoaded},()=>{
                 alert(res.Pesan)
@@ -111,36 +111,14 @@ export default class Intro extends React.Component {
         console.log('Login Result',res);
     }).catch((error) => {
         console.log(error);
+        this.setState({isLoaded: !this.state.isLoaded},()=>{
+          alert(error)
+      });
     });
   }
 
-  signIn = async(res) =>{
-
-    this.getTower()
-
-    try {
-        _storeData('@UserId', res.Data.UserId);
-        _storeData('@Name', res.Data.name);
-        _storeData('@Token', res.Data.Token);
-        _storeData('@User', res.Data.user);
-        _storeData('@Group', res.Data.Group);
-        _storeData("@isLogin",true);
-        _storeData("@isReset",res.Data.isResetPass.toString());
-        _storeData("@AgentCd",res.Data.AgentCd?res.Data.AgentCd:'');
-        _storeData("@Debtor",res.Data.Debtor_acct?res.Data.Debtor_acct:'');
-        _storeData('@rowID', res.Data.rowID.toString());
-        _storeData('@RefreshProfile', false);
-
-        this.setState({isLoaded : true},()=>{
-            Actions.reset('tabbar')
-        })
-       
-    } catch(err){
-        console.log('error:', err)
-    }
-  }
-
-  getTower = () => {
+  getTower = (res) => {
+    let result = res.Data
     const email = this.state.email;
     fetch(urlApi+'c_product_info/getData/IFCAMOBILE/' +email ,{
         method : "GET",
@@ -154,14 +132,41 @@ export default class Intro extends React.Component {
               let items = {...item,illustration : item.picture_url,title :item.project_descs,subtitle:item.db_profile+item.project_no}
               data.push(items)
             })
-            console.log('data',data);
 
-            _storeData('@UserProject', data);
+            result['UserProject'] = data
+            this.signIn(result)
         }
     }).catch((error) => {
         console.log(error);
     });
   }
+
+  signIn = async(res) =>{
+    console.log('res',res);
+    try {
+        _storeData('@UserId', res.UserId);
+        _storeData('@Name', res.name);
+        _storeData('@Token', res.Token);
+        _storeData('@User', res.user);
+        _storeData('@Group', res.Group);
+        _storeData("@isLogin",true);
+        _storeData("@isReset",res.isResetPass.toString());
+        _storeData("@AgentCd",res.AgentCd?res.AgentCd:'');
+        _storeData("@Debtor",res.Debtor_acct?res.Debtor_acct:'');
+        _storeData('@rowID', res.rowID.toString());
+        _storeData('@RefreshProfile', false);
+        _storeData('@UserProject', res.UserProject);
+        
+    } catch(err){
+        console.log('error:', err)
+    } finally{
+      this.setState({isLoaded : true},()=>{
+        Actions.reset('tabbar')
+      })
+    }
+  }
+
+  
 
   render() {
     // let BG_Image = { uri : 'https://antiqueruby.aliansoftware.net/Images/signin/ic_main_bg_stwo.png'};
@@ -224,7 +229,7 @@ export default class Intro extends React.Component {
 								secureTextEntry={true}/>
 						</View>
 					</View>
-					<View style={styles.signbtnSec}>
+					<View style={styles.signbtnSec} pointerEvents={this.state.isLoaded ? 'auto' : 'none'}>
 						<Button style={styles.signInBtn} onPress={() => this.btnLoginClick()}>
               {!this.state.isLoaded ? <ActivityIndicator color="#fff" /> :
             <Text style={styles.signInBtnText}>Sign In</Text>}

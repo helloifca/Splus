@@ -25,16 +25,9 @@ export default class Search extends React.Component {
             dataTower : await _getData('@UserProject')
         }
 
-        this.setState(data,()=>{
-            setTimeout(() => {
-                this.setState({
-                    isVisible: true
-                })
-            }, 2000)
-        })
-        // setTimeout(() => {
-        //     this.setState(data)
-        // }, 2000)
+        setTimeout(() => {
+            this.setState(data)
+        }, 2000)
 
         Actions.refresh({backTitle: ()=> this.props.title})
 
@@ -52,11 +45,11 @@ export default class Search extends React.Component {
         return (
         <Container style={Style.bgMain}>
     
-            <Content style={Style.layoutContent} contentContainerStyle={Style.layoutContent}>
+            <Content style={Style.layoutContent} >
             <ScrollView
-          scrollEventThrottle={200}
-          directionalLockEnabled={true}
-        >
+                scrollEventThrottle={200}
+                directionalLockEnabled={true}
+            >
             
                 <View style={Styles.sectionGrey}>
                     <View style={Styles.headerBg}>
@@ -80,14 +73,12 @@ export default class Search extends React.Component {
                         <View style={Styles.city}>
 
                         {this.state.dataTower.map((item,key)=>
-                            <Shimmer key={key} autoRun={true} style={Styles.btnCity} visible={this.state.isVisible}>
-                            <TouchableOpacity style={Styles.btnCity} onPress={() => this.clickProject(item)}>
+                            <TouchableOpacity key={key} style={Styles.btnCity} onPress={() => this.clickProject(item)}>
                             <Image source={{ uri: item.picture_url+ '?random_number=' + new Date().getTime() }} resizeMode={'cover'} style={Styles.btnCityImg} />
                             <View style={Styles.btnCityLocation}>
                                 <Text style={Styles.btnCityText}>{item.project_descs}</Text>
                             </View>
                             </TouchableOpacity>
-                            </Shimmer>
                         )}
                         </View>
 

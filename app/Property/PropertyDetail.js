@@ -44,7 +44,7 @@ import {urlApi} from '@Config/services';
 import GALLERY from "./Gallery";
 import AMENITIES from "./Amenities";
 import SIMILAR from "./Similar";
-import {_storeData,_getData} from '@Component/StoreAsync';
+import {_storeData,_getData,_navigate} from '@Component/StoreAsync';
 
 import { Style, Colors } from "../Themes/index";
 import Styles from "./Style";
@@ -72,7 +72,7 @@ export default class extends React.Component {
         feature : null,
         overview : null,
         project : null,
-        gallery : []
+        gallery : null
       };
 
     }
@@ -153,15 +153,10 @@ getDataGallery = (item) => {
   :null}
 }
 
-clickCategoris() {
-    Actions.categoris();
-    this.setState({ click : true})
+clickToNavigate = (to,param) =>{
+  Actions[to](param);
+  this.setState({click:true})
 }
-clickSearch() {
-  Actions.search();
-  this.setState({ click : true})
-}
-
  
   render() {
     let feature = ''
@@ -176,11 +171,7 @@ clickSearch() {
     return (
       <Container style={Style.bgMain}>
         <Header style={Style.navigation}>
-          <StatusBar
-            backgroundColor="#7E8BF5"
-            animated
-            barStyle="light-content"
-          />
+          <StatusBar backgroundColor={Colors.statusBarOrange} animated barStyle="light-content" />          
 
           <View style={Style.actionBarLeft}>
             <Button
@@ -216,12 +207,6 @@ clickSearch() {
             </Button>
           </View>
         </Header>
-
-        <StatusBar
-          backgroundColor="rgba(0,0,0,0)"
-          animated
-          barStyle="dark-content"
-        />
 
         <Content
           style={Style.layoutInner}
@@ -268,42 +253,42 @@ clickSearch() {
           <View style={Styles.count}>
            <ScrollView horizontal={true}>
             <View style={[Styles.countItem, Styles.countFirst]}>
-              <TouchableOpacity onPress={() => this.clickCategoris()}>
+              <TouchableOpacity onPress={() => _navigate('choosetower',{items:this.props.items})}>
                 <View style={Styles.countCol}>
                   <Image
                     source={require("@Asset/images/type.png")}
                     style={{ width: 34, height: 34 }}
+                    resizeMode='stretch'
                   />
-                  <View style={{ marginLeft: 8 }}>
-                    <Text style={Styles.countNo}>5</Text>
-                    <Text style={Styles.countText}>Category</Text>
+                  <View style={Styles.textMenu}>
+                    <Text style={Styles.countText}>Find Unit & Price</Text>
                   </View>
                 </View>
               </TouchableOpacity>
             </View>
-            <View style={Styles.countItem}>
+            <View style={[Styles.countItem, Styles.countFirst]}>
               <TouchableOpacity>
                 <View style={Styles.countCol}>
                   <Image
                     source={require("@Asset/images/booking.png")}
-                    style={{ width: 40, height: 36 }}
+                    style={{ width: 34, height: 34 }}
+                    resizeMode='stretch'
                   />
-                  <View style={{ marginLeft: 8 }}>
-                    <Text style={Styles.countNo} />
+                  <View style={Styles.textMenu}>
                     <Text style={Styles.countText}>Booking Now</Text>
                   </View>
                 </View>
               </TouchableOpacity>
             </View>
-            <View style={Styles.countItem}>
+            <View style={[Styles.countItem, Styles.countFirst]}>
               <TouchableOpacity>
                 <View style={Styles.countCol}>
                   <Image
                     source={require("@Asset/images/brosur.png")}
                     style={{ width: 34, height: 34 }}
+                    resizeMode='stretch'
                   />
-                  <View style={{ marginLeft: 8 }}>
-                    <Text style={Styles.countNo} />
+                  <View style={Styles.textMenu}>
                     <Text style={Styles.countText}>Brosur</Text>
                   </View>
                 </View>
@@ -357,7 +342,7 @@ clickSearch() {
               <List style={Styles.infoTab}>
                 <View style={Styles.overview}>
                   <Text style={Styles.overviewTitle}>Photo Gallery</Text>
-                  {this.state.gallery.length != 0 ?
+                  {this.state.gallery ?
                   <FlatList
                   data={this.state.gallery}
                   horizontal
@@ -512,11 +497,6 @@ clickSearch() {
             console.log('Modal has been closed.');
           }}>
           <Header style={Style.navigation}>
-          <StatusBar
-            backgroundColor="#7E8BF5"
-            animated
-            barStyle="light-content"
-          />
            <View style={Style.actionBarLeft}>
                </View>
           <View style={Style.actionBarMiddle}>

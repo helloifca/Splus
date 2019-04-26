@@ -34,8 +34,7 @@ export default class Home extends Component {
       slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
 
       email  : '',
-      dataTower : [{illustration:'',title:'', subtitle:''}],
-      dataTowerCor : [{illustration:'',title:'', subtitle:''}],
+      dataTower : [],
       dataPromo : [],
 
       isCorLoaded : false,
@@ -125,7 +124,7 @@ export default class Home extends Component {
         </View>
         
         <View style={styles.corContainerStyle}>
-          {!this.state.isCorLoaded ? <ActivityIndicator size="large" /> :
+          {this.state.dataTower.length == 0 ? <ActivityIndicator size="large" /> :
             <Carousel
             ref={c => (this._slider1Ref = c)}
             data={this.state.dataTower}

@@ -60,19 +60,23 @@ export default {
     width : dw
   },
   countCol: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent : 'center'
   },
   countItem: {
     flexGrow: 1,
     borderRightWidth: 1,
     borderColor: '#E6E4E4',
     paddingVertical: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     width : dw * 0.333,
     alignItems: 'center',
+    justifyContent:'center'
   },
   countFirst: {
     paddingLeft: 20,
+    
   },
   countNo: {
 		fontFamily: Fonts.type.sfuiDisplaySemibold,
@@ -81,6 +85,9 @@ export default {
 		fontFamily: Fonts.type.sfuiDisplaySemibold,
     fontSize: 12,
     color: '#999',
+    flexWrap: 'wrap',
+    flex :1,
+    textAlign : 'center'
   },
   countIcon: {
     marginRight: 10,
@@ -447,6 +454,8 @@ export default {
   overviewWebView :{
     width: '100%',
     height : 400,
-  }
+  },
+  textMenu : { marginHorizontal: 8,flexDirection:'row',width : '60%' }
+
 
 }

@@ -57,7 +57,7 @@ class UnitEnquiry extends Component {
       <Container style={Style.bgMain}>
         <Header style={Style.navigation}>
           <StatusBar
-            backgroundColor="#7E8BF5"
+            backgroundColor={Colors.statusBarOrange}
             animated
             barStyle="light-content"
           />

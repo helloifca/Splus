@@ -45,19 +45,67 @@ import { Style, Colors } from "../Themes";
 import Styles from "./Style";
 
 import RBSheet from "react-native-raw-bottom-sheet";
-
-
+import numFormat from '@Component/numFormat'
+import {_storeData,_getData} from '@Component/StoreAsync';
+import {urlApi} from '@Config/services';
+let isMount = false
 // create a component
 class UnitInfo extends Component {
-    state = {
-        isVisible: false, //state of modal default false
-      };  
+
+  constructor(props){
+    super(props)
+
+    this.state = {
+      hd : null,
+      price : null,
+      isVisible : false
+    }
+    console.log('props UI',props);
+  }
+
+  async componentDidMount(){
+    isMount = true
+    const data = {
+      hd : new Headers({
+        'Token' : await _getData('@Token')
+      })
+    }
+
+    this.setState(data,()=>{
+        this.getPrice()
+    })
+  }
+
+  getPrice = () =>{
+    const item = this.props.items
+    const items = this.props.prevItems
+    {isMount ?
+        fetch(urlApi+'c_product_info/getPrice/'+items.db_profile+'/'+items.entity_cd+'/'+items.project_no+'/'+item.lot_no,{
+            method:'GET',
+            headers : this.state.hd,
+        }).then((response) => response.json())
+        .then((res)=>{
+            if(!res.Error){
+                const resData = res.DataHC
+                this.setState({price : resData})
+            }
+            console.log('getPrice',res);
+        }).catch((error) => {
+            console.log(error);
+        })
+    :null}
+  }
+
   render() {
+    const item = this.props.items
+    const prevItems = this.props.prevItems
+    const unit = this.props.unitItems
+
     return (
       <Container style={Style.bgMain}>
         <Header style={Style.navigation}>
           <StatusBar
-            backgroundColor="#7E8BF5"
+            backgroundColor={Colors.statusBarOrange}
             animated
             barStyle="light-content"
           />
@@ -119,12 +167,12 @@ class UnitInfo extends Component {
               alignItems: "center"
             }}
           >
-            YUKATA SUITES
+            {prevItems.title}
           </Text>
-          <Text style={{ fontSize: 12, marginLeft: 16 }}>MIZU | Lantai 03</Text>
-          <Text style={{ fontSize: 12, marginLeft: 16 }}>3 BR | 03/B</Text>
+          <Text style={{ fontSize: 12, marginLeft: 16 }}>{prevItems.towerDescs} | {unit.descs}</Text>
+          <Text style={{ fontSize: 12, marginLeft: 16 }}>{item.descs} | {item.lot_no}</Text>
           <Text style={{ fontSize: 12, marginLeft: 16 }}>
-            By Request : IDR,.
+            By Request : IDR, {numFormat(this.state.price)}
           </Text>
         </Content>
         <Modal
