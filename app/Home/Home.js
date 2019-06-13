@@ -1,16 +1,40 @@
 import React, { Component } from "react";
 import {
   Platform,
-  View,
   ScrollView,
   StatusBar,
-  Text,
   SafeAreaView,
   TouchableOpacity,
   Dimensions,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
+  FlatList
 } from "react-native";
+import {
+  Container,
+  Header,
+  Content,
+  Button,
+  Icon,
+  Text,
+  Title,
+  Left,
+  Right,
+  Body,
+  Input,
+  Item,
+  Footer,
+  View,
+  FooterTab,
+  Badge,
+  List,
+  ListItem,
+  Tab,
+  Tabs,
+  Fab,
+  Form,
+  Label,
+} from "native-base";
 import LinearGradient from "react-native-linear-gradient";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import { sliderWidth, itemWidth } from "./styles/SliderEntry";
@@ -23,9 +47,10 @@ const { height, width } = Dimensions.get('window')
 import {urlApi} from '@Config/services';
 import {_storeData,_getData} from '@Component/StoreAsync';
 import { Actions } from "react-native-router-flux";
-
+import Styles from "./Style";
 const IS_ANDROID = Platform.OS === "android";
 const SLIDER_1_FIRST_ITEM = 0;
+import SIMILAR from "../Property/Similar";
 
 export default class Home extends Component {
   constructor(props) {
@@ -71,6 +96,7 @@ export default class Home extends Component {
           const resData = res.Data
 
           this.setState({dataPromo:resData})
+          console.log('dataPRopmo',resData);
         }
     }).catch((error) => {
         console.log(error);
@@ -118,7 +144,7 @@ export default class Home extends Component {
             marginTop: -32
           }}
         >
-          <TouchableOpacity style={styles.InBtn} onPress={()=>Actions.search()}>
+          <TouchableOpacity style={styles.InBtn} onPress={()=>Actions.ListingProjectPage()}>
             <Text style={styles.InBtnText}>All Project</Text>
           </TouchableOpacity>
         </View>
@@ -164,6 +190,28 @@ export default class Home extends Component {
     );
   }
 
+  renderItem(item){
+    return (
+      <TouchableOpacity
+        style={Styles.item}
+        underlayColor="transparent"
+        
+      >
+        <View>
+          <View>
+            <Image
+              source={{ uri: item.picture }}
+              style={Styles.itemImg}
+            />
+          </View>
+          <Text style={Styles.itemPrice}>{item.content}</Text>
+          <Text style={Styles.itemLocation}>{item.subject}</Text>
+          
+        </View>
+      </TouchableOpacity>
+    )
+  }
+
   render() {
     const example1 = this.mainExample(1, "");
     // const example2 = this.momentumExample(2, 'Momentum | Left-aligned | Active animation');
@@ -185,47 +233,62 @@ export default class Home extends Component {
         <ScrollView
           style={styles.scrollview}
           scrollEventThrottle={200}
-          directionalLockEnabled={true}
-        >
+          directionalLockEnabled={true}>
           {example1}
-          <ScrollView
-                        scrollEventThrottle={16}
-                    >
-                        <View style={{ flex: 1 }}>
-                            <Text style={{ fontSize: 18, fontWeight: '500', paddingHorizontal: 20 }}>
-                                Hot Promo
-                            </Text>
+          <ScrollView scrollEventThrottle={16} >
+            <View style={{ flex: 1 }}>
 
-                            <View style={{ height: 130, marginTop: 20 }}>
-                                <ScrollView
-                                    horizontal={true}
-                                    showsHorizontalScrollIndicator={false}
-                                >
-                                    {this.state.dataPromo.length != 0 ?
-                                      this.state.dataPromo.map((item,key)=>
-                                         <CardSlide key={key} imageUri={{url:item.picture}} name={item.subject} />
-                                      )
-                                    :<ActivityIndicator/>}
-                                </ScrollView>
-                            </View>
-                            <View style={{ marginTop: 40, paddingHorizontal: 20, paddingBottom: 16 }}>
-                                <Text style={{ fontSize: 18, fontWeight: '500' }}>
-                                    Introducing Ifca SPlus
-                                </Text>
-                                <Text style={{ fontWeight: '100', marginTop: 10 }}>
-                                    A new selection of homes verified for quality & comfort
+              {/* <View style={{ height: 130, marginTop: 20 }}>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                  {this.state.dataPromo.length != 0 ?
+                    this.state.dataPromo.map((item,key)=>
+                      <CardSlide key={key} imageUri={{url:item.picture}} name={item.subject} />
+                    )
+                  :<ActivityIndicator/>}
+                </ScrollView>
+              </View> */}
+              <View style={Styles.sectionTransparent}>
+                <View style={Styles.headerBg}>
+                  <Text style={Styles.sHeader}>
+                    {"News & Promo".toUpperCase()}
+                  </Text>
+                  <Right>
+                    <Button
+                      small
+                      rounded
+                      style={Styles.sBtn}
+                      onPress={() => {
+                        NavigationService.navigate("PublicProperties");
+                      }} >
+                      <Text style={Styles.sLink}>See All</Text>
+                    </Button>
+                  </Right>
+                </View>
+                <FlatList
+                  data={this.state.dataPromo}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  style={Styles.flatList}
+                  keyExtractor={item => item.id.toString()}
+                  renderItem={({ item }) => this.renderItem(item)}
+                />
+              </View>
 
-                                </Text>
-                                <View style={{ width: width - 40, height: 200, marginTop: 20 }}>
-                                    <Image
-                                        style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 5, borderWidth: 1, borderColor: '#dddddd' }}
-                                        source={require('../Images/home.jpg')}
-                                    />
-
-                                </View>
-                            </View>
-                        </View>
-                    </ScrollView>          
+              <View style={{ marginTop: 40, paddingHorizontal: 20, paddingBottom: 16 }}>
+                <Text style={{ fontSize: 18, fontWeight: '500' }}>
+                    Introducing Ifca SPlus
+                </Text>
+                <Text style={{ fontWeight: '100', marginTop: 10 }}>
+                    A new selection of homes verified for quality & comfort
+                </Text>
+                <View style={{ width: width - 40, height: 200, marginTop: 20 }}>
+                  <Image
+                    style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 5, borderWidth: 1, borderColor: '#dddddd' }}
+                    source={require('../Images/home.jpg')} />
+                </View>
+              </View>
+            </View>
+          </ScrollView>          
         </ScrollView>
       </View>
     );

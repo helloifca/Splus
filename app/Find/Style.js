@@ -272,7 +272,7 @@ export default {
         height: 100,
         marginBottom: 10,
         borderRadius: 5,
-        backgroundColor:'#fff'
+        backgroundColor:'#f3f3f3'
     },
     btnCityImg: {
         width: dw * 0.42,
@@ -281,12 +281,14 @@ export default {
         borderRadius: 5,
     },
     btnCityLocation: {
+        borderRadius: 5,
         flex: 1,
         position: 'absolute',
         width: dw * 0.42,
         height: 100,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor:'rgba(48, 53, 61, 0.7)'
     },
     btnCityText: {
         color: '#fff',

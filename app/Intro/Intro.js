@@ -125,6 +125,7 @@ export default class Intro extends React.Component {
     })
     .then((response) => response.json())
     .then((res)=>{
+      console.log('res',res);
         if(res.Error === false){
             let resData = res.Data
             let data = []
@@ -144,16 +145,18 @@ export default class Intro extends React.Component {
   signIn = async(res) =>{
     console.log('res',res);
     try {
+        _storeData('@DashMenu', res.DashMenu);
         _storeData('@UserId', res.UserId);
         _storeData('@Name', res.name);
         _storeData('@Token', res.Token);
         _storeData('@User', res.user);
         _storeData('@Group', res.Group);
+        _storeData('@Handphone',res.handphone);
         _storeData("@isLogin",true);
-        _storeData("@isReset",res.isResetPass.toString());
-        _storeData("@AgentCd",res.AgentCd?res.AgentCd:'');
-        _storeData("@Debtor",res.Debtor_acct?res.Debtor_acct:'');
-        _storeData('@rowID', res.rowID.toString());
+        _storeData("@isReset",res.isResetPass);
+        _storeData("@AgentCd",res.AgentCd);
+        _storeData("@Debtor",res.Debtor_acct);
+        _storeData('@rowID', res.rowID);
         _storeData('@RefreshProfile', false);
         _storeData('@UserProject', res.UserProject);
         

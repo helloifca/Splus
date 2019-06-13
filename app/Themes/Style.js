@@ -54,6 +54,20 @@ export default {
         backgroundColor: Colors.headerOrange,
         marginTop: StatusBar.currentHeight,
     },
+    navigationModal: {
+        shadowOpacity: 0,
+        elevation: 0,
+        shadowOffset: {
+            height: 0,
+        },
+        shadowRadius: 0,
+        backgroundColor: 'transparent',
+        width: '100%',
+        borderBottomWidth: 0,
+        borderColor: Colors.headerOrange,
+        backgroundColor: Colors.headerOrange,
+        marginTop: Platform.OS === "android" ? null : StatusBar.currentHeight,
+    },
     navigationTransparent: {
         backgroundColor: 'transparent',
         shadowOpacity: 0,

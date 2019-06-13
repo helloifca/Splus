@@ -29,8 +29,6 @@ export default class Search extends React.Component {
             this.setState(data)
         }, 2000)
 
-        Actions.refresh({backTitle: ()=> this.props.title})
-
     }
 
     componentWillMount() {

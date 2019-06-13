@@ -1,6 +1,26 @@
 apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
+import groovy.json.JsonSlurper
+
+
+/**
+ * Kedua fungsi di bawah ini berfungsi agar versi pada build sesuai dengan yang ada di package JSON.
+ * ~(˘▾˘~) ~(˘▾˘~) ~(˘▾˘~)
+*/
+def getVerCode() {
+    def inputFile = new File("../package.json")
+    def packageJson = new JsonSlurper().parseText(inputFile.text)
+    def ver = packageJson["version"].replace(".","")
+    def vers = "10" + ver
+    return vers.toInteger()
+}
+
+def getVerName() {
+    def inputFile = new File("../package.json")
+    def packageJson = new JsonSlurper().parseText(inputFile.text)
+    return packageJson["version"]
+}
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -93,24 +113,39 @@ def enableSeparateBuildPerCPUArchitecture = false
  */
 def enableProguardInReleaseBuilds = false
 
+def verCode = getVerCode()
+def verName = getVerName()
+
 android {
     packagingOptions {
         pickFirst '**/libc++_shared.so'
     }
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+    defaultConfig {
+        applicationId "com.splus"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode verCode
+        versionName verName
+    }
+
+    signingConfigs {
+        release {
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    defaultConfig {
-        applicationId "com.splus"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
-    }
     splits {
         abi {
             reset()
@@ -123,6 +158,7 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release

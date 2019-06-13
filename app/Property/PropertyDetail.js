@@ -12,7 +12,8 @@ import {
   SafeAreaView,
   FlatList,
   Modal,
-  ActivityIndicator
+  ActivityIndicator,
+  Linking
 } from "react-native";
 import {
   Container,
@@ -68,12 +69,19 @@ export default class extends React.Component {
         isVisible: false,
 
         hd : new Headers,
+        email : '',
+        userId : '',
+        descs : '',
+        refEmail : '',
+
         amenities  : null,
         feature : null,
         overview : null,
         project : null,
         gallery : null
       };
+
+      console.log('props',props);
 
     }
       
@@ -84,6 +92,11 @@ async componentDidMount() {
       hd : new Headers({
         'Token' : await _getData('@Token')
       }),
+      email : await _getData('@User'),
+      userId : await _getData('@UserId'),
+      name : await _getData('@Name'),
+      handphone : await _getData('@Handphone'),
+      descs : 'Saya tertarik reservasi ' +this.props.items.project_descs+ '\n\nHubungi saya untuk info detail.',
       title : this.props.items.project_descs,
       picture_url : this.props.items.picture_url
     }
@@ -153,6 +166,16 @@ getDataGallery = (item) => {
   :null}
 }
 
+sendWa(){
+  const noHp = this.props.items.handphone
+  const descs = this.state.descs
+  Linking.openURL('https://wa.me/'+noHp+'?text='+descs)
+}
+
+showModal(){
+  this.setState({isVisible:true})
+}
+
 clickToNavigate = (to,param) =>{
   Actions[to](param);
   this.setState({click:true})
@@ -165,7 +188,6 @@ clickToNavigate = (to,param) =>{
       feature = feature.replace(/<\/li>/gi,'\n')
       feature = feature.replace(/<li>/gi,'• ')
       feature = feature.replace(/<br>/gi,' ')
-      console.log('feature',feature)
     }
 
     return (
@@ -177,7 +199,7 @@ clickToNavigate = (to,param) =>{
             <Button
               transparent
               style={Style.actionBarBtn}
-              onPress={Actions.search}
+              onPress={Actions.pop}
             >
               <Icon
                 active
@@ -196,7 +218,6 @@ clickToNavigate = (to,param) =>{
             <Button
               transparent
               style={Style.actionBtnRight}
-              onPress={Actions.pop}
             >
               <Icon
                 active
@@ -496,7 +517,12 @@ clickToNavigate = (to,param) =>{
           onRequestClose={() => {
             console.log('Modal has been closed.');
           }}>
-          <Header style={Style.navigation}>
+          <Header style={Style.navigationModal}>
+          <StatusBar
+            backgroundColor={Colors.statusBarOrange}
+            animated
+            barStyle="light-content"
+          />
            <View style={Style.actionBarLeft}>
                </View>
           <View style={Style.actionBarMiddle}>
@@ -521,26 +547,25 @@ clickToNavigate = (to,param) =>{
           </View>
         </Header>
         <ScrollView>
-        <Form>
-            <Item floatingLabel>
-              <Label>Username</Label>
-              <Input />
+        <Form style={{marginTop:10}}>
+            <Item>
+              <Text>{this.state.title}</Text>
             </Item>
             <Item floatingLabel>
               <Label>Nama Anda</Label>
-              <Input />
+              <Input value={this.state.name} onChangeText={(val)=>this.setState({name : val})} />
             </Item>
             <Item floatingLabel>
               <Label>Handphone</Label>
-              <Input />
+              <Input value={this.state.handphone} onChangeText={(val)=>this.setState({handphone : val})} />
             </Item>
             <Item floatingLabel>
               <Label>Deskripsi</Label>
-              <Input />
+              <Input multiline value={this.state.descs} onChangeText={(val)=>this.setState({descs : val})} />
             </Item>
             <Item floatingLabel>
               <Label>Reference Email</Label>
-              <Input />
+              <Input value={this.state.refEmail} onChangeText={(val)=>this.setState({refEmail : val})} />
             </Item>
             <Body style={{ paddingVertical:32 }} >
             <Button rounded success full
@@ -548,7 +573,7 @@ clickToNavigate = (to,param) =>{
             <Text>Send Email</Text>
           </Button>
             <Button rounded warning iconRight full
-            style={{ marginTop:16 }}>
+            style={{ marginTop:16 }} onPress={()=>this.sendWa()}>
             <Text>Send via WhatsApp</Text>
             <Icon name='whatsapp' 
             type="FontAwesome5"/>
@@ -558,9 +583,7 @@ clickToNavigate = (to,param) =>{
           </ScrollView>
         </Modal>
         </Content>
-        <Button full style={{ backgroundColor: "#fb5f26" }}  onPress={() => {
-            this.setState({ isVisible: true });
-        }}>
+        <Button full style={{ backgroundColor: "#fb5f26" }}  onPress={() => {this.showModal()}}>
           <Text>I'm Interested</Text>
         </Button>
       </Container>

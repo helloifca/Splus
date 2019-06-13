@@ -111,6 +111,7 @@ class ChouseFloor extends Component {
         this.setState({ click : true})
     }
     render() {
+        const prevItem = this.props.prevItems
         return (
             <Container style={Style.bgMain}>
             <Header style={Style.navigation}>
@@ -136,7 +137,7 @@ class ChouseFloor extends Component {
                </View>
                <View style={Style.actionBarMiddle}>
                  <Text style={Style.actionBarText}>
-                   {"Unit Detail".toUpperCase()}
+                   {"Choose Block".toUpperCase()}
                  </Text>
                </View>
                <View style={Style.actionBarRight}>
@@ -160,7 +161,7 @@ class ChouseFloor extends Component {
                style={Style.layoutInner}
                contentContainerStyle={Style.layoutContent}
              >
-              <Image
+              {/* <Image
               source={require("@Asset/images/tigabr.jpg")}
               style={{
                 width: null,
@@ -170,10 +171,10 @@ class ChouseFloor extends Component {
                 alignItems: "center",
                 marginTop: 8
               }}
-            /> 
+            />  */}
               <View>
                     <View style={Styles.headerUnit}>
-                        <Text style={Styles.sHeader}>{'Yukata suites'.toUpperCase()}</Text>
+                        <Text style={Styles.cHeader}>{prevItem.title.toUpperCase()}</Text>
                         <Right>
                             <Button small rounded style={Styles.sBtn} onPress={() => { this.clickUnitEnquiry(); 
                             }}  >

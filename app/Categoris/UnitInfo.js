@@ -184,7 +184,7 @@ class UnitInfo extends Component {
           }}>
           <Header style={Style.navigation}>
           <StatusBar
-            backgroundColor="#7E8BF5"
+            backgroundColor={Colors.statusBarOrange}
             animated
             barStyle="light-content"
           />
@@ -251,7 +251,7 @@ class UnitInfo extends Component {
         <Button full style={{ backgroundColor: "#fb5f26" }}   onPress={() => {
             this.setState({ isVisible: true });
           }}>
-          <Text>I'm Interested</Text>
+          <Text>Reserve Now</Text>
         </Button>
       </Container>
     );

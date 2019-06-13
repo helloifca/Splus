@@ -28,6 +28,22 @@ import ChooseTower from "./Categoris/ChooseTower";
 import ChouseUnit from "./Categoris/ChouseUnit";
 import UnitInfo from "./Categoris/UnitInfo";
 import UnitEnquiry from "./Categoris/UnitEnquiry";
+
+//Reservation
+import MyReservationProjectPage from "./Reservation/myReservation";
+
+//Unit
+import MyUnitPage from "./MyUnit/myUnit";
+
+//Profile
+import Profile from "./Profile";
+
+//Feed 
+import Feed from './Feed/Feed';
+
+//News And Promo 
+import NewsPage from './NewsAndPromo/news';
+
 import {_storeData,_getData} from '@Component/StoreAsync';
 
 
@@ -87,7 +103,7 @@ class Routes extends Component{
                 icon={TabIcon}
               />
               <Scene
-                key="search"
+                key="ListingProjectPage"
                 component={Search}
                 navTransparent={true}
                 hideNavBar={true}
@@ -98,7 +114,7 @@ class Routes extends Component{
               />
               <Scene
                 key="calcu"
-                component={Calcu}
+                component={Feed}
                 navTransparent={true}
                 hideNavBar={true}
                 title=""
@@ -183,7 +199,41 @@ class Routes extends Component{
                   hideNavBar={true}
                   title=""
                 />
-                
+
+                <Scene
+                  key="profile"
+                  component={Profile}
+                  hideNavBar={true}
+                  title=""
+                />
+
+                <Scene
+                  key="MyReservationProjectPage"
+                  component={MyReservationProjectPage}
+                  hideNavBar={true}
+                  title=""
+                />
+
+                <Scene
+                  key="MyUnitPage"
+                  component={MyUnitPage}
+                  hideNavBar={true}
+                  title=""
+                />
+
+                <Scene
+                  key="SimulasiPage"
+                  component={Calcu}
+                  hideNavBar={true}
+                  title=""
+                />
+
+                <Scene
+                  key="NewsPage"
+                  component={NewsPage}
+                  hideNavBar={true}
+                  title=""
+                />
           </Scene>
         </Router>
       );

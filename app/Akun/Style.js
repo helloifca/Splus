@@ -1,6 +1,6 @@
-const React = require("react-native");
-const { Platform } = React;
+import { StatusBar,Platform } from 'react-native';
 import { Fonts, Metrics, Colors } from '../Themes/';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 
 export default {
@@ -32,9 +32,9 @@ export default {
         width: '100%',
         paddingHorizontal: 20,
         flexDirection: 'row',
-        paddingTop: 20,
+        paddingTop: 20 + getStatusBarHeight(),
         paddingBottom: 16,
-        backgroundColor: '#DAD299',
+        backgroundColor: Colors.headerOrange,
     },
     avatar: {
         marginRight: 10,
@@ -70,7 +70,7 @@ export default {
         padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f0f0f0',
+        backgroundColor: '#f3f3f3',
         borderRadius: 10,
         width: '33%',
         marginBottom: 1,
@@ -82,10 +82,8 @@ export default {
         color: '#333',
         fontFamily: Fonts.type.sfuiDisplaySemibold,
         fontSize: 12,
-        textAlign: 'center'
+        textAlign: 'center',
     },
-
-
 
     message: {
         flex: 1,
@@ -163,17 +161,20 @@ export default {
         marginTop: 5,
     },
     sBtn: {
-        padding: 1,
-        backgroundColor: '#e7e7e7',
+        padding: 9,
+        backgroundColor: '#f3f3f3',
         color: '#FFF',
+        borderRadius: 18,
+        flexDirection: 'row',
+        justifyContent : 'space-evenly',
+        alignItems: 'center',
     },
     sLink: {
         color: '#666',
-        fontSize: 10,
+        fontSize: 12,
         fontFamily: Fonts.type.sfuiDisplaySemibold,
       },
-
-    
+    imgBtn : {padding : 24, marginBottom : 5, tintColor: '#333'}
 
 
 }

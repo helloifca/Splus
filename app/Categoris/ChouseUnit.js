@@ -180,7 +180,7 @@ class ChouseUnit extends Component {
           <View>
             <View style={Styles.headerUnit}>
               <Text style={Styles.sHeader}>
-                {"Yukata Suites".toUpperCase()}
+                {item.title.toUpperCase()}
               </Text>
             </View>
             <View style={{flexDirection:'row',marginHorizontal:20}}>
@@ -194,7 +194,7 @@ class ChouseUnit extends Component {
                   flex :1
                 }}
               >
-                {item.title} | {unit.descs} | {items.descs}
+                {item.towerDescs} | {unit.descs} | {items.descs}
               </Text>
             </View>
             <View style={Styles.city}>

@@ -140,7 +140,7 @@ class UnitDetail extends React.Component {
             </View>
             <View style={Style.actionBarMiddle}>
               <Text style={Style.actionBarText}>
-                {"Unit Detail".toUpperCase()}
+                {"Unit Type Detail".toUpperCase()}
               </Text>
             </View>
             <View style={Style.actionBarRight}/>
