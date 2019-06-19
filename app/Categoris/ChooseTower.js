@@ -28,6 +28,7 @@ class Categoris extends React.Component {
 
             tower : []
         }
+        console.log('props',this.props);
     }
 
     async componentDidMount(){

@@ -57,7 +57,7 @@ export default class Home extends Component {
     super(props);
     this.state = {
       slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
-
+      name : '',
       email  : '',
       dataTower : [],
       dataPromo : [],
@@ -77,6 +77,7 @@ export default class Home extends Component {
     console.log('Data Project',await _getData('@UserProject'));
     const data = {
       email :  await _getData('@User'),
+      name : await _getData('@Name'),
       dataTower : await _getData('@UserProject'),
       isCorLoaded : true
     }
@@ -132,8 +133,8 @@ export default class Home extends Component {
 
     return (
       <View style={styles.exampleContainer}>
-        <Text style={styles.title}>{`Hey Guest`}</Text>
-        <Text style={styles.subtitle}>{`Welcome to Ifca S+`}</Text>
+        <Text style={styles.title}>Hey {this.state.name}</Text>
+        <Text style={styles.subtitle}>{`Welcome to IFCA S+`}</Text>
         
         <View
           style={{
@@ -257,9 +258,7 @@ export default class Home extends Component {
                       small
                       rounded
                       style={Styles.sBtn}
-                      onPress={() => {
-                        NavigationService.navigate("PublicProperties");
-                      }} >
+                      >
                       <Text style={Styles.sLink}>See All</Text>
                     </Button>
                   </Right>

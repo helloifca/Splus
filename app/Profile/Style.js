@@ -1,6 +1,6 @@
 const React = require("react-native");
 const { Platform } = React;
-import { Colors } from "../Themes/";
+import { Colors,Fonts } from "../Themes/";
 import {StatusBar} from 'react-native';
 export default {
   layoutContent: {
@@ -155,7 +155,7 @@ export default {
     width: '100%',
     paddingHorizontal: 15,
     paddingTop: 30,
-    paddingBottom: 30,
+    paddingBottom: 10,
   },
   col: {
     flexDirection: 'row',
@@ -285,6 +285,20 @@ export default {
   },
   accordionContent: {
     paddingVertical: 10,
+  },
+  sLink: {
+    color: '#fff',
+    fontSize: 12,
+    fontFamily: Fonts.type.sfuiDisplaySemibold,
+  },
+  sBtn: {
+      padding: 9,
+      backgroundColor: '#FF6900',
+      color: '#FFF',
+      borderRadius: 18,
+      flexDirection: 'row',
+      justifyContent : 'space-between',
+      alignItems: 'center',
   },
 
 

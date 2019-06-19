@@ -107,7 +107,7 @@ class ChouseFloor extends Component {
         // this.setState({ click : true})
     }
     clickUnitEnquiry() {
-        Actions.unitenquiry();
+        Actions.UnitEnquiryProjectPage();
         this.setState({ click : true})
     }
     render() {

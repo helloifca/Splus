@@ -274,7 +274,7 @@ clickToNavigate = (to,param) =>{
           <View style={Styles.count}>
            <ScrollView horizontal={true}>
             <View style={[Styles.countItem, Styles.countFirst]}>
-              <TouchableOpacity onPress={() => _navigate('choosetower',{items:this.props.items})}>
+              <TouchableOpacity onPress={() => _navigate('ProductProjectPage',{items:this.props.items})}>
                 <View style={Styles.countCol}>
                   <Image
                     source={require("@Asset/images/type.png")}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { StatusBar,ActionSheetIOS, WebView, TouchableOpacity, TextInput, StyleSheet, Image, ImageBackground, Dimensions, ScrollView, Platform, SafeAreaView, Picker, FlatList } from 'react-native'
+import { StatusBar,Alert ,ActionSheetIOS, WebView, TouchableOpacity, TextInput, StyleSheet, Image, ImageBackground, Dimensions, ScrollView, Platform, SafeAreaView, Picker, FlatList } from 'react-native'
 import { Container, Header, Content, Button, Icon, Text, Title, Left, Right, Body, Input, Item, Footer, Accordion, View, FooterTab, Badge, List, ListItem, Tab, Tabs } from 'native-base'
 
 import NavigationService from '@Service/Navigation'
@@ -7,7 +7,7 @@ import NavigationService from '@Service/Navigation'
 import Styles from './Style'
 import {urlApi} from '@Config/services';
 import { Actions } from 'react-native-router-flux';
-import {_storeData,_getData} from '@Component/StoreAsync';
+import {_storeData,_getData,_getAllData,_removeData} from '@Component/StoreAsync';
 import { Style, Colors } from "../Themes/";
 
 //const {width, height} = Dimensions.get('window')
@@ -38,6 +38,7 @@ export default class Profile extends React.Component {
         this.renderAccordionContentAddress = this.renderAccordionContentAddress.bind(this)
         this.renderAccordionContentContact = this.renderAccordionContentContact.bind(this)
         this.renderAccordionContentSocial = this.renderAccordionContentSocial.bind(this)
+
 
     }
 
@@ -169,6 +170,28 @@ export default class Profile extends React.Component {
         </View>
     }
 
+    signOut = async () => {
+        const data = await _getAllData();
+        data.map((val)=>{
+            if(val != "@isIntro"){
+                _removeData(val)
+            }
+        })
+        Actions.reset('Login')
+    }
+
+    showAlert = () => {
+        Alert.alert(
+            '',
+            'Are you want to Logout',
+            [
+                {text: 'Cancel',onPress: () => console.log('Cancel Pressed'), style: 'cancel',},
+                {text: 'OK', onPress: () => this.signOut()},
+            ],
+            {cancelable: false},
+        );
+    }
+
     showActionSheet(){
         const data = ['Cancel','Male','Female']
         ActionSheetIOS.showActionSheetWithOptions(
@@ -235,6 +258,13 @@ export default class Profile extends React.Component {
                         renderHeader={this.renderAccordionHeader}
                         renderContent={this.renderAccordionContent}
                     />
+                </View>
+
+                <View style={{marginHorizontal:15,marginVertical:5}}>
+                    <TouchableOpacity style={Styles.sBtn} onPress={()=>this.showAlert()}>
+                        <Text style={Styles.sLink} > Logout</Text>
+                        <Icon name="log-out" style={{color : "#fff",fontSize: 18,}} />
+                    </TouchableOpacity>
                 </View>
 
             </Content>

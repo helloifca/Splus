@@ -42,24 +42,32 @@ export default class Akun extends React.Component {
         })
     }
 
+    goToFeed = (val) =>{
+        if(val.isProject == 1){
+            Actions.project({goTo : val.URL_angular})
+        } else {
+            Actions[val.URL_angular]()
+        }
+    }
+
     render() {
         let dashmenu = this.state.dashmenu.length % 3
 
         return (
             <Container style={Style.bgMain}>
-                <StatusBar backgroundColor={Colors.statusBarOrange} animated barStyle="dark-content" />
+                <StatusBar backgroundColor={"rgba(0, 0, 0, 0.3)"} animated barStyle="dark-content" />
                 <Content style={Style.layoutInner} contentContainerStyle={Style.layoutContent}>
                     <View style={Styles.section}>
                         <View style={Styles.profile}>
                             <Image source={require('@Asset/images/avatar.png')} style={Styles.avatar} />
                             <View>
-                                <Text style={Styles.profileName}>Hey {this.state.name}</Text>
+                                <Text style={Styles.profileName}>{this.state.name}</Text>
                                 <Text style={Styles.profileLocation}>{this.state.group}</Text>
                             </View>
                             <Right>
-                                <TouchableOpacity style={Styles.sBtn} onPress={() => { Actions.profile() }}>
+                                <TouchableOpacity style={Styles.settingBtn} onPress={() => { Actions.profile() }}>
                                     <Icon name="cog" style={{color : "#666",fontSize: 18,}} />
-                                    <Text style={Styles.sLink} >Profile Setting</Text>
+                                    <Text style={Styles.sLink} > Settings</Text>
                                 </TouchableOpacity>
                             </Right>
                         </View>
@@ -68,7 +76,7 @@ export default class Akun extends React.Component {
                         <View style={Styles.btnLayout}>
                         {this.state.dashmenu.map((val,key)=>
                             <TouchableOpacity key={key} style={Styles.btnBox} onPress={() => {
-                                Actions[val.URL_angular]()
+                                this.goToFeed(val)
                             }}>
                                 <Image source={{uri : urlApi+"images/dashPict/"+val.picture}} style={Styles.imgBtn} />
                                 <Text style={Styles.btnText}>{val.Title}</Text>
@@ -109,7 +117,7 @@ export default class Akun extends React.Component {
                         :null}
                         </View>
 
-                        <View style={Styles.message}>
+                        {/* <View style={Styles.message}>
                             <View style={Styles.headerBg}>
                                 <Icon name="envelope" type="FontAwesome" style={Styles.headerIcon} />
                                 <Text style={Styles.sHeader}>{'Recent Messages'.toUpperCase()}</Text>
@@ -135,7 +143,7 @@ export default class Akun extends React.Component {
                                     </TouchableHighlight>
                                 )}
                             />
-                        </View>
+                        </View> */}
                     </View>
                 </Content>
             </Container>

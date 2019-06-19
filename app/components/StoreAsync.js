@@ -21,6 +21,27 @@ export const _getData = async (name) => {
     }
 }
 
+export const _removeData = async (key)=> {
+    try {
+        await AsyncStorage.removeItem(key);
+        return true;
+    }
+        catch(exception) {
+        return false;
+    }
+}
+
+export const _getAllData = async ()=> {
+    try {
+        const cb = await AsyncStorage.getAllKeys();
+        return cb;
+    }
+        catch(exception) {
+        return false;
+    }
+}
+
 export const _navigate = (to,param) =>{
     Actions[to](param);
 }
+

@@ -32,19 +32,19 @@ export default class Intro extends React.Component {
 
   async componentDidMount(){
     const isIntro = await _getData('@isIntro')
-    if(isMount){
-      BackHandler.addEventListener('hardwareBackPress', function() {
-        Actions.home()
-        return true;
-      })
-    }
+    // if(isMount){
+    //   BackHandler.addEventListener('hardwareBackPress', function() {
+    //     Actions.home()
+    //     return true;
+    //   })
+    // }
     this.setState({showRealApp : isIntro})
 
   }
 
   componentWillUnmount(){
     isMount = false
-    BackHandler.removeEventListener('hardwareBackPress')
+    // BackHandler.removeEventListener('hardwareBackPress')
   }
 
   clickHome() {

@@ -13,6 +13,7 @@ import Home from "./Home/Home";
 import Login from "./Intro/Intro";
 import Search from "./Find/Search";
 import Calcu from "./Calcu/Calcu";
+import Notif from "./Notif/Notif";
 import Akun from "./Akun/Akun";
 
 import PropertyDetail from "./Property/PropertyDetail";
@@ -35,6 +36,9 @@ import MyReservationProjectPage from "./Reservation/myReservation";
 //Unit
 import MyUnitPage from "./MyUnit/myUnit";
 
+//Billing
+import MyBillingPage from "./MyBilling/myBilling";
+
 //Profile
 import Profile from "./Profile";
 
@@ -43,6 +47,19 @@ import Feed from './Feed/Feed';
 
 //News And Promo 
 import NewsPage from './NewsAndPromo/news';
+
+//Booking
+import BookingPage from './Booking/Booking';
+
+//Project
+import Project from './Project/Search';
+
+//Download
+import DownloadPage from './Download/Download';
+
+//Report
+import ReportPage from './Reports/Reports';
+import Dashboard from './Reports/Dashboard';
 
 import {_storeData,_getData} from '@Component/StoreAsync';
 
@@ -123,6 +140,16 @@ class Routes extends Component{
                 icon={TabIcon}
               />
               <Scene
+                key="notif"
+                component={Notif}
+                navTransparent={true}
+                hideNavBar={true}
+                title=""
+                tabBarLabel="Notification"
+                iconName="bell"
+                icon={TabIcon}
+              />
+              <Scene
                 key="akun"
                 component={Akun}
                 navTransparent={true}
@@ -176,7 +203,7 @@ class Routes extends Component{
                   title=""
                 />
                 <Scene
-                  key="choosetower"
+                  key="ProductProjectPage"
                   component={ChooseTower}
                   hideNavBar={true}
                   title=""
@@ -194,7 +221,7 @@ class Routes extends Component{
                   title=""
                 />
                  <Scene
-                  key="unitenquiry"
+                  key="UnitEnquiryProjectPage"
                   component={UnitEnquiry}
                   hideNavBar={true}
                   title=""
@@ -232,6 +259,46 @@ class Routes extends Component{
                   key="NewsPage"
                   component={NewsPage}
                   hideNavBar={true}
+                  title=""
+                />
+
+                <Scene
+                  key="BookingPage"
+                  component={BookingPage}
+                  hideNavBar={true}
+                  title=""
+                />
+
+                <Scene
+                  key="project"
+                  component={Project}
+                  hideNavBar={true}
+                  title=""
+                />
+
+                <Scene
+                  key="TWPBillProjectPage"
+                  component={MyBillingPage}
+                  hideNavBar={true}
+                  title=""
+                />
+
+                <Scene
+                  key="ProjectDownloadPage"
+                  component={DownloadPage}
+                  hideNavBar={true}
+                  title=""
+                />
+                <Scene
+                  key="ReportProject"
+                  component={ReportPage}
+                  hideNavBar={true}
+                  title=""
+                />
+                <Scene
+                  key="Dashboard"
+                  component={Dashboard}
+                  hideNavBar={false}
                   title=""
                 />
           </Scene>

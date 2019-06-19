@@ -196,20 +196,20 @@ class NewsPage extends Component {
                                         <Text style={{
                                             fontSize: 12,
                                             fontWeight: 'bold',
-                                            textAlign: 'right',
+                                            textAlign: 'left',
                                             color: '#333'
                                         }}>
                                             {data.subject}
                                         </Text>
                                     </View>
                                     <View>
-                                        <Image source={{uri:"http://35.198.219.220:2121/ifca_splus/img/NewsAndPromo/http://139.255.61.85/WaskitaWeb/img/NewsAndPromo/Soltera_news2.png"}} width={200} height={200} />
+                                        <Image source={{uri:data.picture}} style={Styles.itemImg} />
                                     </View>
                                     <View>
                                         <Text style={{
                                             fontSize: 12,
                                             fontWeight: '500',
-                                            textAlign: 'right',
+                                            textAlign: 'left',
                                             color: '#ff720d'
                                         }}>
                                             {data.date_created}
