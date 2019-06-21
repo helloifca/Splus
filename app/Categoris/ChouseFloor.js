@@ -141,7 +141,7 @@ class ChouseFloor extends Component {
                  </Text>
                </View>
                <View style={Style.actionBarRight}>
-               <Button
+               {/* <Button
                    transparent
                    style={Style.actionBarBtnRight}
                    onPress={Actions.categoris}
@@ -152,7 +152,7 @@ class ChouseFloor extends Component {
                      style={Style.actionIcon}
                      type="SimpleLineIcons"
                    />
-                 </Button>
+                 </Button> */}
                  </View>
                  
                 

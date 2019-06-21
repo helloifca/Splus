@@ -70,7 +70,7 @@ export default {
         padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f3f3f3',
+        backgroundColor: 'transparent',
         borderRadius: 10,
         width: '33%',
         marginBottom: 1,

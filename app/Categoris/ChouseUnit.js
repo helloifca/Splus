@@ -148,7 +148,7 @@ class ChouseUnit extends Component {
             </Text>
           </View>
           <View style={Style.actionBarRight}>
-            <Button
+            {/* <Button
               transparent
               style={Style.actionBarBtnRight}
               onPress={Actions.categoris}
@@ -159,7 +159,7 @@ class ChouseUnit extends Component {
                 style={Style.actionIcon}
                 type="SimpleLineIcons"
               />
-            </Button>
+            </Button> */}
           </View>
         </Header>
         <Content

@@ -215,7 +215,7 @@ clickToNavigate = (to,param) =>{
             </Text>
           </View>
           <View style={Style.actionBarRight}>
-            <Button
+            {/* <Button
               transparent
               style={Style.actionBtnRight}
             >
@@ -225,7 +225,7 @@ clickToNavigate = (to,param) =>{
                 style={Style.actionIcon}
                 type="FontAwesome"
               />
-            </Button>
+            </Button> */}
           </View>
         </Header>
 
@@ -304,7 +304,7 @@ clickToNavigate = (to,param) =>{
             </View>
             <View style={[Styles.countItem, Styles.countFirst]}>
               <TouchableOpacity
-              onPress={()=>Actions.DownloadPage()}>
+              onPress={()=>Actions.ProjectDownloadPage({items:this.props.items})}>
                 <View style={Styles.countCol}>
                   <Image
                     source={require("@Asset/images/brosur.png")}

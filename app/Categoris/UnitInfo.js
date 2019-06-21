@@ -68,7 +68,12 @@ class UnitInfo extends Component {
     const data = {
       hd : new Headers({
         'Token' : await _getData('@Token')
-      })
+      }),
+      email : await _getData('@User'),
+      userId : await _getData('@UserId'),
+      name : await _getData('@Name'),
+      handphone : await _getData('@Handphone'),
+      descs : 'Saya tertarik reservasi ' +this.props.items.project_descs+ '\n\nHubungi saya untuk info detail.',
     }
 
     this.setState(data,()=>{
@@ -129,7 +134,7 @@ class UnitInfo extends Component {
             <Text style={Style.actionBarText}>{"Unit Info".toUpperCase()}</Text>
           </View>
           <View style={Style.actionBarRight}>
-            <Button
+            {/* <Button
               transparent
               style={Style.actionBarBtnRight}
               onPress={Actions.categoris}
@@ -140,7 +145,7 @@ class UnitInfo extends Component {
                 style={Style.actionIcon}
                 type="SimpleLineIcons"
               />
-            </Button>
+            </Button> */}
           </View>
         </Header>
         <Content
@@ -182,7 +187,7 @@ class UnitInfo extends Component {
           onRequestClose={() => {
             console.log('Modal has been closed.');
           }}>
-          <Header style={Style.navigation}>
+          <Header style={Style.navigationModal}>
           <StatusBar
             backgroundColor={Colors.statusBarOrange}
             animated
@@ -214,24 +219,20 @@ class UnitInfo extends Component {
         <ScrollView>
         <Form>
             <Item floatingLabel>
-              <Label>Username</Label>
-              <Input />
-            </Item>
-            <Item floatingLabel>
               <Label>Nama Anda</Label>
-              <Input />
+              <Input value={this.state.name} onChangeText={(val)=>this.setState({name : val})} />
             </Item>
             <Item floatingLabel>
               <Label>Handphone</Label>
-              <Input />
+              <Input value={this.state.handphone} onChangeText={(val)=>this.setState({handphone : val})} />
             </Item>
             <Item floatingLabel>
               <Label>Deskripsi</Label>
-              <Input />
+              <Input multiline value={this.state.descs} onChangeText={(val)=>this.setState({descs : val})} />
             </Item>
             <Item floatingLabel>
               <Label>Reference Email</Label>
-              <Input />
+              <Input value={this.state.refEmail} onChangeText={(val)=>this.setState({refEmail : val})} />
             </Item>
             <Body style={{ paddingVertical:32 }} >
             <Button rounded success full
