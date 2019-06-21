@@ -241,7 +241,7 @@ clickToNavigate = (to,param) =>{
             imageStyle={"cover"}
             style={Styles.coverImg}
             >
-          <Fab
+          {/* <Fab
             active={this.state.active}
             direction="down"
             containerStyle={{ marginLeft:8}}
@@ -258,7 +258,7 @@ clickToNavigate = (to,param) =>{
             <Button style={{ backgroundColor: '#DAD299' ,  width:32, height: 32,  marginLeft:4 }}>
               <Icon name="mail" />
             </Button>
-          </Fab>
+          </Fab> */}
           </ImageBackground>
           :<ActivityIndicator/>}
 
@@ -288,7 +288,8 @@ clickToNavigate = (to,param) =>{
               </TouchableOpacity>
             </View>
             <View style={[Styles.countItem, Styles.countFirst]}>
-              <TouchableOpacity>
+              <TouchableOpacity
+              onPress={()=>Actions.BookingPage({items : this.props.items})}>
                 <View style={Styles.countCol}>
                   <Image
                     source={require("@Asset/images/booking.png")}
@@ -302,7 +303,8 @@ clickToNavigate = (to,param) =>{
               </TouchableOpacity>
             </View>
             <View style={[Styles.countItem, Styles.countFirst]}>
-              <TouchableOpacity>
+              <TouchableOpacity
+              onPress={()=>Actions.DownloadPage()}>
                 <View style={Styles.countCol}>
                   <Image
                     source={require("@Asset/images/brosur.png")}

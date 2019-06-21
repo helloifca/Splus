@@ -56,7 +56,7 @@ export default class Notif extends React.Component {
                                 data={MESSAGES}
                                 style={Styles.item}
                                 renderItem={({ item, separators,key }) => (
-                                    <TouchableHighlight key={key} underlayColor='transparent' onPress={() => { NavigationService.navigate('MemberMessages') }}>
+                                    <TouchableHighlight key={key} underlayColor='transparent'>
                                         <View style={Styles.record}>
                                             <Image source={{ uri: item.image }} style={Styles.itemImg} />
                                             <View style={Styles.itemInfo}>

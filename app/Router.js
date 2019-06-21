@@ -57,8 +57,18 @@ import Project from './Project/Search';
 //Download
 import DownloadPage from './Download/Download';
 
+//Download
+import NewsAndPromoDetail from './NewsAndPromo/NewsAndPromoDetail';
+
 //Report
 import ReportPage from './Reports/Reports';
+
+//Report New
+import ReportNew from './ReportNew/ReportNew';
+
+//Comission
+import Comission from './Comission/Comission';
+
 import Dashboard from './Reports/Dashboard';
 
 import {_storeData,_getData} from '@Component/StoreAsync';
@@ -130,7 +140,7 @@ class Routes extends Component{
                 icon={TabIcon}
               />
               <Scene
-                key="calcu"
+                key="Feed"
                 component={Feed}
                 navTransparent={true}
                 hideNavBar={true}
@@ -299,6 +309,24 @@ class Routes extends Component{
                   key="Dashboard"
                   component={Dashboard}
                   hideNavBar={false}
+                  title=""
+                />
+                <Scene
+                  key="NewsAndPromoDetail"
+                  component={NewsAndPromoDetail}
+                  hideNavBar={true}
+                  title=""
+                />
+                <Scene
+                  key="ReportNew"
+                  component={ReportNew}
+                  hideNavBar={true}
+                  title=""
+                />
+                <Scene
+                  key="ComissionPage"
+                  component={Comission}
+                  hideNavBar={true}
                   title=""
                 />
           </Scene>

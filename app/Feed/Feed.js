@@ -144,52 +144,54 @@ class Feed extends Component {
                     <ScrollView>
                     {
                         this.state.news.map((data,key)=>
-                            <Card style={{
-                                height: null,
-                                backgroundColor: 'white',
-                                shadowOffset: { width: 1, height: 1 },
-                                shadowColor: "#37BEB7",
-                                shadowOpacity: 0.5,
-                                elevation: 5,
-                                paddingHorizontal: 10,
-                                paddingVertical: 10
-                            }} key={key}>
-                                <View>
+                            <TouchableOpacity key={key} onPress={()=>Actions.NewsAndPromoDetail({items : data})}>
+                                <Card style={{
+                                    height: null,
+                                    backgroundColor: 'white',
+                                    shadowOffset: { width: 1, height: 1 },
+                                    shadowColor: "#37BEB7",
+                                    shadowOpacity: 0.5,
+                                    elevation: 5,
+                                    paddingHorizontal: 10,
+                                    paddingVertical: 10
+                                }} >
                                     <View>
-                                        <Text style={{
-                                            fontSize: 12,
-                                            textAlign: 'left',
-                                            color: '#333',
-                                            fontWeight : "500"
-                                        }}>
-                                            {data.descs}
+                                        <View>
+                                            <Text style={{
+                                                fontSize: 12,
+                                                textAlign: 'left',
+                                                color: '#333',
+                                                fontWeight : "500"
+                                            }}>
+                                                {data.descs}
+                                                </Text>
+                                        </View>
+                                        <View>
+                                            <Text style={{
+                                                fontSize: 12,
+                                                fontWeight: 'bold',
+                                                textAlign: 'left',
+                                                color: '#333'
+                                            }}>
+                                                {data.subject}
                                             </Text>
+                                        </View>
+                                        <View>
+                                            <Image source={{uri:data.picture}} style={Styles.itemImg} />
+                                        </View>
+                                        <View>
+                                            <Text style={{
+                                                fontSize: 12,
+                                                fontWeight: '500',
+                                                textAlign: 'left',
+                                                color: '#ff720d'
+                                            }}>
+                                                {data.date_created}
+                                            </Text>
+                                        </View>
                                     </View>
-                                    <View>
-                                        <Text style={{
-                                            fontSize: 12,
-                                            fontWeight: 'bold',
-                                            textAlign: 'left',
-                                            color: '#333'
-                                        }}>
-                                            {data.subject}
-                                        </Text>
-                                    </View>
-                                    <View>
-                                        <Image source={{uri:data.picture}} style={Styles.itemImg} />
-                                    </View>
-                                    <View>
-                                        <Text style={{
-                                            fontSize: 12,
-                                            fontWeight: '500',
-                                            textAlign: 'left',
-                                            color: '#ff720d'
-                                        }}>
-                                            {data.date_created}
-                                        </Text>
-                                    </View>
-                                </View>
-                            </Card>
+                                </Card>
+                            </TouchableOpacity>
                         )
                     }
                     </ScrollView>

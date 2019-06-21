@@ -75,6 +75,15 @@ export default {
         width: '33%',
         marginBottom: 1,
     },
+    btnTrans: {
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+        borderRadius: 10,
+        width: '33%',
+        marginBottom: 1,
+    },
     btnImg: {
         marginBottom: 10,
     },

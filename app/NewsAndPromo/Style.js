@@ -200,4 +200,20 @@ itemCityImg: {
   borderRadius: 5,
   textAlign: 'center'
 },
+picture :{
+  width : dw,
+  height : dh*0.3
+},
+wrapNews :{
+  marginHorizontal: 20,
+  marginVertical: 10,
+},
+titleText : {
+  fontWeight : "bold",
+  fontSize : 15
+},
+contentText :{
+  fontWeight: "300",
+  fontSize : 10
+}
 };

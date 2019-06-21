@@ -52,6 +52,7 @@ export default class Akun extends React.Component {
 
     render() {
         let dashmenu = this.state.dashmenu.length % 3
+        let secLoop = [0,1]
 
         return (
             <Container style={Style.bgMain}>
@@ -110,11 +111,22 @@ export default class Akun extends React.Component {
                                 <Image source={require('@Asset/images/btn-settings.png')} style={Styles.btnImg} />
                                 <Text style={Styles.btnText}>Settings</Text>
                             </TouchableOpacity> */}
+                        
+                        <TouchableOpacity style={Styles.btnBox}
+                            onPress={()=>this.goToFeed({URL_angular : "ReportNew",isProject:1})}>
+                            <Image source={{uri : urlApi+"images/dashPict/profits.png"}} style={Styles.imgBtn} />
+                            <Text style={Styles.btnText}>New Report</Text>
+                        </TouchableOpacity>
                     
-                        { dashmenu > 1 ? 
-                            <TouchableOpacity style={Styles.btnBox}>
+                        {/* { dashmenu == 2 ? 
+                            <TouchableOpacity style={Styles.btnTrans}>
                             </TouchableOpacity>
-                        :null}
+                        : dashmenu == 1 ?
+                            secLoop.map((val)=>
+                                <TouchableOpacity key={val} style={Styles.btnTrans}>
+                                </TouchableOpacity>
+                            )
+                        : null} */}
                         </View>
 
                         {/* <View style={Styles.message}>

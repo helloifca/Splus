@@ -88,7 +88,7 @@ export default class Home extends Component {
   }
 
   getPromo = () => {
-    fetch(urlApi+'c_newsandpromo/getDatapromo/IFCAMOBILE' ,{
+    fetch(urlApi+'c_newsandpromo/getDatanews2/IFCAMOBILE' ,{
         method : "GET",
     })
     .then((response) => response.json())
@@ -116,6 +116,7 @@ export default class Home extends Component {
         even={(index + 1) % 2 === 0}
         parallax={true}
         parallaxProps={parallaxProps}
+        onPress={()=>Actions.propertydetail({items:item})}
       />
     );
   }
@@ -196,8 +197,7 @@ export default class Home extends Component {
       <TouchableOpacity
         style={Styles.item}
         underlayColor="transparent"
-        
-      >
+        onPress={()=>Actions.NewsAndPromoDetail({items : item})}>
         <View>
           <View>
             <Image
@@ -205,8 +205,8 @@ export default class Home extends Component {
               style={Styles.itemImg}
             />
           </View>
-          <Text style={Styles.itemPrice}>{item.content}</Text>
-          <Text style={Styles.itemLocation}>{item.subject}</Text>
+          <Text style={Styles.itemPrice}>{item.subject}</Text>
+          {/* <Text style={Styles.itemLocation}>{item.content}</Text> */}
           
         </View>
       </TouchableOpacity>
@@ -258,6 +258,7 @@ export default class Home extends Component {
                       small
                       rounded
                       style={Styles.sBtn}
+                      onPress={()=>Actions.Feed()}
                       >
                       <Text style={Styles.sLink}>See All</Text>
                     </Button>
@@ -273,7 +274,7 @@ export default class Home extends Component {
                 />
               </View>
 
-              <View style={{ marginTop: 40, paddingHorizontal: 20, paddingBottom: 16 }}>
+              {/* <View style={{ marginTop: 40, paddingHorizontal: 20, paddingBottom: 16 }}>
                 <Text style={{ fontSize: 18, fontWeight: '500' }}>
                     Introducing Ifca SPlus
                 </Text>
@@ -285,7 +286,7 @@ export default class Home extends Component {
                     style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 5, borderWidth: 1, borderColor: '#dddddd' }}
                     source={require('../Images/home.jpg')} />
                 </View>
-              </View>
+              </View> */}
             </View>
           </ScrollView>          
         </ScrollView>
