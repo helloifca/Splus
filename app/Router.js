@@ -69,6 +69,9 @@ import ReportNew from './ReportNew/ReportNew';
 //Comission
 import Comission from './Comission/Comission';
 
+// NUP
+import NUPPage from './NUP/NUP';
+
 import Dashboard from './Reports/Dashboard';
 
 import {_storeData,_getData} from '@Component/StoreAsync';
@@ -326,6 +329,12 @@ class Routes extends Component{
                 <Scene
                   key="ComissionPage"
                   component={Comission}
+                  hideNavBar={true}
+                  title=""
+                />
+                <Scene
+                  key="NUPPage"
+                  component={NUPPage}
                   hideNavBar={true}
                   title=""
                 />

@@ -117,6 +117,12 @@ export default class Akun extends React.Component {
                             <Image source={{uri : urlApi+"images/dashPict/profits.png"}} style={Styles.imgBtn} />
                             <Text style={Styles.btnText}>New Report</Text>
                         </TouchableOpacity>
+
+                        <TouchableOpacity style={Styles.btnBox}
+                            onPress={()=>this.goToFeed({URL_angular : "NUPPage",isProject:1})}>
+                            <Image source={{uri : urlApi+"images/dashPict/profits.png"}} style={Styles.imgBtn} />
+                            <Text style={Styles.btnText}>NUP</Text>
+                        </TouchableOpacity>
                     
                         {/* { dashmenu == 2 ? 
                             <TouchableOpacity style={Styles.btnTrans}>
