@@ -25,8 +25,6 @@ export default {
     paddingVertical: 20,
     paddingHorizontal: 20,
   },
-
-
   profile: {
     flex: 1,
     height: 200,
@@ -292,6 +290,7 @@ export default {
     fontFamily: Fonts.type.sfuiDisplaySemibold,
   },
   sBtn: {
+      width : 150,
       padding: 9,
       backgroundColor: '#FF6900',
       color: '#FFF',
@@ -300,7 +299,16 @@ export default {
       justifyContent : 'space-between',
       alignItems: 'center',
   },
-
+  editBtn :{
+    
+  },
+  iconEdit : {
+    color : "#fff",
+    fontSize : 25,
+    position : 'absolute',
+    right : 3,
+    bottom : 3,
+  }
 
 
 }

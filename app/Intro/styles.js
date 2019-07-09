@@ -158,5 +158,10 @@ const styles = StyleSheet.create({
 		fontSize: Fonts.moderateScale(17),
 		fontFamily: Fonts.type.sfuiDisplayRegular,
 	},
+	eye :{
+		position: 'absolute',
+		right : 10,
+		top : 9,
+	}
 });
 export default styles;

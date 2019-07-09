@@ -205,8 +205,8 @@ export default class Home extends Component {
               style={Styles.itemImg}
             />
           </View>
-          <Text style={Styles.itemPrice}>{item.subject}</Text>
-          {/* <Text style={Styles.itemLocation}>{item.content}</Text> */}
+          <Text style={Styles.itemPrice}>{item.descs}</Text>
+          <Text style={Styles.itemLocation}>{item.subject}</Text>
           
         </View>
       </TouchableOpacity>

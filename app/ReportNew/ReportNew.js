@@ -15,7 +15,8 @@ import {
     View,
     FlatList,
     Modal,
-    NativeModules
+    NativeModules,
+    PermissionsAndroid
 } from "react-native";
 import {
     Container,
@@ -63,7 +64,9 @@ class ReportNew extends Component {
             user: "",
             name: "",
             project: [],
-            selected: ""
+            selected: "",
+
+            accesStorage :false
         }
 
         console.log('props cf', props);
@@ -82,7 +85,31 @@ class ReportNew extends Component {
 
         this.setState(data,()=>{
             this.getFile("TB")
+            this.requestStorage()
         })
+    }
+
+    requestStorage = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                {
+                title: 'IFCA S + want to acces your storage',
+                message:
+                    'Please be careful with agreement permissions ',
+                buttonNeutral: 'Ask Me Later',
+                buttonNegative: 'Cancel',
+                buttonPositive: 'OK',
+                },
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                this.setState({accesStorage : granted})
+            } else {
+                this.setState({accesStorage : false})
+            }
+        } catch (err) {
+          console.warn(err);
+        }
     }
 
     getFile = (type) =>{
@@ -114,26 +141,32 @@ class ReportNew extends Component {
     downloadFile = (item) =>{
         const android = RNFetchBlob.android
 
-        RNFetchBlob
-        .config({
-            fileCache : true,
-            addAndroidDownloads: {
-                path: RNFetchBlob.fs.dirs.SDCardDir +'/downloads/'+item.descs+'.pdf',
-                useDownloadManager: true,
-                notification: true,
-                overwrite: true,
-                description: 'downloading content...',
-                mime: 'application/pdf',
-                mediaScannable: true
-            }
-        })
-        .fetch('GET', item.file_url)
-        .then((res) => {
-            console.log('The file saved to ', res.path())
-            // this.openFile(RNFetchBlob.fs.dirs.SDCardDir +'/Download/laporan.pdf')
-            // android.actionViewIntent(res.path(), 'application/pdf')
-            // android.actionViewIntent(RNFetchBlob.fs.dirs.SDCardDir +'/Download/laporan.pdf','application/pdf')
-        })
+        if(this.state.accesStorage){
+            RNFetchBlob
+            .config({
+                fileCache : true,
+                addAndroidDownloads: {
+                    path: RNFetchBlob.fs.dirs.SDCardDir +'/downloads/'+item.descs+'.pdf',
+                    useDownloadManager: true,
+                    notification: true,
+                    overwrite: true,
+                    description: 'downloading content...',
+                    mime: 'application/pdf',
+                    mediaScannable: true
+                }
+            })
+            .fetch('GET', item.file_url)
+            .then((res) => {
+                console.log('The file saved to ', res.path())
+                alert(res.path())
+                // this.openFile(RNFetchBlob.fs.dirs.SDCardDir +'/Download/laporan.pdf')
+                android.actionViewIntent(res.path(), 'application/pdf')
+                // android.actionViewIntent(RNFetchBlob.fs.dirs.SDCardDir +'/Download/laporan.pdf','application/pdf')
+            })
+        } else {
+            this.requestStorage()
+        }
+        
     }
 
     openFile = (url) =>{

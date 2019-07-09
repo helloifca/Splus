@@ -1,6 +1,6 @@
 import React from 'react'
-import { StatusBar,Alert ,ActionSheetIOS, WebView, TouchableOpacity, TextInput, StyleSheet, Image, ImageBackground, Dimensions, ScrollView, Platform, SafeAreaView, Picker, FlatList } from 'react-native'
-import { Container, Header, Content, Button, Icon, Text, Title, Left, Right, Body, Input, Item, Footer, Accordion, View, FooterTab, Badge, List, ListItem, Tab, Tabs } from 'native-base'
+import { StatusBar,Alert ,ActionSheetIOS, WebView, TouchableOpacity, TextInput, StyleSheet, Image, ImageBackground, Dimensions, ScrollView, Platform, SafeAreaView,  FlatList } from 'react-native'
+import { Container, Header, Content, Button, Icon, Text, Title, Left, Right, Body, Input, Item, Footer, Accordion, View, FooterTab, Badge, List, ListItem, Tab, Tabs,Picker, } from 'native-base'
 
 import NavigationService from '@Service/Navigation'
 
@@ -26,6 +26,10 @@ export default class Profile extends React.Component {
             token : '',
             gender : '',
             hp : '',
+
+            newPass : '',
+            curPass : '',
+            conPass : '',
 
             dataProfile : [],
             fotoProfil : require('@Asset/images/1.png'),
@@ -57,6 +61,11 @@ export default class Profile extends React.Component {
         })
     }
 
+    componentWillUnmount() {
+        this.props.onBack()
+    }
+    
+
     getProfile = () => {
         
         fetch(urlApi+'c_profil/getData/IFCAMOBILE/'+this.state.email+'/'+this.state.userId,{
@@ -86,6 +95,84 @@ export default class Profile extends React.Component {
         });
     }
 
+    save = () => {
+        const {email,name,hp,gender} = this.state
+
+        const formData = {
+            UserName : email,
+            Name : name,
+            Handphone : hp,
+            Gender : gender,
+            wherename : name,
+
+        }
+
+        fetch(urlApi+'c_profil/save/',{
+            method : "POST",
+            body :JSON.stringify(formData),
+            headers :{
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Token' : this.state.token
+            }
+        })
+        .then((response) => response.json())
+        .then((res)=>{
+            if(!res.Error){
+                alert(res.Pesan)
+                _storeData('@Name',name)
+                _storeData('@Handphone',hp)
+            }
+            console.log('save profile',res)
+
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+    changePassPress = () =>{
+        const {newPass,curPass,conPass} = this.state
+
+        if(newPass != '' && curPass != '' && conPass != ''){
+            if(newPass == conPass){
+                this.changePass()
+            } else {
+                alert('Password does not match')
+            }
+        } else {
+            alert('Password can not be null')
+        }
+
+    }
+
+    changePass = () =>{
+        const {email,newPass,curPass} = this.state
+
+        const formData = {
+            email : email,
+            password : newPass,
+            cpassword : curPass
+        }
+
+        fetch(urlApi+'c_profil/changePassReact/',{
+            method : "POST",
+            body :JSON.stringify(formData),
+            headers :{
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Token' : this.state.token
+            }
+        })
+        .then((response) => response.json())
+        .then((res)=>{
+            alert(res.Pesan)
+            console.log('save profile',res)
+
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
     renderAccordionHeader(item, expanded) {
         return (
             <View style={Styles.accordionTab}>
@@ -105,21 +192,33 @@ export default class Profile extends React.Component {
         </View>
     }
     renderAccordionContentBasic() {
-        let {gender,name,email,hp} = this.state
+        let {gender,name,email,hp,group} = this.state
 
         return <View>
             <TextInput style={Styles.textInput} placeholder={'Email'} value={email} />
-            <TextInput style={Styles.textInput} placeholder={'First Name'} value={name} />
-            <TouchableOpacity onPress={()=>this.showActionSheet()}>
-                <View pointerEvents="none">
-                    <TextInput style={Styles.textInput} placeholder={'Gender'} value={gender} />
-                </View>
-            </TouchableOpacity>
-            <TextInput style={Styles.textInput} placeholder={'Handphone'} value={hp} />
+            <TextInput style={Styles.textInput} placeholder={'Group'} value={group} />
+            <TextInput style={Styles.textInput} placeholder={'First Name'} value={name} onChangeText={(val)=>{this.setState({name:val})}}/>
+            {Platform.OS == "ios" ?
+                <TouchableOpacity onPress={()=>this.showActionSheet()}>
+                    <View pointerEvents="none">
+                        <TextInput style={Styles.textInput} placeholder={'Gender'} value={gender} />
+                    </View>
+                </TouchableOpacity>
+            :
+                <Picker 
+                placeholder="Gender"
+                selectedValue={this.state.gender}
+                style={{width: '100%',marginHorizontal:10}} 
+                textStyle={{fontFamily:'Montserrat-Regular',fontSize:12,color:'#666'}} 
+                onValueChange={(val)=>this.setState({gender:val})}>
+                    <Item label="Male" value="Male" />
+                    <Item label="Female" value="Female" />
+                </Picker>
+            }
+            
+            <TextInput style={Styles.textInput} placeholder={'Handphone'} value={hp} onChangeText={(val)=>{this.setState({hp:val})}} />
             {/* <TextInput style={Styles.textInputMulti} multiline={true} numberOfLines={8} placeholder={'About You'} /> */}
-            <Button style={Styles.btn} onPress={() => {
-                NavigationService.navigate('MemberHome')
-            }}>
+            <Button style={Styles.btn} onPress={() => {this.save()}}>
                 <Text style={Styles.formBtnText}>{'Save'.toUpperCase()}</Text>
                 <Icon active name='arrow-right' type="Feather" style={Styles.formBtnIcon} />
             </Button>
@@ -158,12 +257,10 @@ export default class Profile extends React.Component {
     }
     renderAccordionContentSocial() {
         return <View>
-            <TextInput style={Styles.textInput} placeholder={'Old Password'} />
-            <TextInput style={Styles.textInput} placeholder={'New Password'} />
-            <TextInput style={Styles.textInput} placeholder={'Confirm Password'} />
-            <Button style={Styles.btn} onPress={() => {
-                NavigationService.navigate('MemberHome')
-            }}>
+            <TextInput style={Styles.textInput} placeholder={'Current Password'} onChangeText={(val)=>this.setState({curPass:val})} value={this.state.curPass} />
+            <TextInput style={Styles.textInput} placeholder={'New Password'} onChangeText={(val)=>this.setState({newPass:val})} value={this.state.newPass} />
+            <TextInput style={Styles.textInput} placeholder={'Confirm Password'} onChangeText={(val)=>this.setState({conPass:val})} value={this.state.conPass} />
+            <Button style={Styles.btn} onPress={() => {this.changePassPress()}}>
                 <Text style={Styles.formBtnText}>{'Save'.toUpperCase()}</Text>
                 <Icon active name='arrow-right' type="Feather" style={Styles.formBtnIcon} />
             </Button>
@@ -225,6 +322,7 @@ export default class Profile extends React.Component {
                     <View style={[Styles.owner, Style.actionBarIn]}>
                         <View style={Styles.ownerBg}>
                             <Image source={ fotoProfil } style={Styles.ownerAvatarImg} />
+                            <Icon name="create" style={Styles.iconEdit} />
                         </View>
                         <View style={Styles.ownerInfo}>
                             <Text style={Styles.ownerName}>{this.state.name}</Text>
@@ -260,7 +358,7 @@ export default class Profile extends React.Component {
                     />
                 </View>
 
-                <View style={{marginHorizontal:15,marginVertical:5}}>
+                <View style={{marginHorizontal:15,marginVertical:5,alignItems:'center'}}>
                     <TouchableOpacity style={Styles.sBtn} onPress={()=>this.showAlert()}>
                         <Text style={Styles.sLink} > Logout</Text>
                         <Icon name="log-out" style={{color : "#fff",fontSize: 18,}} />

@@ -1,7 +1,7 @@
 /*This is an example of React Native App Intro Slider */
 import React from 'react';
 //import react in project 
-import { Text, View, Image, StatusBar, Platform, ActivityIndicator, ImageBackground ,TouchableOpacity, BackHandler,I18nManager} from 'react-native';
+import { PermissionsAndroid,Text, View, Image, StatusBar, Platform, ActivityIndicator, ImageBackground ,TouchableOpacity, BackHandler,I18nManager} from 'react-native';
 import { Container, Button, Icon, Right, Item, Input, Header, Left, Body, Title} from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 //import all the required component
@@ -23,11 +23,37 @@ export default class Intro extends React.Component {
       isLoaded : true,
 
       email : '',
-      password : ''
+      password : '',
+      isHide : false,
     };
   }
-  componentWillMount() {
+   async componentWillMount() {
     isMount = true
+
+    this.requestStorage()
+  }
+
+  requestStorage = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'IFCA S + want to acces your storage',
+          message:
+            'Please be careful with agreement permissions ',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the camera');
+      } else {
+        console.log('Camera permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
   }
 
   async componentDidMount(){
@@ -102,7 +128,12 @@ export default class Intro extends React.Component {
     }).then((response) => response.json())
     .then((res)=>{
         if(!res.Error){
+          if(res.Data.isResetPass != 1){
             this.getTower(res)
+          } else {
+            this.setState({isLoaded: !this.state.isLoaded});
+            Actions.ResetPass({email:res.Data.user})
+          }
         } else {
             this.setState({isLoaded: !this.state.isLoaded},()=>{
                 alert(res.Pesan)
@@ -169,7 +200,11 @@ export default class Intro extends React.Component {
     }
   }
 
-  
+  skipLogin = () =>{
+    this.setState({email : 'guest@ifca.co.id',password : 'pass1234'},()=>{
+      this.btnLoginClick()
+    })
+  }
 
   render() {
     // let BG_Image = { uri : 'https://antiqueruby.aliansoftware.net/Images/signin/ic_main_bg_stwo.png'};
@@ -192,7 +227,7 @@ export default class Intro extends React.Component {
 						</Body>
 						<Right style={styles.right}>
             <TouchableOpacity style={styles.textRight} onPress={()=>this.props.navigation.navigate('Guest')}>
-              <Text style={styles.textTitle} onPress={() =>this.clickHome()} >Skip Login</Text>
+              <Text style={styles.textTitle} onPress={() =>this.skipLogin()} >Skip Login</Text>
 							</TouchableOpacity>
            </Right>
 					</Header>
@@ -229,7 +264,9 @@ export default class Intro extends React.Component {
 								textAlign={I18nManager.isRTL ? 'right' : 'left'}
 								placeholder='Password'
 								placeholderTextColor="rgba(0,0,0,0.20)"
-								secureTextEntry={true}/>
+								secureTextEntry={!this.state.isHide}
+                value={this.state.password}/>
+              <Icon name={this.state.isHide ? "eye-off" : "eye"} style={styles.eye} onPress={()=>this.setState({isHide:!this.state.isHide})} />
 						</View>
 					</View>
 					<View style={styles.signbtnSec} pointerEvents={this.state.isLoaded ? 'auto' : 'none'}>
@@ -240,7 +277,7 @@ export default class Intro extends React.Component {
 					</View>
 					<Text style={styles.forgotPassword} onPress={() => alert("Forgot Password")}>Forgot your password?</Text>
 					<View style={styles.socialSec}>
-						<TouchableOpacity onPress={() => alert("FaceBook")}>
+						<TouchableOpacity onPress={() => Actions.Signup()}>
 							<Text style={styles.fbButtonText}>New here? Register now</Text>
 </TouchableOpacity>
 					</View>

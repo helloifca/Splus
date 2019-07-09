@@ -228,6 +228,7 @@ export default {
         flex: 1,
         paddingHorizontal: 20,
         paddingVertical: 2,
+        justifyContent: 'center'
     },
     textButton: {
         fontFamily: Fonts.type.sfuiDisplaySemibold,

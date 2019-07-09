@@ -11,6 +11,8 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 import Home from "./Home/Home";
 import Login from "./Intro/Intro";
+import Signup from './Signup/Signup';
+import Reset from './ResetPass/Reset';
 import Search from "./Find/Search";
 import Calcu from "./Calcu/Calcu";
 import Notif from "./Notif/Notif";
@@ -302,9 +304,10 @@ class Routes extends Component{
                   hideNavBar={true}
                   title=""
                 />
+                {/* //!! Sementara diubah Dulu */}
                 <Scene
                   key="ReportProject"
-                  component={ReportPage}
+                  component={ReportNew}
                   hideNavBar={true}
                   title=""
                 />
@@ -320,9 +323,11 @@ class Routes extends Component{
                   hideNavBar={true}
                   title=""
                 />
+
+                {/*//! Sementara diubah  */}
                 <Scene
                   key="ReportNew"
-                  component={ReportNew}
+                  component={ReportPage}
                   hideNavBar={true}
                   title=""
                 />
@@ -335,6 +340,18 @@ class Routes extends Component{
                 <Scene
                   key="NUPPage"
                   component={NUPPage}
+                  hideNavBar={true}
+                  title=""
+                />
+                <Scene
+                  key="Signup"
+                  component={Signup}
+                  hideNavBar={true}
+                  title=""
+                />
+                <Scene
+                  key="ResetPass"
+                  component={Reset}
                   hideNavBar={true}
                   title=""
                 />

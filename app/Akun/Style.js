@@ -38,7 +38,9 @@ export default {
     },
     avatar: {
         marginRight: 10,
-        borderRadius: 34,
+        borderRadius: 30,
+        width : 60,
+        height :60
     },
     profileName: {
       fontFamily: Fonts.type.sfuiDisplaySemibold,

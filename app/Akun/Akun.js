@@ -24,23 +24,59 @@ export default class Akun extends React.Component {
             email : '',
             name : '',
             group : '',
-            dashmenu : []
+            dashmenu : [],
+            fotoProfil : 'http://35.198.219.220:2121/alfaAPI/images/profil/avatar.png'
         }
     }
 
     async componentDidMount(){
         const data = {
           email :  await _getData('@User'),
+          userId : await _getData('@UserId'),
           name :  await _getData('@Name'),
           group : await _getData('@Group'),
-          dashmenu : await _getData('@DashMenu'),
+          token : await _getData('@Token'),
+          dashmenu : await _getData('@DashMenu') ? await _getData('@DashMenu') : [],
         }
 
         console.log('datra',data);
     
         this.setState(data,()=>{
+            this.getProfile()
         })
     }
+
+    receiveProps = async() =>{
+        const data = {
+          name :  await _getData('@Name'),
+        }
+
+        this.setState(data)
+    }
+
+    getProfile = () => {
+        
+        fetch(urlApi+'c_profil/getData/IFCAMOBILE/'+this.state.email+'/'+this.state.userId,{
+            method : "GET",
+            headers :{
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Token' : this.state.token
+            }
+        })
+        .then((response) => response.json())
+        .then((res)=>{
+            const resData = res.Data[0];
+
+            // ? Agar Gambar Tidak ter cache 
+            let url = resData.pict + '?random_number=' + new Date().getTime()
+            this.setState({fotoProfil:url})
+            console.log('res Profil',this.state);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
 
     goToFeed = (val) =>{
         if(val.isProject == 1){
@@ -60,13 +96,13 @@ export default class Akun extends React.Component {
                 <Content style={Style.layoutInner} contentContainerStyle={Style.layoutContent}>
                     <View style={Styles.section}>
                         <View style={Styles.profile}>
-                            <Image source={require('@Asset/images/avatar.png')} style={Styles.avatar} />
+                            <Image source={{uri:this.state.fotoProfil}} style={Styles.avatar} />
                             <View>
                                 <Text style={Styles.profileName}>{this.state.name}</Text>
                                 <Text style={Styles.profileLocation}>{this.state.group}</Text>
                             </View>
                             <Right>
-                                <TouchableOpacity style={Styles.settingBtn} onPress={() => { Actions.profile() }}>
+                                <TouchableOpacity style={Styles.settingBtn} onPress={() => { Actions.profile({onBack:()=>this.receiveProps()}) }}>
                                     <Icon name="cog" style={{color : "#666",fontSize: 18,}} />
                                     <Text style={Styles.sLink} > Settings</Text>
                                 </TouchableOpacity>
@@ -75,7 +111,7 @@ export default class Akun extends React.Component {
 
 
                         <View style={Styles.btnLayout}>
-                        {this.state.dashmenu.map((val,key)=>
+                        { this.state.dashmenu.map((val,key)=>
                             <TouchableOpacity key={key} style={Styles.btnBox} onPress={() => {
                                 this.goToFeed(val)
                             }}>
@@ -112,11 +148,11 @@ export default class Akun extends React.Component {
                                 <Text style={Styles.btnText}>Settings</Text>
                             </TouchableOpacity> */}
                         
-                        <TouchableOpacity style={Styles.btnBox}
+                        {/* <TouchableOpacity style={Styles.btnBox}
                             onPress={()=>this.goToFeed({URL_angular : "ReportNew",isProject:1})}>
                             <Image source={{uri : urlApi+"images/dashPict/profits.png"}} style={Styles.imgBtn} />
                             <Text style={Styles.btnText}>New Report</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
                         <TouchableOpacity style={Styles.btnBox}
                             onPress={()=>this.goToFeed({URL_angular : "NUPPage",isProject:1})}>

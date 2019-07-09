@@ -50,6 +50,7 @@ import {_storeData,_getData,_navigate} from '@Component/StoreAsync';
 import { Style, Colors } from "../Themes/index";
 import Styles from "./Style";
 import { WebView } from 'react-native-webview';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 //const {width, height} = Dimensions.get('window')
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get(
@@ -57,6 +58,8 @@ const { width: viewportWidth, height: viewportHeight } = Dimensions.get(
 );
 
 let isMount = false
+
+
 
 export default class extends React.Component {
     constructor(props) {
@@ -67,6 +70,7 @@ export default class extends React.Component {
 
         active: false,
         isVisible: false,
+        isView : false,
 
         hd : new Headers,
         email : '',
@@ -78,7 +82,9 @@ export default class extends React.Component {
         feature : null,
         overview : null,
         project : null,
-        gallery : null
+        gallery : null,
+        imagesPreview :[],
+        index : 0
       };
 
       console.log('props',props);
@@ -154,6 +160,11 @@ getDataGallery = (item) => {
       if(!res.Error){
           const resData = res.Data
           this.setState({gallery : resData.gallery})
+          resData.gallery.map((item)=>{
+            this.setState(prevState=>({
+              imagesPreview : [...prevState.imagesPreview, {url:item.gallery_url}]
+            }))
+          })
       } else {
           this.setState({isLoaded: !this.state.isLoaded},()=>{
               alert(res.Pesan)
@@ -372,11 +383,11 @@ clickToNavigate = (to,param) =>{
                   style={Styles.slider}
                   showsHorizontalScrollIndicator={false}
                   keyExtractor={item =>item.line_no}
-                  renderItem={({ item }) => (
+                  renderItem={({ item,index }) => (
                     <TouchableOpacity
                       underlayColor="transparent"
                       onPress={() => {
-                        alert('click')
+                        this.setState({isView:true,index:index})
                       }}
                     >
                       <View>
@@ -512,12 +523,43 @@ clickToNavigate = (to,param) =>{
               )}
             />
           </View>
+
+          
+          <Modal visible={this.state.isView} transparent={true}
+          onRequestClose={() => {
+            this.setState({ isView: !this.state.isView })
+          }}>
+            <Header style={Style.navigationModal}>
+              <StatusBar
+                backgroundColor={Colors.statusBarOrange}
+                animated
+                barStyle="light-content"
+              />
+              <View style={Style.actionBarRight}>
+                <Button
+                  transparent
+                  style={Style.actionBtnRight}
+                  onPress={() => {
+                    this.setState({ isView: !this.state.isView })
+                  }}            >
+                  <Icon
+                    active
+                    name="close"
+                    style={Style.actionIcon}
+                    type="FontAwesome"
+                  />
+                </Button>
+              </View>
+            </Header>
+            {this.state.imagesPreview ? <ImageViewer enableImageZoom={true} enableSwipeDown={true} onSwipeDown={()=>this.setState({ isView: !this.state.isView })} index={this.state.index} imageUrls={this.state.imagesPreview}/> : null}
+          </Modal>
+
           <Modal
           animationType={'slide'}
           transparent={false}
           visible={this.state.isVisible}
           onRequestClose={() => {
-            console.log('Modal has been closed.');
+            this.setState({ isVisible: !this.state.isVisible })
           }}>
           <Header style={Style.navigationModal}>
           <StatusBar
@@ -537,7 +579,7 @@ clickToNavigate = (to,param) =>{
               transparent
               style={Style.actionBtnRight}
               onPress={() => {
-                this.setState({ isVisible: !this.state.isVisible });
+                this.setState({ isVisible: !this.state.isVisible })
               }}            >
               <Icon
                 active

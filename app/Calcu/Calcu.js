@@ -36,7 +36,7 @@ import {
   } from "native-base";
   import { Actions } from "react-native-router-flux";
   import ParallaxScroll from '@monterosa/react-native-parallax-scroll';
-
+import numFormat from '@Component/numFormat'
 import {Fonts, Metrics, Style, Colors } from "../Themes";
 import Styles from "./Style";
 
@@ -57,7 +57,13 @@ class Calcu extends Component {
         customers : [],
         user : "",
         name : "",
-        project : []
+        project : [],
+        isCount:false,
+
+        totalCredit : '',
+        bunga : '',
+        time : '',
+        angsuran : ''
     }
 
       console.log('props cf',props);
@@ -79,33 +85,29 @@ class Calcu extends Component {
       })
     }
 
-    getCustomers = () =>{
+    count = () =>{
+        const {totalCredit,bunga,time} = this.state
+        let kredit = this.unFormat(totalCredit)
+        let bunga1 = bunga / 1200
+        let waktu = time * 12
 
-        {isMount ?
-            this.state.project.map((val)=>{
-                fetch(urlApi+'c_reservate/myReservation/'+val.db_profile+'/'+this.state.name,{
-                    method:'GET',
-                    headers : this.state.hd,
-                }).then((response) => response.json())
-                .then((res)=>{
-                    if(!res.Error){
-                        const resData = res.Data
-                        resData.map((data)=>{
-                            this.setState(prevState=>({
-                                customers : [...prevState.customers, data]
-                            }))
-                        })
-                    } else {
-                        this.setState({isLoaded: !this.state.isLoaded},()=>{
-                            alert(res.Pesan)
-                        });
-                    }
-                    console.log('getCustomers',res);
-                }).catch((error) => {
-                    console.log(error);
-                })
-            })
-        :null}
+        const angsuran1 = Math.round((kredit * bunga1) * (1/(1-(1/(Math.pow((1+bunga1),waktu))))))
+
+        this.setState({isCount:true,angsuran:this.format(angsuran1)})
+    }
+
+    format = (angka) =>{
+        const data = Math.floor(angka)
+        if(angka==null){
+            return '-';
+        }
+        let val = this.unFormat(angka)
+        return val.toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",");
+    }
+
+    unFormat = (value)=>{
+        let a = value.toString().replace(/^0+/, '').replace(/\D/g,'')
+        return a
     }
 
     clickChouseUnit(item) {
@@ -155,31 +157,49 @@ class Calcu extends Component {
                 contentContainerStyle={Style.layoutContent}>
                 <View>
                     <View style={styles.overview}>
-                        <Text style={styles.overviewTitle}>Simulasi Perhitungan KPA/R</Text>
 
                         <TextInput
                             style={styles.textInput}
                             placeholder={"Total Credit ( IDR )"}
                             keyboardType="numeric"
+                            value={this.state.totalCredit}
+                            onChangeText={(val)=>this.setState({totalCredit:this.format(val)})}
                         />
 
                         <View style={styles.col}>
                             <TextInput
                             style={styles.textInputHalf}
                             placeholder={"Bunga (%)"}
-                            keyboardType="numeric" />
+                            keyboardType="numeric" 
+                            value={this.state.bunga}
+                            onChangeText={(val)=>this.setState({bunga:val})}
+                            />
                             <TextInput
                             style={styles.textInputHalf}
                             placeholder={"Time (years)"}
-                            keyboardType="numeric" />
+                            keyboardType="numeric" 
+                            value={this.state.time}
+                            onChangeText={(val)=>this.setState({time:val})}
+                            />
                         </View>
 
-                        <Button style={styles.btn} >
+                        <Button style={styles.btn} onPress={()=>this.count()}>
                             <Text style={styles.formBtnText}>{"Hitung".toUpperCase()}</Text>
                             <Icon active name="calculator" type="FontAwesome" style={styles.formBtnIcon} />
                         </Button>
 
                     </View>
+                    {this.state.isCount ?
+                        <View style={styles.overviewResult}>
+
+                            <Text style={styles.countText}>
+                                JUMLAH ANGSURAN (PERBULAN)
+                            </Text>
+                            <Text style={styles.numResultText}>
+                                {this.state.angsuran}
+                            </Text>
+                        </View>
+                    :null}
                     <View style={styles.overview}>
 
                         <Text style={styles.countText}>
@@ -206,6 +226,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 20,
         backgroundColor : '#fff'
+    },
+    overviewResult: {
+        flex: 1,
+        marginHorizontal: 20,
+        paddingVertical: 20,
+        borderRadius:5,
+        backgroundColor : '#f3f3f3'
     },
     overviewTitle: {
         flex: 1,
@@ -259,9 +286,17 @@ const styles = StyleSheet.create({
         fontSize: 24,
     },
     countText: {
-    fontFamily: Fonts.type.sfuiDisplaySemibold,
+        fontFamily: Fonts.type.sfuiDisplaySemibold,
         fontSize: 12,
         color: '#999',
+        flexWrap: 'wrap',
+        flex :1,
+        textAlign : 'center'
+    },
+    numResultText: {
+        fontFamily: Fonts.type.sfuiDisplaySemibold,
+        fontSize: 15,
+        color: '#000',
         flexWrap: 'wrap',
         flex :1,
         textAlign : 'center'

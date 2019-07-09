@@ -15,7 +15,8 @@ import {
     View,
     FlatList,
     Modal,
-    NativeModules
+    NativeModules,
+    PermissionsAndroid
 } from "react-native";
 import {
     Container,
@@ -81,8 +82,32 @@ class DownloadPage extends Component {
         }
 
         this.setState(data,()=>{
-            this.getFile()
+            this.getFile(),
+            this.requestStorage()
         })
+    }
+
+    requestStorage = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                {
+                title: 'IFCA S + want to acces your storage',
+                message:
+                    'Please be careful with agreement permissions ',
+                buttonNeutral: 'Ask Me Later',
+                buttonNegative: 'Cancel',
+                buttonPositive: 'OK',
+                },
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log('You can use the camera');
+            } else {
+                console.log('Camera permission denied');
+            }
+        } catch (err) {
+          console.warn(err);
+        }
     }
 
     getFile = () =>{
@@ -130,14 +155,10 @@ class DownloadPage extends Component {
         .fetch('GET', urlApi+"pdf/"+item.url)
         .then((res) => {
             console.log('The file saved to ', res.path())
-            // this.openFile(RNFetchBlob.fs.dirs.SDCardDir +'/Download/laporan.pdf')
+            DocumentInteractionController.open(RNFetchBlob.fs.dirs.SDCardDir +'/Download/laporan.pdf')
             // android.actionViewIntent(res.path(), 'application/pdf')
             // android.actionViewIntent(RNFetchBlob.fs.dirs.SDCardDir +'/Download/laporan.pdf','application/pdf')
         })
-    }
-
-    openFile = (url) =>{
-        DocumentInteractionController.open(url)
     }
 
     onValueChange(value) {
