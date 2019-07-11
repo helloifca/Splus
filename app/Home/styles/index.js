@@ -1,4 +1,4 @@
-import { StyleSheet,Dimensions } from 'react-native';
+import { StyleSheet,Dimensions,Platform } from 'react-native';
 import { Fonts, Metrics, Colors } from '../../Themes/';
 const dh = Dimensions.get("window").height;
 const dw = Dimensions.get("window").width;
@@ -102,5 +102,37 @@ export default StyleSheet.create({
         height : dh * 0.54,
         alignItems:'center',
         justifyContent: 'center',
+    },
+    imageContainer: {
+      flex: 1,
+      marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+      backgroundColor: 'white',
+      borderRadius: 8,
+    },
+    image: {
+      ...StyleSheet.absoluteFillObject,
+      resizeMode: 'cover',
+    },
+    item: {
+        width: dw - 60,
+        height: dw /2,
+    },
+    newsTitleText :{
+        backgroundColor: 'transparent',
+        color: '#fff',
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginHorizontal: 16,
+        marginVertical : 16
+    },
+    newsTitle :{
+        position : 'absolute',
+        borderRadius :5,
+        left : 0,
+        bottom :0,
+        width : dw - 60,
+        backgroundColor : 'rgba(0,0,0,0.5)',
+        justifyContent :'center',
+        alignItems:'center'
     }
 });

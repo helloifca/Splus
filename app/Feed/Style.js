@@ -1,203 +1,440 @@
 const React = require("react-native");
-const { Platform,Dimensions } = React;
-import { Fonts, Metrics, Colors } from "../Themes/";
+const { Platform } = React;
+import { Fonts, Metrics, Colors } from '../Themes/';
+import {Dimensions} from 'react-native';
 const dh = Dimensions.get("window").height;
 const dw = Dimensions.get("window").width;
 
 export default {
-  layoutContent: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center"
-  },
+    layoutContent: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 
-  homeBg: {
-    flex: 1,
-    paddingBottom: 30,
-  },
+    /* -- Header Button -- */
+    btnLayout: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#7E8BF5',
+        paddingBottom: 10,
+        paddingHorizontal: 20,
+    },
+    btnBg: {
+        flexDirection: 'row',
+        borderWidth: 1,
+        borderColor: '#FFF',
+        borderRadius: 3,
+        padding: 2,
+    },
+    btn: {
+        color: '#FFF',
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+        paddingHorizontal: 5,
+        paddingVertical: 15,
+        fontSize: 10,
+    },
+    btnActive: {
+        color: '#7E8BF5',
+        backgroundColor: '#FFF',
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+        paddingHorizontal: 20,
+        paddingVertical: 5,
+        fontSize: 10,
+        borderRadius: 3,
+    },
 
-  section: {
-    flex: 1,
-    paddingLeft: 0,
-    alignItems: "center",
-    width: "100%"
-  },
-  trash: {
-    justifyContent: "center"
-  },
-
-  item: {
-    width: "100%",
-    flexDirection: "column"
-  },
-  record: {
-    flexDirection: "row",
-    borderBottomWidth: 1,
-    borderColor: "#DDD",
-    marginLeft: 0,
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    backgroundColor: "#FFF",
-    justifyContent: "center"
-  },
-  recordLast: {
-    flexDirection: "row",
-    borderBottomWidth: 0,
-    marginLeft: 0,
-    paddingVertical: 15
-  },
-  itemImg: {
-    height: dh * 0.2,
-    borderRadius: 5
-  },
-  itemInfo: {
-    flex: 1,
-    paddingHorizontal: 15
-  },
-  itemTitle: {
-    color: "#333",
-    fontSize: 14,
-    fontFamily: Fonts.type.sfuiDisplaySemibold,
-    marginTop: 32,
-    lineHeight: 16,
-    
-
-
-  },
-  itemLocation: {
-    color: "#666",
-    fontSize: 11,
-    fontFamily: Fonts.type.sfuiDisplaySemibold,
-
-    marginBottom: 5,
-    lineHeight: 16
-  },
-  itemDate: {
-    color: "#999",
-    fontSize: 10,
-    fontFamily: Fonts.type.sfuiDisplaySemibold
-  },
-  itemRow: {
-    flexDirection: "row"
-  },
-  itemOverview: {
-    flexGrow: 1,
-    flexDirection: "row"
-  },
-  itemIcon: {
-    color: "#999",
-    marginRight: 5,
-    fontSize: 18
-  },
-  itemNo: {
-    color: "#333",
-    marginRight: 5,
-    fontFamily: Fonts.type.sfuiDisplaySemibold,
-
-    marginTop: 5,
-    fontSize: 12
-  },
-
-  crv: {
-    borderRadius: 8
-  },
-  sHeader: {
-    color: '#333',
-    fontSize: 14,
-    fontFamily: Fonts.type.sfuiDisplaySemibold,
-    marginTop: 5,
-    flexWrap : 'wrap',
-    flexDirection: 'row',
-},
-cHeader: {
-  color: '#333',
-  fontSize: 14,
-  fontFamily: Fonts.type.sfuiDisplaySemibold,
-  marginTop: 5,
-  flexWrap : 'wrap',
-  flexDirection: 'row',
-  marginRight : 100
-},
-sBtn: {
-    padding: 1,
-    backgroundColor: "#fb5f26",
-    color: '#FFF',
-    width : 120
-},
-sLink: {
-    color: '#FFF',
-    fontSize: 12,
-    fontFamily: Fonts.type.sfuiDisplaySemibold,
-},
-headerUnit: {
-  flexDirection: 'row',
-  marginBottom: 8,
-  paddingHorizontal: 20,
-  paddingTop: 16,
-},
-city: {
-  flex: 1,
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  paddingHorizontal: 20,
-  justifyContent:'space-between'
-},
-btnCity: {
-  width: '30%',
-  height: 75,
-  marginBottom: 10,
-  marginTop: 16,
-  backgroundColor: '#DFE3EE',
-  borderRadius: 10,
-  shadowColor: '#eee',
-  shadowOffset: { width: 2, height: 3 },
-  shadowOpacity: 2,
-  shadowRadius: 2,
-  elevation: 1,
-},
-btnCityImg: {
-  flex: 1,
-},
-btnCityLocation: {
-  flex: 1,
-  position: 'absolute',
-  width: '100%',
-  height: 75,
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-btnCityText: {
-  color: '#8B9DC3',
-  fontFamily: Fonts.type.sfuiDisplaySemibold,
-  fontSize: 12,
-},
+    /* -- Search -- */
+    search: {
+        flex: 1,
+        paddingHorizontal: 20,
+        paddingTop: 5,
+        paddingBottom: 20,
+        backgroundColor: '#DAD299',
+        flexDirection: 'row',
+    },
+    textInput: {
+        flex: 8,
+        paddingHorizontal: 20,
+        backgroundColor: '#FFF',
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+        fontSize: 12,
+        borderTopLeftRadius: 5,
+        borderBottomLeftRadius: 5,
+        height: 50,
+    },
+    searchBtn: {
+        flex: 2,
+        backgroundColor: '#FFF',
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+        fontSize: 12,
+        borderTopRightRadius: 5,
+        borderBottomRightRadius: 5,
+        borderTopLeftRadius: 0,
+        borderBottomLeftRadius: 0,
+        justifyContent: 'center',
+        height: 50,
+    },
+    searchBtnIcon: {
+        color: '#999',
+        fontSize: 18,
+    },
 
 
-flatCity: {
-  paddingLeft: 20,
-},
-itemCity: {
-  width: 150,
-  marginLeft: 5,
-  marginRight: 5,
-},
-itemCityCount: {
-  position: 'absolute',
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: 150,
-  height: 64,
-},
-itemCityLocation: {
-  color: '#FFF',
-  fontFamily: Fonts.type.sfuiDisplaySemibold,
-  fontSize: 13,
-},
-itemCityImg: {
-  marginBottom: 10,
-  width: 150,
-  height: 64,
-  borderRadius: 5,
-  textAlign: 'center'
-},
-};
+    /* -- Slider -- */
+    slider: {
+        flex: 1,
+        paddingBottom: 10,
+    },
+
+    /* -- Featured -- */
+    section: {
+        flex: 1,
+        paddingTop: 30,
+        paddingBottom: 30,
+    },
+    sectionGrey: {
+        flex: 1,
+        paddingTop: 60,
+        backgroundColor: '#f3f3f3',
+    },
+    flatList: {
+        paddingLeft: 10,
+    },
+    headerBg: {
+        flexDirection: 'row',
+        marginBottom: 15,
+        paddingHorizontal: 20,
+    },
+    headerIcon: {
+        fontSize: 24,
+        color: '#333',
+    },
+    sHeader: {
+        color: '#333',
+        marginLeft: 3,
+        fontSize: 14,
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+        marginTop: 5,
+    },
+    sBtn: {
+        padding: 1,
+        backgroundColor: '#e7e7e7',
+        color: '#FFF',
+    },
+    sLink: {
+        color: '#666',
+        fontSize: 10,
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+    },
+
+    itemList: {
+        flexDirection: 'row',
+        width: '100%',
+        marginBottom: 10,
+    },
+    itemBig: {
+        width: 300,
+        backgroundColor: '#FFF',
+        borderRadius: 5,
+        elevation: 10,
+        shadowOffset: {
+            width: 15,
+            height: 15
+        },
+        shadowColor: '#999',
+        shadowOpacity: 0.1,
+        shadowRadius: 0,
+        margin: 10,
+        marginBottom: 20,
+    },
+    itemImgBig: {
+        marginBottom: 10,
+        width: '100%',
+        height: 150,
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+        ...Platform.select({
+            ios: {
+                borderRadius: 5,
+            },
+        }),
+    },
+    itemNoCrv: {
+        ...Platform.select({
+            ios: {
+                width: '100%',
+                height: 5,
+                backgroundColor: '#FFF',
+                bottom: 10,
+                position: 'absolute',
+            },
+        }),
+    },
+    itemBg: {
+        ...Platform.select({
+            ios: {
+                
+            },
+        }),
+    },
+
+    item: {
+        width: 200,
+        marginBottom: 20,
+        marginLeft: 10,
+        marginRight: 10,
+        backgroundColor: '#FFF',
+        borderRadius: 5,
+        elevation: 10,
+        shadowOffset: {
+            width: 15,
+            height: 15
+        },
+        shadowColor: "grey",
+        shadowOpacity: 0.1,
+        shadowRadius: 0,
+    },
+    itemImg: {
+        marginBottom: 10,
+        width: 200,
+        height: 100,
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+        ...Platform.select({
+            ios: {
+                borderRadius: 5,
+            },
+        }),
+    },
+    itemFavorite: {
+        position: 'absolute',
+        alignSelf: 'flex-end',
+        color: '#FCC300',
+        marginTop: 10,
+        paddingRight: 10,
+    },
+    itemPrice: {
+        color: '#333',
+        fontSize: 16,
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+        paddingHorizontal: 20,
+    },
+    itemPriceSm: {
+        color: '#333',
+        fontSize: 14,
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+        paddingHorizontal: 20,
+    },
+    itemLocation: {
+        color: '#999',
+        fontSize: 11,
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+        marginBottom: 10,
+        paddingHorizontal: 20,
+    },
+    crv: {
+        borderRadius: 8,
+    },
+    itemRow: {
+        flexDirection: 'row',
+        paddingHorizontal: 20,
+        paddingBottom: 15,
+    },
+    itemOverview: {
+        flexGrow: 1,
+        flexDirection: 'row',
+    },
+    itemIcon: {
+        color: '#999',
+        marginRight: 5,
+        fontSize: 24,
+    },
+    itemNo: {
+        color: '#333',
+        marginRight: 5,
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+        marginTop: 5,
+        fontSize: 14,
+    },
+
+    /* -- Top Cities -- */
+    city: {
+        flex : 1,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        paddingHorizontal: 20,
+        justifyContent: 'space-between'
+    },
+    btnCity: {
+        width: '48%',
+        height: 100,
+        marginBottom: 10,
+        borderRadius: 5,
+        backgroundColor:'#f3f3f3'
+    },
+    btnCityImg: {
+        width: dw * 0.42,
+        height : null,
+        flex: 1,
+        borderRadius: 5,
+    },
+    btnCityLocation: {
+        borderRadius: 5,
+        flex: 1,
+        position: 'absolute',
+        width: dw * 0.42,
+        height: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor:'rgba(48, 53, 61, 0.7)'
+    },
+    btnCityText: {
+        color: '#fff',
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+        fontSize: 12,
+    },
+
+
+    flatCity: {
+        paddingLeft: 20,
+    },
+    itemCity: {
+        width: 150,
+        marginLeft: 5,
+        marginRight: 5,
+    },
+    itemCityCount: {
+        position: 'absolute',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 150,
+        height: 64,
+    },
+    itemCityLocation: {
+        color: '#FFF',
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+        fontSize: 13,
+    },
+    itemCityImg: {
+        marginBottom: 10,
+        width: 150,
+        height: 64,
+        borderRadius: 5,
+        textAlign: 'center'
+    },
+
+    /* -- Agents -- */
+    agents: {
+        paddingHorizontal: 15,
+    },
+    itemAgent: {
+        width: 72,
+        marginLeft: 5,
+        marginRight: 5,
+    },
+    itemAgentImg: {
+        marginBottom: 10,
+        width: 72,
+        height: 72,
+        borderRadius: 35,
+        textAlign: 'center'
+    },
+    itemAgentName: {
+        color: '#333',
+        fontSize: 12,
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+        textAlign: 'center',
+    },
+
+
+    typeBg: {
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#FFF',
+        width: '70%',
+    },
+    typeBtn: {
+        flex: 1,
+        borderWidth: 0,
+        borderRadius: 0,
+    },
+    typeBtnText: {
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+        color: '#999',
+        fontSize: 12,
+    },
+
+    typeBtnActive: {
+        backgroundColor: '#FFF',
+        paddingVertical: 8,
+        paddingHorizontal: 5,
+    },
+    typeBtnInactive: {
+        backgroundColor: 'transparent',
+        paddingVertical: 8,
+        paddingHorizontal: 5,
+    },
+    typeActiveText: {
+        color: '#333',
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+        fontSize: 10,
+    },
+    typeInactiveText: {
+        color: '#FFF',
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+        fontSize: 10,
+    },
+    loading: {
+        marginVertical: 10,
+    },
+    loadingText: {
+        textAlign: 'center',
+        fontSize: 16,
+        fontWeight: '500',
+    },
+    // News
+
+    newsContainer : {
+        flexDirection: 'row',
+        justifyContent:'space-between',
+        
+        paddingVertical: 10,
+        paddingHorizontal: 8,
+        marginBottom: 5,
+        backgroundColor : '#fff',
+    },
+    newsTextWrap :{
+        width : '60%',
+        justifyContent :'space-between'
+    },
+    newsImageWrap : {
+        width : '40%',
+        justifyContent : 'flex-start',
+        alignItems : 'flex-end',
+    },
+    newsImage : {
+        width :120,
+        height : 100,
+        marginBottom: 20,
+    },
+    newsTitle : {
+        fontSize : 18,
+        fontWeight : '500',
+    },
+    newsLocation : {
+        fontSize : 15,
+        fontWeight : '400',
+        color : '#333'
+    },
+    newsBadge :{
+        position : 'absolute',
+        borderBottomLeftRadius: 10,
+        right : 0,
+        top : 0,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+    }
+
+}

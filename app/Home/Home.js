@@ -36,7 +36,7 @@ import {
   Label,
 } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
-import Carousel, { Pagination } from "react-native-snap-carousel";
+import Carousel, { Pagination, ParallaxImage } from "react-native-snap-carousel";
 import { sliderWidth, itemWidth } from "./styles/SliderEntry";
 import SliderEntry from "../components/SlideEntry";
 import styles, { colors } from "./styles/index";
@@ -61,6 +61,7 @@ export default class Home extends Component {
       email  : '',
       dataTower : [],
       dataPromo : [],
+      dataNews : [],
 
       isCorLoaded : false,
     };
@@ -84,11 +85,12 @@ export default class Home extends Component {
 
     this.setState(data,()=>{
       this.getPromo()
+      this.getNews()
     })
   }
 
   getPromo = () => {
-    fetch(urlApi+'c_newsandpromo/getDatanews2/IFCAMOBILE' ,{
+    fetch(urlApi+'c_newsandpromo/getDatapromo2/IFCAMOBILE' ,{
         method : "GET",
     })
     .then((response) => response.json())
@@ -103,11 +105,47 @@ export default class Home extends Component {
         console.log(error);
     });
   }
+
+  getNews = () => {
+    fetch(urlApi+'c_newsandpromo/getDatanews2/IFCAMOBILE' ,{
+        method : "GET",
+    })
+    .then((response) => response.json())
+    .then((res)=>{
+        if(!res.Error){
+          const resData = res.Data
+
+          this.setState({dataNews:resData})
+          console.log('dataNews',resData);
+        }
+    }).catch((error) => {
+        console.log(error);
+    });
+  }
   
 
   // _renderItem({ item, index }) {
   //   return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
   // }
+
+  _renderItemPromo ({item, index}, parallaxProps) {
+    return (
+        <View style={styles.item}>
+            <ParallaxImage
+                source={{ uri: item.picture }}
+                containerStyle={styles.imageContainer}
+                style={styles.image}
+                parallaxFactor={0.4}
+                {...parallaxProps}
+            />
+            <View style={styles.newsTitle}>
+              <Text style={styles.newsTitleText} numberOfLines={2}>
+                  { item.descs }
+              </Text>
+            </View>
+        </View>
+    );
+}
 
   _renderItemWithParallax({ item, index }, parallaxProps) {
     return (
@@ -192,7 +230,28 @@ export default class Home extends Component {
     );
   }
 
-  renderItem(item){
+  renderItemNews(item){
+    return (
+      <TouchableOpacity
+        style={Styles.item}
+        underlayColor="transparent"
+        onPress={()=>Actions.NewsAndPromoDetail({items : item})}>
+        <View>
+          <View>
+            <Image
+              source={{ uri: item.picture }}
+              style={Styles.itemImg}
+            />
+          </View>
+          <Text style={Styles.itemPrice}>{item.descs}</Text>
+          <Text style={Styles.itemLocation}>{item.subject}</Text>
+          
+        </View>
+      </TouchableOpacity>
+    )
+  }
+
+  renderItemPromo(item){
     return (
       <TouchableOpacity
         style={Styles.item}
@@ -251,7 +310,7 @@ export default class Home extends Component {
               <View style={Styles.sectionTransparent}>
                 <View style={Styles.headerBg}>
                   <Text style={Styles.sHeader}>
-                    {"News & Promo".toUpperCase()}
+                    {"IFCA S+ Promo".toUpperCase()}
                   </Text>
                   <Right>
                     <Button
@@ -264,13 +323,49 @@ export default class Home extends Component {
                     </Button>
                   </Right>
                 </View>
-                <FlatList
+                <Carousel
+                  autoplay={true}
+                  autoplayDelay={1000}
+                  autoplayInterval={3000}
+                  sliderWidth={width}
+                  sliderHeight={width}
+                  itemWidth={width - 60}
+                  data={this.state.dataPromo}
+                  renderItem={this._renderItemPromo}
+                  hasParallaxImages={true}
+                />
+                {/* <FlatList
                   data={this.state.dataPromo}
                   horizontal
+                  alwaysBounceHorizontal={true}
                   showsHorizontalScrollIndicator={false}
                   style={Styles.flatList}
                   keyExtractor={item => item.id.toString()}
-                  renderItem={({ item }) => this.renderItem(item)}
+                  renderItem={({ item }) => this.renderItemPromo(item)}
+                /> */}
+              </View>
+
+              <View style={Styles.sectionTransparent}>
+                <View style={Styles.headerBg}>
+                  <Text style={Styles.sHeader}>
+                    {"IFCA S+ News".toUpperCase()}
+                  </Text>
+                  <Right>
+                    <Button
+                      small
+                      rounded
+                      style={Styles.sBtn}
+                      onPress={()=>Actions.Feed()}>
+                      <Text style={Styles.sLink}>See All</Text>
+                    </Button>
+                  </Right>
+                </View>
+                <FlatList
+                  data={this.state.dataNews}
+                  contentContainerStyle={Styles.flatList}
+                  keyExtractor={item => item.id.toString()}
+                  numColumns={2}
+                  renderItem={({ item }) => this.renderItemNews(item)}
                 />
               </View>
 

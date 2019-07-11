@@ -212,8 +212,12 @@ titleText : {
   fontWeight : "bold",
   fontSize : 15
 },
+locationText :{
+  fontWeight: 'bold',
+  fontSize : 12
+},
 contentText :{
-  fontWeight: "300",
-  fontSize : 10
+  fontWeight: "400",
+  fontSize : 12
 }
 };

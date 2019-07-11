@@ -48,6 +48,7 @@ import Styles from "./Style";
 import { _storeData, _getData } from '@Component/StoreAsync';
 import { urlApi } from '@Config/services';
 import moment from 'moment'
+import pdf from 'react-native-pdf';
 const DocumentInteractionController = NativeModules.RNDocumentInteractionController;
 
 let isMount = false
@@ -138,27 +139,28 @@ class DownloadPage extends Component {
 
     downloadFile = (item) =>{
         const android = RNFetchBlob.android
+        Actions.PDFViewer({item : item})
 
-        RNFetchBlob
-        .config({
-            fileCache : true,
-            addAndroidDownloads: {
-                path: RNFetchBlob.fs.dirs.SDCardDir +'/downloads/'+item.descs+'.pdf',
-                useDownloadManager: true,
-                notification: true,
-                overwrite: true,
-                description: 'downloading content...',
-                mime: 'application/pdf',
-                mediaScannable: true
-            }
-        })
-        .fetch('GET', urlApi+"pdf/"+item.url)
-        .then((res) => {
-            console.log('The file saved to ', res.path())
-            DocumentInteractionController.open(RNFetchBlob.fs.dirs.SDCardDir +'/Download/laporan.pdf')
-            // android.actionViewIntent(res.path(), 'application/pdf')
-            // android.actionViewIntent(RNFetchBlob.fs.dirs.SDCardDir +'/Download/laporan.pdf','application/pdf')
-        })
+        // RNFetchBlob
+        // .config({
+        //     fileCache : true,
+        //     addAndroidDownloads: {
+        //         path: RNFetchBlob.fs.dirs.SDCardDir +'/downloads/'+item.descs+'.pdf',
+        //         useDownloadManager: true,
+        //         notification: true,
+        //         overwrite: true,
+        //         description: 'downloading content...',
+        //         mime: 'application/pdf',
+        //         mediaScannable: true
+        //     }
+        // })
+        // .fetch('GET', urlApi+"pdf/"+item.url)
+        // .then((res) => {
+        //     console.log('The file saved to ', res.path())
+        //     DocumentInteractionController.open(RNFetchBlob.fs.dirs.SDCardDir +'/Download/laporan.pdf')
+        //     // android.actionViewIntent(res.path(), 'application/pdf')
+        //     // android.actionViewIntent(RNFetchBlob.fs.dirs.SDCardDir +'/Download/laporan.pdf','application/pdf')
+        // })
     }
 
     onValueChange(value) {

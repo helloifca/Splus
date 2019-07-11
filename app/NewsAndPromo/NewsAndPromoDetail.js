@@ -44,6 +44,7 @@ import Styles from "./Style";
 import {_storeData,_getData} from '@Component/StoreAsync';
 import {urlApi} from '@Config/services';
 import moment from 'moment'
+import HTML from 'react-native-render-html';
 
 let isMount = false
 // create a component
@@ -110,7 +111,14 @@ class NewsAndPromoDetail extends Component {
                         <Text style={Styles.titleText}>{item.subject}</Text>
                     </View>
                     <View style={Styles.wrapNews}>
-                        <Text style={Styles.contentText}>{item.content}</Text>
+                        {item.content != "" ?
+                          <HTML html={item.content} imagesMaxWidth={Dimensions.get('window').width} />
+                        :null}
+                        {/* <Text style={Styles.contentText}>{item.content}</Text> */}
+                        {/* <Text>
+                          <Text style={Styles.locationText}>{item.location}, {moment(item.date_created).format('DD MMMM YYYY')}</Text>
+                          <Text style={Styles.contentText}>{item.content}</Text>
+                        </Text> */}
                     </View>
                 </View>
              </Content>

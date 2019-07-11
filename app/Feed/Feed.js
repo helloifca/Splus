@@ -1,4 +1,3 @@
-//import liraries
 import React, { Component } from 'react';
 import {
     StatusBar,
@@ -46,44 +45,44 @@ import {urlApi} from '@Config/services';
 import moment from 'moment'
 
 let isMount = false
-// create a component
+
 class Feed extends Component {
 
     constructor(props){
-      super(props)
-
-      this.state={
-        hd : null,
-
-        news : [],
-        user : "",
-        name : "",
-        project : []
-    }
-
-      console.log('props cf',props);
+        super(props)
+  
+        this.state={
+            hd : null,
+    
+            news : [],
+            user : "",
+            name : "",
+            project : []
+        }
+  
+        console.log('props cf',props);
     }
 
     async componentDidMount(){
-      isMount = true
-      const data = {
-        hd : new Headers({
-          'Token' : await _getData('@Token')
-        }),
-        user : await _getData('@User'),
-        name : await _getData('@UserId'),
-        project : await _getData('@UserProject')
-      }
-
-      this.setState(data,()=>{
-        this.getNews()
-      })
+        isMount = true
+        const data = {
+            hd : new Headers({
+                'Token' : await _getData('@Token')
+            }),
+            user : await _getData('@User'),
+            name : await _getData('@UserId'),
+            project : await _getData('@UserProject')
+        }
+  
+        this.setState(data,()=>{
+            this.getNews()
+        })
     }
-
+  
     getNews = () =>{
-
+  
         {isMount ?
-            fetch(urlApi+'c_newsandpromo/getDatanews2/IFCAMOBILE/',{
+            fetch(urlApi+'c_newsandpromo/getDataNewsAndPromo/IFCAMOBILE/',{
                 method:'GET',
                 headers : this.state.hd,
             }).then((response) => response.json())
@@ -107,110 +106,44 @@ class Feed extends Component {
             })
         :null}
     }
-
-    clickChouseUnit(item) {
-      
-        Actions.chouseunit({
-          unitItems : item,
-          items : this.props.item,
-          prevItems : this.props.prevItems
-        });
-        // this.setState({ click : true})
-    }
-    clickUnitEnquiry() {
-        Actions.unitenquiry();
-        this.setState({ click : true})
-    }
+  
     render() {
         return (
             <Container style={Style.bgMain}>
-              <StatusBar backgroundColor={"rgba(0, 0, 0, 0.3)"} animated barStyle="dark-content" />
-             <Content
-               style={[Style.layoutInner,{marginTop:StatusBar.currentHeight}]}
-               contentContainerStyle={Style.layoutContent}
-             >
-              {/* <Image
-              source={require("@Asset/images/tigabr.jpg")}
-              style={{
-                width: null,
-                height: 168,
-                resizeMode: "cover",
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: 8
-              }}
-            />  */}
-              <View>
-                    <ScrollView>
-                    {
-                        this.state.news.map((data,key)=>
-                            <TouchableOpacity key={key} onPress={()=>Actions.NewsAndPromoDetail({items : data})}>
-                                <Card style={{
-                                    height: null,
-                                    backgroundColor: 'white',
-                                    shadowOffset: { width: 1, height: 1 },
-                                    shadowColor: "#37BEB7",
-                                    shadowOpacity: 0.5,
-                                    elevation: 5,
-                                    paddingHorizontal: 10,
-                                    paddingVertical: 10
-                                }} >
-                                    <View>
-                                        <View>
-                                            <Text style={{
-                                                fontSize: 12,
-                                                textAlign: 'left',
-                                                color: '#333',
-                                                fontWeight : "500"
-                                            }}>
-                                                {data.descs}
-                                                </Text>
-                                        </View>
-                                        <View>
-                                            <Text style={{
-                                                fontSize: 12,
-                                                fontWeight: 'bold',
-                                                textAlign: 'left',
-                                                color: '#333'
-                                            }}>
-                                                {data.subject}
-                                            </Text>
-                                        </View>
-                                        <View>
-                                            <Image source={{uri:data.picture}} style={Styles.itemImg} />
-                                        </View>
-                                        <View>
-                                            <Text style={{
-                                                fontSize: 12,
-                                                fontWeight: '500',
-                                                textAlign: 'left',
-                                                color: '#ff720d'
-                                            }}>
-                                                {data.date_created}
-                                            </Text>
-                                        </View>
-                                    </View>
-                                </Card>
+                <Content style={[Style.layoutContent,{backgroundColor:'#f3f3f3'}]} >
+                    <ScrollView
+                    scrollEventThrottle={200}
+                    directionalLockEnabled={true}
+                    >
+                        <View style={Styles.sectionGrey}>
+                            <View style={Styles.headerBg}>
+                                <Icon name="newspaper" type="FontAwesome5" style={Styles.headerIcon} />
+                                <Text style={Styles.sHeader}>{'News And Promo'.toUpperCase()}</Text>
+                            </View>
+                        </View>
+
+                        {this.state.news.map((data,key)=>
+                            <TouchableOpacity key={key} style={Styles.newsContainer} onPress={()=>Actions.NewsAndPromoDetail({items : data})}>
+                                <View style={Styles.newsTextWrap}>
+                                    <Text style={Styles.newsTitle}>{data.subject}.</Text>
+                                    <Text style={Styles.newsLocation}>{data.descs}</Text>
+                                </View>
+                                <View style={Styles.newsImageWrap}>
+                                    <Image style={Styles.newsImage} source={{uri : data.picture}} />
+                                </View>
+                                <View style={[Styles.newsBadge,{backgroundColor : data.content_type=="news" ? '#f5ef42' : '#f56822'}]}>
+                                    <Text>{data.content_type.charAt(0).toUpperCase()+data.content_type.slice(1)}</Text>
+                                </View>
                             </TouchableOpacity>
-                        )
-                    }
+                        )}
+
+
                     </ScrollView>
-                </View>
-             </Content>
-             </Container>
+                </Content>
+
+
+            </Container>
         );
     }
 }
-
-// define your styles
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#2c3e50',
-    },
-});
-
-//make this component available to the app
 export default Feed;

@@ -322,7 +322,7 @@ export default class Profile extends React.Component {
                     <View style={[Styles.owner, Style.actionBarIn]}>
                         <View style={Styles.ownerBg}>
                             <Image source={ fotoProfil } style={Styles.ownerAvatarImg} />
-                            <Icon name="create" style={Styles.iconEdit} />
+                            <Icon name="camera" onPress={()=>alert('oke')} style={Styles.iconEdit} />
                         </View>
                         <View style={Styles.ownerInfo}>
                             <Text style={Styles.ownerName}>{this.state.name}</Text>

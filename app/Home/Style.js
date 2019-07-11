@@ -355,6 +355,8 @@ export default {
     backgroundColor: 'transparent',
   },
   flatList: {
+    justifyContent:'center',
+    alignItems: 'center',
     // paddingLeft: 15,
     // paddingRight : 15
   },
@@ -385,7 +387,7 @@ export default {
 		fontFamily: Fonts.type.sfuiDisplaySemibold,
   },
   item: {
-    width: 200,
+    width: '45%',
     marginBottom: 20,
     marginLeft: 10,
     marginRight: 10,
@@ -402,7 +404,7 @@ export default {
   },
   itemImg: {
     marginBottom: 10,
-    width: 200,
+    width: '100%',
     height: 100,
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
@@ -425,6 +427,7 @@ export default {
     fontSize: 11,
 		fontFamily: Fonts.type.sfuiDisplaySemibold,
     marginBottom: 10,
+    height : 30,
     paddingHorizontal: 20,
   },
   crv: {

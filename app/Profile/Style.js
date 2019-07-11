@@ -303,11 +303,14 @@ export default {
     
   },
   iconEdit : {
-    color : "#fff",
-    fontSize : 25,
+    color : "#333",
+    fontSize : 20,
     position : 'absolute',
-    right : 3,
-    bottom : 3,
+    right : -5,
+    bottom : 0,
+    backgroundColor : '#f3f3f3',
+    padding : 7,
+    borderRadius : 30
   }
 
 
