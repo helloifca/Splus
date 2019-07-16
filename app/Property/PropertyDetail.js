@@ -13,7 +13,8 @@ import {
   FlatList,
   Modal,
   ActivityIndicator,
-  Linking
+  Linking,
+  Alert
 } from "react-native";
 import {
   Container,
@@ -71,6 +72,7 @@ export default class extends React.Component {
         active: false,
         isVisible: false,
         isView : false,
+        isLogin : false,
 
         hd : new Headers,
         email : '',
@@ -84,6 +86,7 @@ export default class extends React.Component {
         project : null,
         gallery : null,
         imagesPreview :[],
+        dataPromo:[],
         index : 0
       };
 
@@ -102,6 +105,7 @@ async componentDidMount() {
       userId : await _getData('@UserId'),
       name : await _getData('@Name'),
       handphone : await _getData('@Handphone'),
+      isLogin : await _getData('@isLogin'),
       descs : 'Saya tertarik reservasi ' +this.props.items.project_descs+ '\n\nHubungi saya untuk info detail.',
       title : this.props.items.project_descs,
       picture_url : this.props.items.picture_url
@@ -112,6 +116,7 @@ async componentDidMount() {
     this.setState(data,()=>{
       this.getDataDetails(this.props.items)
       this.getDataGallery(this.props.items)
+      this.getPromo()
     })
 
 }
@@ -119,6 +124,24 @@ async componentDidMount() {
 componentWillUnmount(){
   // this.setState({isMount:false})
   isMount =false
+}
+
+getPromo = () => {
+  const {entity_cd,project_no} = this.props.items
+  fetch(urlApi+'c_newsandpromo/getDatapromo2/IFCAMOBILE/'+entity_cd+'/'+project_no ,{
+      method : "GET",
+  })
+  .then((response) => response.json())
+  .then((res)=>{
+      if(!res.Error){
+        const resData = res.Data
+
+        this.setState({dataPromo:resData})
+        console.log('dataPRopmo',resData);
+      }
+  }).catch((error) => {
+      console.log(error);
+  });
 }
 
 getDataDetails = (item) => {
@@ -190,6 +213,18 @@ showModal(){
 clickToNavigate = (to,param) =>{
   Actions[to](param);
   this.setState({click:true})
+}
+
+showAlert = () => {
+  Alert.alert(
+      '',
+      'Please Login First',
+      [
+          {text: 'Cancel',onPress: () => console.log('Cancel Pressed'), style: 'cancel',},
+          {text: 'OK', onPress: () => Actions.Login()},
+      ],
+      {cancelable: false},
+  );
 }
  
   render() {
@@ -285,7 +320,10 @@ clickToNavigate = (to,param) =>{
           <View style={Styles.count}>
            <ScrollView horizontal={true}>
             <View style={[Styles.countItem, Styles.countFirst]}>
-              <TouchableOpacity onPress={() => _navigate('ProductProjectPage',{items:this.props.items})}>
+              <TouchableOpacity onPress={() => {
+                this.state.isLogin ? _navigate('ProductProjectPage',{items:this.props.items})
+                : this.showAlert()
+              }}>
                 <View style={Styles.countCol}>
                   <Image
                     source={require("@Asset/images/type.png")}
@@ -300,7 +338,10 @@ clickToNavigate = (to,param) =>{
             </View>
             <View style={[Styles.countItem, Styles.countFirst]}>
               <TouchableOpacity
-              onPress={()=>Actions.BookingPage({items : this.props.items})}>
+              onPress={()=>{
+                this.state.isLogin ? Actions.BookingPage({items : this.props.items}) 
+                : this.showAlert()
+              }}>
                 <View style={Styles.countCol}>
                   <Image
                     source={require("@Asset/images/booking.png")}
@@ -481,7 +522,7 @@ clickToNavigate = (to,param) =>{
           <View style={Styles.sectionGrey}>
             <View style={Styles.headerBg}>
               <Text style={Styles.sHeader}>
-                {"News & Promo".toUpperCase()}
+                {"Promo".toUpperCase()}
               </Text>
               <Right>
                 <Button
@@ -489,39 +530,41 @@ clickToNavigate = (to,param) =>{
                   rounded
                   style={Styles.sBtn}
                   onPress={() => {
-                    NavigationService.navigate("PublicProperties");
+                    Actions.Feed()
                   }}
                 >
                   <Text style={Styles.sLink}>See All</Text>
                 </Button>
               </Right>
             </View>
-            <FlatList
-              data={SIMILAR}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={Styles.flatList}
-              keyExtractor={item => item.id}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={Styles.item}
-                  underlayColor="transparent"
-                  
-                >
-                  <View>
-                    <View>
-                      <Image
-                        source={{ uri: item.image }}
-                        style={Styles.itemImg}
-                      />
-                    </View>
-                    <Text style={Styles.itemPrice}>{item.title}</Text>
-                    <Text style={Styles.itemLocation}>{item.subtitle}</Text>
+            {this.state.dataPromo.length > 0 ?
+              <FlatList
+                data={this.state.dataPromo}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={Styles.flatList}
+                keyExtractor={item => item.id.toString()}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={Styles.item}
+                    underlayColor="transparent"
                     
-                  </View>
-                </TouchableOpacity>
-              )}
-            />
+                  >
+                    <View>
+                      <View>
+                        <Image
+                          source={{ uri: item.picture }}
+                          style={Styles.itemImg}
+                        />
+                      </View>
+                      <Text style={Styles.itemPrice}>{item.descs}</Text>
+                      <Text style={Styles.itemLocation}>{item.subject}</Text>
+                      
+                    </View>
+                  </TouchableOpacity>
+                )}
+              />  
+            :<Text style={[Styles.itemPrice,{alignSelf:'center'}]}>No Promo</Text>}
           </View>
 
           
@@ -627,7 +670,11 @@ clickToNavigate = (to,param) =>{
           </ScrollView>
         </Modal>
         </Content>
-        <Button full style={{ backgroundColor: "#fb5f26" }}  onPress={() => {this.showModal()}}>
+        <Button full style={{ backgroundColor: "#fb5f26" }}  onPress={() =>{
+          this.state.isLogin ? this.showModal()
+          : this.showAlert()
+          
+        }}>
           <Text>I'm Interested</Text>
         </Button>
       </Container>

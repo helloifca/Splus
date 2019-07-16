@@ -25,6 +25,7 @@ export default class Intro extends React.Component {
       email : '',
       password : '',
       isHide : false,
+      isLogin : false
     };
   }
    async componentWillMount() {
@@ -110,12 +111,15 @@ export default class Intro extends React.Component {
       // this.setState({isCorrect:false,titleButtonAlert:"Try Again"});
       alert('Wrong password !!!')
     }else{
-      this.doLogin(formData);
+      this.setState({isLogin:true},()=>{
+        this.doLogin(formData);
+      })
     }
   }
 
   doLogin (value) {
     this.setState({isLoaded: !this.state.isLoaded});
+    console.log('value',value);
     data = JSON.stringify(value);
 
     fetch(urlApi+'c_auth/Login',{
@@ -149,8 +153,9 @@ export default class Intro extends React.Component {
   }
 
   getTower = (res) => {
+    console.log('res',res);
     let result = res.Data
-    const email = this.state.email;
+    const email = result.user;
     fetch(urlApi+'c_product_info/getData/IFCAMOBILE/' +email ,{
         method : "GET",
     })
@@ -183,7 +188,7 @@ export default class Intro extends React.Component {
         _storeData('@User', res.user);
         _storeData('@Group', res.Group);
         _storeData('@Handphone',res.handphone);
-        _storeData("@isLogin",true);
+        _storeData("@isLogin",this.state.isLogin);
         _storeData("@isReset",res.isResetPass);
         _storeData("@AgentCd",res.AgentCd);
         _storeData("@Debtor",res.Debtor_acct);
@@ -200,9 +205,22 @@ export default class Intro extends React.Component {
     }
   }
 
-  skipLogin = () =>{
-    this.setState({email : 'guest@ifca.co.id',password : 'pass1234'},()=>{
-      this.btnLoginClick()
+  skipLogin = async() =>{
+    // this.setState({email : 'guest@ifca.co.id',password : 'pass1234'},()=>{
+    //   this.btnLoginClick()
+    // })
+    const mac = await DeviceInfo.getMACAddress().then(mac => {return mac});
+
+    const formData = {
+      email : 'guest@ifca.co.id',
+      password : 'pass1234',
+      token : '',
+      token_firebase : "",
+      device : Platform.OS,
+      mac : mac
+    }
+    this.setState({isLogin:false},()=>{
+      this.doLogin(formData)
     })
   }
 

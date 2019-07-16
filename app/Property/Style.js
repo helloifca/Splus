@@ -421,6 +421,7 @@ export default {
 		fontFamily: Fonts.type.sfuiDisplaySemibold,
     marginBottom: 10,
     paddingHorizontal: 20,
+    height : 30
   },
   crv: {
     borderRadius: 8,
