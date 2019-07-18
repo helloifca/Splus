@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 		elevation: 0
 	},
 	images: {
-		top: 5,
+		marginBottom : 20,
 		shadowColor:'#000',
 		shadowOffset: {width: 3, height: 2 },
 		shadowRadius: 2,
@@ -107,12 +107,15 @@ const styles = StyleSheet.create({
 		marginTop: Fonts.moderateScale(15),
 		height: (Metrics.HEIGHT * 0.12),
 	},
+	signInGoogle : {
+		alignItems:'center'
+	},
 	signInBtn:{
 		backgroundColor: Colors.loginBlue,
 		height: (Metrics.HEIGHT * 0.08),
 		width: (Metrics.WIDTH * 0.92),
 		borderRadius: 15,
-    alignSelf: 'center',
+		alignSelf: 'center',
 		elevation: 3,
 		shadowColor:"#000",
 		alignItems : 'center',
@@ -137,7 +140,7 @@ const styles = StyleSheet.create({
 		fontFamily: Fonts.type.sfuiDisplayRegular,
 	},
 	socialSec:{
-		height: (Metrics.HEIGHT * 0.25),
+		height: (Metrics.HEIGHT * 0.16),
 		justifyContent: 'flex-end',
 		alignItems: 'center',
 		paddingBottom: Fonts.moderateScale(20),

@@ -39,7 +39,7 @@ export default {
   },
   back: {
     flex: 1,
-    width: '100%',
+    // width: '100%',
     height: 200,
     paddingHorizontal: 10,
     flexDirection: 'column',
@@ -310,7 +310,8 @@ export default {
     bottom : 0,
     backgroundColor : '#f3f3f3',
     padding : 7,
-    borderRadius : 30
+    borderRadius : 18,
+    overflow: 'hidden'
   }
 
 

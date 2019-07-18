@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "336664359822",
+    "firebase_url": "https://ifca-s.firebaseio.com",
+    "project_id": "ifca-s",
+    "storage_bucket": "ifca-s.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:336664359822:android:927da37823fc289d",
+        "android_client_info": {
+          "package_name": "com.splus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "336664359822-f5g4jan7m94m2dd6eke006pdqqtkv3d7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.splus",
+            "certificate_hash": "02fbe38d279b9d964422f3221b2c8ce8b7c361f0"
+          }
+        },
+        {
+          "client_id": "336664359822-ekuov5b9qpopo1vk55gqi2n5oa3e59kd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCv5Ix8mZRFYtQzsZae9fYMH3tS71OjxJ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "336664359822-ekuov5b9qpopo1vk55gqi2n5oa3e59kd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

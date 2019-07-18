@@ -5,11 +5,13 @@ import { Container, Header, Content, Button, Icon, Text, Title, Left, Right, Bod
 import NavigationService from '@Service/Navigation'
 
 import Styles from './Style'
+import Icons from 'react-native-vector-icons/FontAwesome';
 import {urlApi} from '@Config/services';
 import { Actions } from 'react-native-router-flux';
 import {_storeData,_getData,_getAllData,_removeData} from '@Component/StoreAsync';
 import { Style, Colors } from "../Themes/";
-
+import ImagePicker from 'react-native-image-crop-picker';
+import RNFetchBlob from 'rn-fetch-blob'
 //const {width, height} = Dimensions.get('window')
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
@@ -122,6 +124,7 @@ export default class Profile extends React.Component {
                 alert(res.Pesan)
                 _storeData('@Name',name)
                 _storeData('@Handphone',hp)
+                _storeData('@ProfileUpdate',true)
             }
             console.log('save profile',res)
 
@@ -279,6 +282,68 @@ export default class Profile extends React.Component {
 
     showAlert = () => {
         Alert.alert(
+            'Select a Photo',
+            'Choose the place where you want to get a photo',
+            [
+              {text: 'Gallery',onPress: () => this.fromGallery()},
+              {text: 'Camera', onPress: () => this.fromCamera()},
+              {text: 'Cancel', onPress: () => console.log('User Cancel'),style: 'cancel'},
+            ],
+            {cancelable: false},
+        );
+    }
+
+    fromCamera() {
+
+        ImagePicker.openCamera({
+          cropping: true,
+          width : 200,
+          height : 200,
+        }).then(image => {
+          console.log('received image', image);
+
+          this.setState({fotoProfil:{uri:image.path}},()=>
+            this.uploadPhoto()
+          )
+      
+        }).catch(e => console.log('tag', e));
+    }
+
+    fromGallery(cropping, mediaType='photo') {
+
+        ImagePicker.openPicker({
+        multiple : false,
+        width : 200,
+        height : 200,
+        }).then(image => {
+          console.log('received image', image);
+
+          this.setState({fotoProfil:{uri:image.path}},()=>
+            this.uploadPhoto()
+          )
+      
+        }).catch(e => console.log('tag', e));
+    }
+
+    uploadPhoto =  async() =>{
+        let fileName = 'profile.png';
+        let fileImg = RNFetchBlob.wrap(this.state.fotoProfil.uri.replace('file://',''));
+
+        RNFetchBlob.fetch('POST', urlApi+'/c_profil/upload/'+this.state.email, {
+            'Content-Type' : 'multipart/form-data',
+            'Token' : this.state.token
+        }, [
+            { name : 'photo', filename : fileName, data: fileImg},
+        ]).then((resp) => {
+            let res = JSON.stringify(resp.data);
+            console.log('res',resp);
+            _storeData('@ProfileUpdate',true)
+        })
+       
+    }
+
+    logout = () => {
+        Alert.alert(
             '',
             'Are you want to Logout',
             [
@@ -318,11 +383,10 @@ export default class Profile extends React.Component {
 
                     <View style={Styles.bgBlue}>
                     </View>
-
                     <View style={[Styles.owner, Style.actionBarIn]}>
                         <View style={Styles.ownerBg}>
                             <Image source={ fotoProfil } style={Styles.ownerAvatarImg} />
-                            <Icon name="camera" onPress={()=>alert('oke')} style={Styles.iconEdit} />
+                            <Icons name="camera" onPress={()=>this.showAlert()} style={Styles.iconEdit} />
                         </View>
                         <View style={Styles.ownerInfo}>
                             <Text style={Styles.ownerName}>{this.state.name}</Text>
@@ -330,6 +394,7 @@ export default class Profile extends React.Component {
                         </View>
                     </View>
                     <View style={[Styles.back, Style.actionBarIn]}>
+
                         <Button transparent style={Style.actionBarBtn} onPress={() => {
                             Actions.pop()
                         }}>
@@ -359,7 +424,7 @@ export default class Profile extends React.Component {
                 </View>
 
                 <View style={{marginHorizontal:15,marginVertical:5,alignItems:'center'}}>
-                    <TouchableOpacity style={Styles.sBtn} onPress={()=>this.showAlert()}>
+                    <TouchableOpacity style={Styles.sBtn} onPress={()=>this.logout()}>
                         <Text style={Styles.sLink} > Logout</Text>
                         <Icon name="log-out" style={{color : "#fff",fontSize: 18,}} />
                     </TouchableOpacity>

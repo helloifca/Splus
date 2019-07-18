@@ -127,6 +127,7 @@ android {
         multiDexEnabled true
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        vectorDrawables.useSupportLibrary = true
         versionCode verCode
         versionName verName
     }
@@ -178,6 +179,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-google-signin')
+    implementation project(':react-native-image-crop-picker')
     implementation project(':react-native-webview')
     implementation project(':react-native-linear-gradient')
     implementation project(':react-native-device-info')
@@ -200,3 +203,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+apply plugin: 'com.google.gms.google-services' 

@@ -172,8 +172,10 @@ export default class Home extends Component {
 
     return (
       <View style={styles.exampleContainer}>
-        <Text style={styles.title}>Hey {this.state.name}</Text>
-        <Text style={styles.subtitle}>{`Welcome to IFCA S+`}</Text>
+        {/* //??? Di Matiin Belum nemu Solusi Biar ke refresh */}
+        {/* <Text style={styles.title}>Hey {this.state.name}</Text> */}
+        <Text style={styles.title}>IFCA S+</Text>
+        <Text style={styles.subtitle}>{`This is what you need !`}</Text>
         
         <View
           style={{
@@ -184,9 +186,13 @@ export default class Home extends Component {
             marginTop: -32
           }}
         >
-          <TouchableOpacity style={styles.InBtn} onPress={()=>Actions.ListingProjectPage()}>
-            <Text style={styles.InBtnText}>All Project</Text>
-          </TouchableOpacity>
+          <Button
+            small
+            rounded
+            style={Styles.sBtnHead}
+            onPress={()=>Actions.ListingProjectPage()}>
+            <Text style={Styles.sLinkHead}>ALL PROJECT</Text>
+          </Button>
         </View>
         
         <View style={styles.corContainerStyle}>

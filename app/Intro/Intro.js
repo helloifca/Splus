@@ -11,11 +11,21 @@ import { Actions } from 'react-native-router-flux'
 import {_storeData,_getData} from '@Component/StoreAsync';
 import DeviceInfo from 'react-native-device-info';
 import {urlApi} from '@Config/services';
+import {GoogleSignin, GoogleSigninButton,statusCodes} from 'react-native-google-signin'
+
+GoogleSignin.configure({
+  scopes: ['https://www.googleapis.com/auth/drive.readonly'], 
+  webClientId: '336664359822-ekuov5b9qpopo1vk55gqi2n5oa3e59kd.apps.googleusercontent.com',
+  offlineAccess :true
+})
 
 let isMount = false;
 
 //import AppIntroSlider to use it
 export default class Intro extends React.Component {
+
+
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -25,7 +35,9 @@ export default class Intro extends React.Component {
       email : '',
       password : '',
       isHide : false,
-      isLogin : false
+      isLogin : false,
+      userDetails:'',
+      GoogleLogin:false,
     };
   }
    async componentWillMount() {
@@ -223,6 +235,42 @@ export default class Intro extends React.Component {
       this.doLogin(formData)
     })
   }
+  
+  signInGoogle = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log('User Details', JSON.stringify(userInfo))
+
+
+      this.setState({GoogleLogin:true,userDetails:userInfo.user})
+    } catch (error) {
+      this.setState({GoogleLogin:false})
+
+
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log("Cancel ", statusCodes.SIGN_IN_CANCELLED )
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log("InProgress ", statusCodes.IN_PROGRESS )
+        // operation (f.e. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log("Not Available ", statusCodes.PLAY_SERVICES_NOT_AVAILABLE)
+        // play services not available or outdated
+      } else {
+        console.log("Error ", error.code)
+      }
+    }
+  };
+
+
+
+
+
+
+  
+
+
 
   render() {
     // let BG_Image = { uri : 'https://antiqueruby.aliansoftware.net/Images/signin/ic_main_bg_stwo.png'};
@@ -293,11 +341,19 @@ export default class Intro extends React.Component {
             <Text style={styles.signInBtnText}>Sign In</Text>}
 						</Button>
 					</View>
-					<Text style={styles.forgotPassword} onPress={() => alert("Forgot Password")}>Forgot your password?</Text>
+          <Text style={styles.forgotPassword}
+          //  onPress={() => alert("Forgot Password")}
+           >OR</Text>
+          <View style={styles.signInGoogle}>
+            <GoogleSigninButton
+            style={{width:192, height:50}}
+            size={GoogleSigninButton.Size.Wide}
+            onPress={()=>this.signInGoogle()} />
+          </View>
 					<View style={styles.socialSec}>
 						<TouchableOpacity onPress={() => Actions.Signup()}>
 							<Text style={styles.fbButtonText}>New here? Register now</Text>
-</TouchableOpacity>
+            </TouchableOpacity>
 					</View>
 				</ImageBackground>
       </Container>
@@ -317,6 +373,10 @@ export default class Intro extends React.Component {
     }
   }
 }
+
+
+
+
 
 const slides = [
   {

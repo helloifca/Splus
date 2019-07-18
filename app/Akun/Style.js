@@ -195,6 +195,26 @@ export default {
         flexDirection: 'row',
         justifyContent : 'space-evenly',
         alignItems: 'center',
+    },
+    loginWrap :{
+        justifyContent :'center',
+        alignItems: 'center',
+        marginHorizontal: 20,
+    },
+
+    loginText : {
+        fontSize : 25,
+        color : "#fff",
+        fontFamily : 'Montserrat-Regular'
+    },
+    login : {
+        backgroundColor : 'transparent',
+        padding : 10
+    },
+    loginLink : {
+        fontSize : 16,
+        color : "#0015fa",
+        fontFamily : 'Montserrat-Regular'
     }
 
 

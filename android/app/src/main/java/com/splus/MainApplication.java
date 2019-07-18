@@ -3,6 +3,8 @@ package com.splus;
 import android.app.Application;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.facebook.react.ReactApplication;
+import co.apptailor.googlesignin.RNGoogleSigninPackage;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.swmansion.reanimated.ReanimatedPackage;
@@ -33,6 +35,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNGoogleSigninPackage(),
+            new PickerPackage(),
           new RNDeviceInfo(),
           new AsyncStoragePackage(),
           new ReanimatedPackage(),

@@ -11,7 +11,15 @@ target 'Splus' do
   pod 'React', :path => '../node_modules/react-native', :subspecs => [
     'Core',
     'DevSupport',
+    'RCTActionSheet',
+    'RCTAnimation',
+    'RCTGeolocation',
+    'RCTImage',
+    'RCTLinkingIOS',
     'RCTNetwork',
+    'RCTSettings',
+    'RCTText',
+    'RCTVibration',
     'RCTWebSocket'
   ]
   
@@ -23,6 +31,11 @@ target 'Splus' do
 
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
 
+
+
+  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
+
+  pod 'RNGoogleSignin', :path => '../node_modules/react-native-google-signin'
 
   target 'SplusTests' do
     inherit! :search_paths

@@ -59,7 +59,12 @@ export default class Akun extends React.Component {
           name :  await _getData('@Name'),
         }
 
-        this.setState(data)
+        if(await _getData('@ProfileUpdate')){
+            _storeData('@ProfileUpdate',false)
+            this.setState(data)
+            this.getProfile()
+        }
+
     }
 
     getProfile = () => {
@@ -98,25 +103,35 @@ export default class Akun extends React.Component {
         let dashmenu = this.state.dashmenu.length % 3
         let secLoop = [0,1]
 
-        if(this.state.isLogin){
             return (
                 <Container style={Style.bgMain}>
                     <StatusBar backgroundColor={"rgba(0, 0, 0, 0.3)"} animated barStyle="dark-content" />
                     <Content style={Style.layoutInner} contentContainerStyle={Style.layoutContent}>
                         <View style={Styles.section}>
-                            <View style={Styles.profile}>
-                                <Image source={{uri:this.state.fotoProfil}} style={Styles.avatar} />
-                                <View>
-                                    <Text style={Styles.profileName}>{this.state.name}</Text>
-                                    <Text style={Styles.profileLocation}>{this.state.group}</Text>
-                                </View>
-                                <Right>
-                                    <TouchableOpacity style={Styles.settingBtn} onPress={() => { Actions.profile({onBack:()=>this.receiveProps()}) }}>
-                                        <Icon name="cog" style={{color : "#666",fontSize: 18,}} />
-                                        <Text style={Styles.sLink} > Settings</Text>
-                                    </TouchableOpacity>
-                                </Right>
-                            </View>
+                                {this.state.isLogin ? 
+                                    <View style={Styles.profile}>
+                                        <Image source={{uri:this.state.fotoProfil}} style={Styles.avatar} />
+                                        <View>
+                                            <Text style={Styles.profileName}>{this.state.name}</Text>
+                                            <Text style={Styles.profileLocation}>{this.state.group}</Text>
+                                        </View>
+                                        <Right>
+                                            <TouchableOpacity style={Styles.settingBtn} onPress={() => { Actions.profile({onBack:()=>this.receiveProps()}) }}>
+                                                <Icon name="cog" style={{color : "#666",fontSize: 18,}} />
+                                                <Text style={Styles.sLink} > Settings</Text>
+                                            </TouchableOpacity>
+                                        </Right>    
+                                    </View>                                    
+                                :                                    
+                                    <View style={[Styles.profile,{alignItems:'center',justifyContent:'center',marginHorizontal:30}]}>
+                                        <View style={Styles.loginWrap}>
+                                        <Text style={Styles.loginText}>Welcome Guest</Text>
+                                            <TouchableOpacity style={Styles.login} onPress={() => { Actions.Login()}}>
+                                                <Text style={Styles.loginLink} > Sign In or Register</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                }
     
     
                             <View style={Styles.btnLayout}>
@@ -211,17 +226,7 @@ export default class Akun extends React.Component {
                     </Content>
                 </Container>
             )
-        } else {
-            return (
-                <View style={LoginStyle.container}>
-                    {this.state.isLoaded ?
-                        <TouchableOpacity style={LoginStyle.btn} onPress={()=>Actions.Login()}>
-                            <Text>Login</Text>
-                        </TouchableOpacity>    
-                    : <ActivityIndicator/> }
-                </View>
-            )
-        }
+        
     }
 }
 

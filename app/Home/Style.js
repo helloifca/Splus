@@ -386,6 +386,16 @@ export default {
     fontSize: 10,
 		fontFamily: Fonts.type.sfuiDisplaySemibold,
   },
+  sBtnHead: {
+    padding: 1,
+    backgroundColor: Colors.bloodOrange,
+    color: '#FFF',
+  },
+  sLinkHead: {
+    color: '#f3f3f3',
+    fontSize: 10,
+		fontFamily: Fonts.type.sfuiDisplaySemibold,
+  },
   item: {
     width: '45%',
     marginBottom: 20,
