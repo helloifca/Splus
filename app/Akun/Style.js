@@ -14,7 +14,10 @@ export default {
         flex: 1,
         paddingBottom: 30,
     },
-
+    body : {
+        marginLeft : 100,
+        width : 200
+    },
     section: {
         flex: 1,
         paddingLeft: 0,
@@ -34,7 +37,7 @@ export default {
         flexDirection: 'row',
         paddingTop: 20 + getStatusBarHeight(),
         paddingBottom: 16,
-        backgroundColor: Colors.headerOrange,
+        backgroundColor: 'transparent',
     },
     avatar: {
         marginRight: 10,

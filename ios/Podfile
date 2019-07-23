@@ -37,6 +37,8 @@ target 'Splus' do
 
   pod 'RNGoogleSignin', :path => '../node_modules/react-native-google-signin'
 
+  pod 'react-native-mail', :path => '../node_modules/react-native-mail'
+
   target 'SplusTests' do
     inherit! :search_paths
     # Pods for testing

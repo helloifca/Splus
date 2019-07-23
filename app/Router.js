@@ -17,6 +17,7 @@ import Search from "./Find/Search";
 import Calcu from "./Calcu/Calcu";
 import Notif from "./Notif/Notif";
 import Akun from "./Akun/Akun";
+import AkunHome from "./Akun/AkunHome";
 import PDFViewer from "./components/PDFViewer/index";
 
 import PropertyDetail from "./Property/PropertyDetail";
@@ -167,7 +168,7 @@ class Routes extends Component{
               />
               <Scene
                 key="akun"
-                component={Akun}
+                component={AkunHome}
                 navTransparent={true}
                 hideNavBar={true}
                 title=""
@@ -359,6 +360,12 @@ class Routes extends Component{
                 <Scene
                   key="PDFViewer"
                   component={PDFViewer}
+                  hideNavBar={true}
+                  title=""
+                />
+                <Scene
+                  key="menu"
+                  component={Akun}
                   hideNavBar={true}
                   title=""
                 />

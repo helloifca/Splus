@@ -1,16 +1,15 @@
 import React from 'react'
 import { StatusBar,ActivityIndicator, TouchableOpacity, TextInput, StyleSheet, Image, TouchableHighlight, ImageBackground, Dimensions, ScrollView, Platform, SafeAreaView, FlatList } from 'react-native'
-import { Container, Header, Content, Button, Icon, Text, Title, Left, Right, Body, Input, Item, Footer, View, FooterTab, Badge } from 'native-base'
+import { Container,List,ListItem, Header, Content, Button, Icon, Text, Title, Left, Right, Body, Input, Item, Footer, View, FooterTab, Badge } from 'native-base'
 
 import NavigationService from '../Service/Navigation'
 
 import MESSAGES from './Messages'
-
-import { Style } from '../Themes/'
+import { Fonts, Metrics, Colors,Style } from '../Themes/';
 import Styles from './Style'
+import Styles2 from './Style2'
 import {_storeData,_getData} from '@Component/StoreAsync';
 import { Actions } from "react-native-router-flux";
-import { Fonts, Metrics, Colors } from '../Themes/';
 import {urlApi} from '@Config/services';
 //const {width, height} = Dimensions.get('window')
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
@@ -105,10 +104,50 @@ export default class Akun extends React.Component {
 
             return (
                 <Container style={Style.bgMain}>
-                    <StatusBar backgroundColor={"rgba(0, 0, 0, 0.3)"} animated barStyle="dark-content" />
+
+                    <Header style={Styles.profile}>
+                    <StatusBar backgroundColor="rgba(0,0,0,0)" animated barStyle="dark-content" />
+						<Left style={Styles.left}>
+                            <Button transparent style={Style.actionBarBtn} onPress={Actions.pop} >
+                                <Icon
+                                    active
+                                    name="arrow-left"
+                                    style={Style.textBlack}
+                                    type="MaterialCommunityIcons"
+                                />
+                            </Button>
+                        </Left>
+						<Body style={Styles.body}>
+                            
+                        </Body>
+						<Right style={Styles.right}></Right>
+					</Header>
                     <Content style={Style.layoutInner} contentContainerStyle={Style.layoutContent}>
                         <View style={Styles.section}>
-                                {this.state.isLogin ? 
+
+
+                            <List style={Styles2.infoTab}>
+
+                                { this.state.dashmenu.map((val,key)=>
+
+                                    <ListItem key={key} style={Styles2.infoItem} onPress={()=>this.goToFeed(val) }>
+                                        <Image source={{uri : urlApi+"images/dashPict/"+val.picture}} style={Styles2.infoIcon} />
+                                        <View style={{alignSelf:'center'}} style={{alignSelf:'center'}}>
+                                            <Text style={Styles2.infoHeader}>{val.Title}</Text>
+                                            <Text style={Styles2.infoDesc}>{'Account Setting & Change Password'}</Text>
+                                        </View>
+
+                                        <Right style={{position:'absolute',right:10}}>
+                                            <Icon name="ios-arrow-dropright" style={{fontSize: 30,}} />
+                                        </Right>
+                                    </ListItem>
+                                )}
+
+                                
+                            </List>
+
+
+                                {/* {this.state.isLogin ? 
                                     <View style={Styles.profile}>
                                         <Image source={{uri:this.state.fotoProfil}} style={Styles.avatar} />
                                         <View>
@@ -131,10 +170,10 @@ export default class Akun extends React.Component {
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                }
+                                } */}
     
     
-                            <View style={Styles.btnLayout}>
+                            {/* <View style={Styles.btnLayout}>
                             { this.state.dashmenu.map((val,key)=>
                                 <TouchableOpacity key={key} style={Styles.btnBox} onPress={() => {
                                     this.goToFeed(val)
@@ -142,7 +181,7 @@ export default class Akun extends React.Component {
                                     <Image source={{uri : urlApi+"images/dashPict/"+val.picture}} style={Styles.imgBtn} />
                                     <Text style={Styles.btnText}>{val.Title}</Text>
                                 </TouchableOpacity>
-                            )}
+                            )} */}
     
                                 {/* <TouchableOpacity style={Styles.btnBox} onPress={() => {
                                     NavigationService.navigate('MemberMessages')
@@ -178,7 +217,7 @@ export default class Akun extends React.Component {
                                 <Text style={Styles.btnText}>New Report</Text>
                             </TouchableOpacity> */}
     
-                            <TouchableOpacity style={Styles.btnBox}
+                            {/* <TouchableOpacity style={Styles.btnBox}
                                 onPress={()=>this.goToFeed({URL_angular : "NUPPage",isProject:1})}>
                                 <Image source={{uri : urlApi+"images/dashPict/profits.png"}} style={Styles.imgBtn} />
                                 <Text style={Styles.btnText}>NUP</Text>
@@ -193,7 +232,7 @@ export default class Akun extends React.Component {
                                     </TouchableOpacity>
                                 )
                             : null}
-                            </View>
+                            </View> */}
     
                             {/* <View style={Styles.message}>
                                 <View style={Styles.headerBg}>

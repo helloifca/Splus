@@ -16,9 +16,49 @@ class Signup extends React.Component {
         super(props)
 
         this.state = {
-            isLoaded : true
+            isLoaded : true,
+            email : this.props.data.email,
+            fullname : this.props.data.givenName + ' ' + this.props.data.familyName,
+            nohp : '',
+            password : '',
+            isHide : false
+            
         }
+
+        console.log('props',props);
     }
+
+    SignupSosmed () {
+        this.setState({isLoaded: !this.state.isLoaded});
+
+
+        data = {
+            Email : this.state.email,
+            FullName : this.state.fullname,
+            Handphone : this.state.nohp,
+            Medsos : this.props.sosmed,
+            Id : this.props.data.id,
+            password : this.state.password,
+        };
+    
+        fetch(urlApi+'c_auth/SignUpGuest',{
+            method:'POST',
+            headers : {
+                'Accept':'application/json',
+                'Content-Type' : 'application/json',
+            },
+            body : JSON.stringify(data)
+        }).then((response) => response.json())
+        .then((res)=>{
+            
+            console.log('Login Result',res);
+        }).catch((error) => {
+            console.log(error);
+            this.setState({isLoaded: !this.state.isLoaded},()=>{
+              alert(error)
+          });
+        });
+      }
 
     render() {
         return (
@@ -35,7 +75,11 @@ class Signup extends React.Component {
                                 />
                             </Button>
                         </Left>
-						<Body style={styles.body}></Body>
+						<Body style={styles.body}>
+                            <Text style={{fontSize : 18,fontWeight:'bold',color : '#fff'}}>
+                                {"Sign Up as Guest"}
+                            </Text>
+                        </Body>
 						<Right style={styles.right}></Right>
 					</Header>
 					<View style={styles.inputFieldStyles}>
@@ -46,8 +90,7 @@ class Signup extends React.Component {
                             <Input 
                                 ref='email' 
                                 style={styles.inputEmail} 
-                                editable={true} 
-                                onChangeText={(val)=>this.setState({email:val})}
+                                editable={false} 
                                 keyboardType='email-address'
                                 returnKeyType='next'
                                 autoCapitalize='none'
@@ -55,26 +98,46 @@ class Signup extends React.Component {
                                 underlineColorAndroid='transparent'
                                 textAlign={I18nManager.isRTL ? 'right' : 'left'}
                                 placeholder='Email'
-                                placeholderTextColor="rgba(0,0,0,0.20)" />
-						</View>
-						{Platform.OS == "ios" ? <View style={styles.divider}/> : null}
-                        <View style={styles.containMid}>
-                            <Input 
-                                ref='Apaya' 
-                                style={styles.inputEmail} 
-                                editable={true} 
-                                onChangeText={(val)=>this.setState({email:val})}
-                                keyboardType='email-address'
-                                returnKeyType='next'
-                                autoCapitalize='none'
-                                autoCorrect={false}
-                                underlineColorAndroid='transparent'
-                                textAlign={I18nManager.isRTL ? 'right' : 'left'}
-                                placeholder='Email'
-                                placeholderTextColor="rgba(0,0,0,0.20)" />
+                                placeholderTextColor="rgba(0,0,0,0.20)"
+                                value = {this.state.email}
+                                />
 						</View>
 						<View style={styles.divider}/>
-						<View style={styles.containPassword}>
+                        <View style={styles.containMid}>
+                            <Input 
+                                ref='fullname' 
+                                style={styles.inputEmail} 
+                                editable={true} 
+                                onChangeText={(val)=>this.setState({fullname:val})}
+                                returnKeyType='next'
+                                autoCapitalize='none'
+                                autoCorrect={false}
+                                underlineColorAndroid='transparent'
+                                textAlign={I18nManager.isRTL ? 'right' : 'left'}
+                                placeholder='Full Name'
+                                placeholderTextColor="rgba(0,0,0,0.20)"
+                                value = {this.state.fullname}                                
+                                />
+						</View>
+						<View style={styles.divider}/>
+						<View style={styles.containMid}>
+							<Input
+								ref='nohp'
+								style={styles.inputEmail}
+								editable={true}
+                                onChangeText={(val)=>this.setState({nohp:val})}
+								keyboardType='numeric'
+								returnKeyType='next'
+								autoCapitalize='none'
+								autoCorrect={false}
+								underlineColorAndroid='transparent'lkk
+								textAlign={I18nManager.isRTL ? 'right' : 'left'}
+								placeholder='Handphone'
+								placeholderTextColor="rgba(0,0,0,0.20)" 
+                                value = {this.state.nohp}
+                                />
+						</View>
+                        <View style={styles.containPassword}>
 							<Input
 								ref='password'
 								style={styles.inputEmail}
@@ -88,11 +151,13 @@ class Signup extends React.Component {
 								textAlign={I18nManager.isRTL ? 'right' : 'left'}
 								placeholder='Password'
 								placeholderTextColor="rgba(0,0,0,0.20)"
-								secureTextEntry={true}/>
+								secureTextEntry={!this.state.isHide}
+                                value={this.state.password}/>
+                                <Icon name={this.state.isHide ? "eye-off" : "eye"} style={styles.eye} onPress={()=>this.setState({isHide:!this.state.isHide})} />
 						</View>
 					</View>
 					<View style={styles.signbtnSec} pointerEvents={this.state.isLoaded ? 'auto' : 'none'}>
-                        <Button style={styles.signInBtn} onPress={() => this.btnLoginClick()}>
+                        <Button style={styles.signInBtn} onPress={() => this.SignupSosmed()}>
                             {!this.state.isLoaded ? <ActivityIndicator color="#fff" /> :
                             <Text style={styles.signInBtnText}>Register Now</Text>}
                         </Button>

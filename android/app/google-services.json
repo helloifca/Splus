@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "336664359822",
-    "firebase_url": "https://ifca-s.firebaseio.com",
-    "project_id": "ifca-s",
-    "storage_bucket": "ifca-s.appspot.com"
+    "project_number": "1043761356860",
+    "firebase_url": "https://splus-b1148.firebaseio.com",
+    "project_id": "splus-b1148",
+    "storage_bucket": "splus-b1148.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:336664359822:android:927da37823fc289d",
+        "mobilesdk_app_id": "1:1043761356860:android:927da37823fc289d",
         "android_client_info": {
           "package_name": "com.splus"
         }
       },
       "oauth_client": [
         {
-          "client_id": "336664359822-f5g4jan7m94m2dd6eke006pdqqtkv3d7.apps.googleusercontent.com",
+          "client_id": "1043761356860-po3ci5hl3s44771utquppofbvk0tj6nk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.splus",
@@ -23,20 +23,20 @@
           }
         },
         {
-          "client_id": "336664359822-ekuov5b9qpopo1vk55gqi2n5oa3e59kd.apps.googleusercontent.com",
+          "client_id": "1043761356860-hojmsl1rebh78a3ilbna6ckrdbcjciaa.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCv5Ix8mZRFYtQzsZae9fYMH3tS71OjxJ0"
+          "current_key": "AIzaSyD_tfk8dLJuaM4t4eQ-WYf-EuA8xq0U65s"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "336664359822-ekuov5b9qpopo1vk55gqi2n5oa3e59kd.apps.googleusercontent.com",
+              "client_id": "1043761356860-hojmsl1rebh78a3ilbna6ckrdbcjciaa.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

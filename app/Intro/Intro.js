@@ -13,11 +13,7 @@ import DeviceInfo from 'react-native-device-info';
 import {urlApi} from '@Config/services';
 import {GoogleSignin, GoogleSigninButton,statusCodes} from 'react-native-google-signin'
 
-GoogleSignin.configure({
-  scopes: ['https://www.googleapis.com/auth/drive.readonly'], 
-  webClientId: '336664359822-ekuov5b9qpopo1vk55gqi2n5oa3e59kd.apps.googleusercontent.com',
-  offlineAccess :true
-})
+
 
 let isMount = false;
 
@@ -238,12 +234,48 @@ export default class Intro extends React.Component {
   
   signInGoogle = async () => {
     try {
+      await GoogleSignin.configure({
+        webClientId: '1043761356860-hojmsl1rebh78a3ilbna6ckrdbcjciaa.apps.googleusercontent.com',
+        offlineAccess :true
+      })
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log('User Details', JSON.stringify(userInfo))
+      console.log('User Details', userInfo)
 
+      const data =  { 
+        Email: userInfo.user.email, 
+        Medsos: 1, 
+        LoginId : userInfo.user.id,
+        device: Platform.OS,
+        Token: userInfo.idToken
+      }
 
-      this.setState({GoogleLogin:true,userDetails:userInfo.user})
+      console.log('data',data);
+
+      fetch(urlApi+'c_auth/LoginWithSosmed',{
+          method:'POST',
+          headers : {
+              'Accept':'application/json',
+              'Content-Type' : 'application/json',
+          },
+          body : JSON.stringify(data)
+      }).then((response) => response.json())
+      .then((res)=>{
+          console.log('Login Result',res);
+          if(res.Error){
+            Actions.Signup({sosmed : true,data:userInfo.user})
+          } else {
+            this.setState({isLogin:true},()=>{
+              this.getTower(res)
+            })
+          }
+      }).catch((error) => {
+          console.log(error);
+          this.setState({isLoaded: !this.state.isLoaded},()=>{
+            alert(error)
+        });
+      });
+
     } catch (error) {
       this.setState({GoogleLogin:false})
 
@@ -258,19 +290,10 @@ export default class Intro extends React.Component {
         console.log("Not Available ", statusCodes.PLAY_SERVICES_NOT_AVAILABLE)
         // play services not available or outdated
       } else {
-        console.log("Error ", error.code)
+        console.log("Error ", error)
       }
     }
   };
-
-
-
-
-
-
-  
-
-
 
   render() {
     // let BG_Image = { uri : 'https://antiqueruby.aliansoftware.net/Images/signin/ic_main_bg_stwo.png'};
