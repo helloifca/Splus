@@ -125,15 +125,30 @@ export default class extends React.Component {
 
                 
                 <View style={Styles.owner}>
-                    <View style={Styles.ownerAvatar}>
-                        <Image source={{uri : this.state.fotoProfil}} style={Styles.ownerAvatarImg} />
-                    </View>
-                    <View style={Styles.ownerInfo}>
-                        <View>
-                            <Text style={Styles.ownerName}>{this.state.name}</Text>
-                            <Text style={Styles.ownerLocation}>{this.state.group}</Text>
+
+                    {this.state.isLogin ? 
+                        <View style={Styles.ownerAvatar}>
+                            <Image source={{uri : this.state.fotoProfil}} style={Styles.ownerAvatarImg} />
                         </View>
-                    </View>
+                    :null}
+
+                    {this.state.isLogin ? 
+                        
+                        <View style={Styles.ownerInfo}>
+                            <View>
+                                <Text style={Styles.ownerName}>{this.state.name}</Text>
+                                <Text style={Styles.ownerLocation}>{this.state.group}</Text>
+                            </View>
+                        </View>
+                        
+                    :  
+                        <View style={Styles.ownerInfo}>
+                            <View>
+                                <Text style={Styles.ownerName}>Welcome Guest</Text>
+                                <Text style={Styles.ownerLocation}>Sign In or Register</Text>
+                            </View>
+                        </View>
+                    }
                 </View>
                 
                     <List style={Styles.infoTab}>

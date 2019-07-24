@@ -218,6 +218,7 @@ export default {
     fontFamily: 'Montserrat-Regular',
     fontSize: 12,
     color: '#999',
+    alignSelf: 'center',
   },
 
   tabBorder: {
